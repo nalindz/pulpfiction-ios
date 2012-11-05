@@ -1,0 +1,101 @@
+//
+//  API.m
+//  BookApp
+//
+//  Created by Nalin on 11/1/12.
+//
+//
+
+#import "API.h"
+#import "Environment.h"
+#import <RestKit/RKErrorMessage.h>
+#import "Story.h"
+#import "Block.h"
+
+
+static API* _sharedInstance = nil;
+
+@interface API ()
+@property (strong, atomic) RKManagedObjectStore * objectStore;
+- (void)createErrorMapping;
+- (void)setupObjectMapping;
+- (void)initRestKit;
+@end
+
+@implementation API
+
++ (API*)sharedInstance {
+    @synchronized(self) {
+        if (_sharedInstance == nil) {
+            _sharedInstance = [[self alloc] init];
+        }
+    } 
+    return _sharedInstance;
+}
+
+- (API*)init {
+    self = [super init];
+    [self initRestKit];
+    return self;
+}
+
+- (void)initRestKit {
+    
+    Environment* tierConfig = [Environment sharedInstance];
+    NSString* baseUrl = [tierConfig getConfigOption:@"apiURL"];
+    NSString* objectStoreFilename = [tierConfig getConfigOption:@"ObjectStoreFilename"];
+    
+    NSLog(@"fetch object store file name : %@", objectStoreFilename);
+#if DEBUG
+//    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
+//    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+#endif
+    
+    NSLog(@"base url: %@", [NSURL URLWithString:baseUrl]);
+    
+    RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:baseUrl]];
+    objectManager.serializationMIMEType = RKMIMETypeJSON;
+    
+    [objectManager setClient:[RKClient sharedClient]];
+    
+    objectManager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:objectStoreFilename usingSeedDatabaseName:nil managedObjectModel:[self managedObjectModel] delegate:self];
+    
+    self.objectStore = objectManager.objectStore;
+    
+    // Enable automatic network activity indicator management
+    objectManager.client.requestQueue.showsNetworkActivityIndicatorWhenBusy = YES;
+    [self createErrorMapping];
+    
+    RKManagedObjectMapping* storyMapping = [RKManagedObjectMapping mappingForEntityWithName:@"BAStory"
+                                                                       inManagedObjectStore:objectManager.objectStore];
+    [Story configureMapping:storyMapping];
+    [objectManager.mappingProvider registerMapping:storyMapping
+                                   withRootKeyPath:@"story"];
+    
+    RKManagedObjectMapping* blockMapping = [RKManagedObjectMapping mappingForEntityWithName:@"BABlock"
+                                                                       inManagedObjectStore:objectManager.objectStore];
+    [Block configureMapping:blockMapping];
+    [objectManager.mappingProvider registerMapping:blockMapping
+                                   withRootKeyPath:@"block"];
+    
+}
+
+
+- (void)setupObjectMapping {
+}
+
+
+- (void)createErrorMapping {
+    RKObjectMapping *errorMapping = [RKObjectMapping mappingForClass:[RKErrorMessage class]];
+    [errorMapping mapKeyPath:@"description" toAttribute:@"errorMessage"];
+
+    [RKObjectManager.sharedManager.mappingProvider setErrorMapping:errorMapping];
+}
+
+- (NSManagedObjectModel *)managedObjectModel {
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"BookApp-Entities" ofType:@"momd"];
+    NSURL *momURL = [NSURL fileURLWithPath:path];
+    return [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
+}
+
+@end
