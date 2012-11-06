@@ -31,6 +31,8 @@
     vc2.pageNumber = 2;
     self.columnsController.viewControllers = [NSMutableArray arrayWithObjects: vc, vc2, vc3, nil];
     
+    //[self.columnsController reloadChildViewControllers];
+    
     self.navigationController.viewControllers = [NSArray arrayWithObject:self.columnsController];
     
     self.window.rootViewController = self.columnsController;
