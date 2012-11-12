@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1811" systemVersion="12C60" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="BABlock" representedClassName="BABlock" syncable="YES">
-        <attribute name="block_number" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1811" systemVersion="12C3006" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="BABlock" representedClassName="Block" syncable="YES">
+        <attribute name="block_number" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="first_block" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="last_block" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="story_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
-    <entity name="BAStory" representedClassName="BAStory" syncable="YES">
+    <entity name="BAPage" representedClassName="Page" syncable="YES">
+        <attribute name="first_block_index" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="first_block_number" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="last_block_index" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="last_block_number" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="page_number" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="story_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="BAStory" representedClassName="Story" syncable="YES">
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
@@ -16,7 +27,7 @@
         <attribute name="user_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="BAUser" inverseName="stories" inverseEntity="BAUser" syncable="YES"/>
     </entity>
-    <entity name="BAUser" representedClassName="BAUser" syncable="YES">
+    <entity name="BAUser" representedClassName="User" syncable="YES">
         <attribute name="facebook_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="first_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -24,8 +35,9 @@
         <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BAStory" inverseName="user" inverseEntity="BAStory" syncable="YES"/>
     </entity>
     <elements>
+        <element name="BABlock" positionX="160" positionY="192" width="128" height="165"/>
         <element name="BAStory" positionX="160" positionY="192" width="128" height="135"/>
-        <element name="BABlock" positionX="160" positionY="192" width="128" height="135"/>
         <element name="BAUser" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="BAPage" positionX="160" positionY="192" width="128" height="150"/>
     </elements>
 </model>

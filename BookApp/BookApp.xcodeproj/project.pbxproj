@@ -26,14 +26,17 @@
 		F530E1FD16435AEE003A9EDF /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1FC16435AEE003A9EDF /* libxml2.dylib */; };
 		F530E1FF16435AF6003A9EDF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1FE16435AF6003A9EDF /* QuartzCore.framework */; };
 		F530E20016435B07003A9EDF /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1E716435A3C003A9EDF /* libRestKit.a */; };
+		F575269E165067FD005E2235 /* BABlock.m in Sources */ = {isa = PBXBuildFile; fileRef = F575269D165067FD005E2235 /* BABlock.m */; };
+		F57526A11650839B005E2235 /* BAPage.m in Sources */ = {isa = PBXBuildFile; fileRef = F57526A01650839B005E2235 /* BAPage.m */; };
+		F57526A4165083CC005E2235 /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = F57526A3165083CC005E2235 /* Page.m */; };
 		F59EED8F1643660A001C42F2 /* API.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED8E1643660A001C42F2 /* API.m */; };
 		F59EED9716438A8D001C42F2 /* Environments.plist in Resources */ = {isa = PBXBuildFile; fileRef = F59EED9616438A8D001C42F2 /* Environments.plist */; };
 		F59EED9A16438BED001C42F2 /* Environment.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED9916438BED001C42F2 /* Environment.m */; };
 		F59EED9D16438E1E001C42F2 /* BookApp-Entities.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F59EED9B16438E1E001C42F2 /* BookApp-Entities.xcdatamodeld */; };
 		F59EEDA11643AF89001C42F2 /* BAStory.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EEDA01643AF89001C42F2 /* BAStory.m */; };
-		F59EEDA41643AF8A001C42F2 /* BABlock.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EEDA31643AF8A001C42F2 /* BABlock.m */; };
 		F59EEDA71643AF8A001C42F2 /* BAUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EEDA61643AF8A001C42F2 /* BAUser.m */; };
 		F59EEDAA1643B039001C42F2 /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EEDA91643B039001C42F2 /* Story.m */; };
+		F5E56593164EEA630044B956 /* NSString+FitInLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E56592164EEA630044B956 /* NSString+FitInLabel.m */; };
 		F5FC6DEC1645F7110087137F /* Block.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6DEB1645F7110087137F /* Block.m */; };
 		F5FC6DF8164640C00087137F /* ISColumnsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6DF7164640C00087137F /* ISColumnsController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F5FC6EDC1648E2B90087137F /* PSCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6ED91648E2B90087137F /* PSCollectionView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -113,6 +116,12 @@
 		F530E1FA16435AE6003A9EDF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		F530E1FC16435AEE003A9EDF /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		F530E1FE16435AF6003A9EDF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F575269C165067FD005E2235 /* BABlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BABlock.h; sourceTree = "<group>"; };
+		F575269D165067FD005E2235 /* BABlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BABlock.m; sourceTree = "<group>"; };
+		F575269F1650839B005E2235 /* BAPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAPage.h; sourceTree = "<group>"; };
+		F57526A01650839B005E2235 /* BAPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAPage.m; sourceTree = "<group>"; };
+		F57526A2165083CC005E2235 /* Page.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Page.h; sourceTree = "<group>"; };
+		F57526A3165083CC005E2235 /* Page.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Page.m; sourceTree = "<group>"; };
 		F59EED8D1643660A001C42F2 /* API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = API.h; sourceTree = "<group>"; };
 		F59EED8E1643660A001C42F2 /* API.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = API.m; sourceTree = "<group>"; };
 		F59EED9616438A8D001C42F2 /* Environments.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Environments.plist; sourceTree = "<group>"; };
@@ -121,13 +130,13 @@
 		F59EED9C16438E1E001C42F2 /* BookApp-Entities.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BookApp-Entities.xcdatamodel"; sourceTree = "<group>"; };
 		F59EED9F1643AF89001C42F2 /* BAStory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAStory.h; sourceTree = "<group>"; };
 		F59EEDA01643AF89001C42F2 /* BAStory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAStory.m; sourceTree = "<group>"; };
-		F59EEDA21643AF8A001C42F2 /* BABlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BABlock.h; sourceTree = "<group>"; };
-		F59EEDA31643AF8A001C42F2 /* BABlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BABlock.m; sourceTree = "<group>"; };
 		F59EEDA51643AF8A001C42F2 /* BAUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAUser.h; sourceTree = "<group>"; };
 		F59EEDA61643AF8A001C42F2 /* BAUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAUser.m; sourceTree = "<group>"; };
 		F59EEDA81643B039001C42F2 /* Story.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Story.h; sourceTree = "<group>"; };
 		F59EEDA91643B039001C42F2 /* Story.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Story.m; sourceTree = "<group>"; };
 		F59EEDB81643B15F001C42F2 /* BAProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAProtocols.h; sourceTree = "<group>"; };
+		F5E56591164EEA630044B956 /* NSString+FitInLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FitInLabel.h"; sourceTree = "<group>"; };
+		F5E56592164EEA630044B956 /* NSString+FitInLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FitInLabel.m"; sourceTree = "<group>"; };
 		F5FC6DEA1645F7110087137F /* Block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Block.h; sourceTree = "<group>"; };
 		F5FC6DEB1645F7110087137F /* Block.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Block.m; sourceTree = "<group>"; };
 		F5FC6DF6164640C00087137F /* ISColumnsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISColumnsController.h; sourceTree = "<group>"; };
@@ -272,11 +281,15 @@
 		F530E20316435C96003A9EDF /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F575269F1650839B005E2235 /* BAPage.h */,
+				F57526A2165083CC005E2235 /* Page.h */,
+				F57526A3165083CC005E2235 /* Page.m */,
+				F57526A01650839B005E2235 /* BAPage.m */,
+				F575269C165067FD005E2235 /* BABlock.h */,
+				F575269D165067FD005E2235 /* BABlock.m */,
 				F59EED9B16438E1E001C42F2 /* BookApp-Entities.xcdatamodeld */,
 				F59EEDA51643AF8A001C42F2 /* BAUser.h */,
 				F59EEDA61643AF8A001C42F2 /* BAUser.m */,
-				F59EEDA21643AF8A001C42F2 /* BABlock.h */,
-				F59EEDA31643AF8A001C42F2 /* BABlock.m */,
 				F59EED9F1643AF89001C42F2 /* BAStory.h */,
 				F59EEDA01643AF89001C42F2 /* BAStory.m */,
 				F59EEDA81643B039001C42F2 /* Story.h */,
@@ -290,6 +303,8 @@
 		F59EED90164386AE001C42F2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				F5E56591164EEA630044B956 /* NSString+FitInLabel.h */,
+				F5E56592164EEA630044B956 /* NSString+FitInLabel.m */,
 				F59EEDB81643B15F001C42F2 /* BAProtocols.h */,
 				F59EED9816438BED001C42F2 /* Environment.h */,
 				F59EED9916438BED001C42F2 /* Environment.m */,
@@ -436,7 +451,6 @@
 				F59EED9A16438BED001C42F2 /* Environment.m in Sources */,
 				F59EED9D16438E1E001C42F2 /* BookApp-Entities.xcdatamodeld in Sources */,
 				F59EEDA11643AF89001C42F2 /* BAStory.m in Sources */,
-				F59EEDA41643AF8A001C42F2 /* BABlock.m in Sources */,
 				F59EEDA71643AF8A001C42F2 /* BAUser.m in Sources */,
 				F59EEDAA1643B039001C42F2 /* Story.m in Sources */,
 				F5FC6DEC1645F7110087137F /* Block.m in Sources */,
@@ -446,6 +460,10 @@
 				F5FC6EE01648E54A0087137F /* MainViewController.m in Sources */,
 				F5FC6EE31648E6DD0087137F /* SlideViewCell.m in Sources */,
 				F5FC6EE61648FC550087137F /* SlideScrollView.m in Sources */,
+				F5E56593164EEA630044B956 /* NSString+FitInLabel.m in Sources */,
+				F575269E165067FD005E2235 /* BABlock.m in Sources */,
+				F57526A11650839B005E2235 /* BAPage.m in Sources */,
+				F57526A4165083CC005E2235 /* Page.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

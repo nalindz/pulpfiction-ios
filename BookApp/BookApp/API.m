@@ -47,8 +47,8 @@ static API* _sharedInstance = nil;
     
     NSLog(@"fetch object store file name : %@", objectStoreFilename);
 #if DEBUG
-//    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
-//    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
+    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
 #endif
     
     NSLog(@"base url: %@", [NSURL URLWithString:baseUrl]);

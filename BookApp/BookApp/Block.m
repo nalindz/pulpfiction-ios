@@ -24,7 +24,10 @@
     [mapping mapAttributes:
      @"id",
      @"text",
+     @"block_number",
      @"story_id",
+     @"first_block",
+     @"last_block",
      nil];
 
     mapping.primaryKeyAttribute = @"id";

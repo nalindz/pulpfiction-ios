@@ -7,7 +7,11 @@
 - (void)didResignActive;
 @end
 
-@interface ISColumnsController : UIViewController <UIScrollViewDelegate, SlideScrollDataSource>
+@interface ISColumnsController : UIViewController
+<UIScrollViewDelegate,
+SlideScrollDataSource,
+RKObjectLoaderDelegate
+>
 
 @property (retain, nonatomic) NSMutableArray       *viewControllers;
 @property (retain, nonatomic) SlideScrollView  *scrollView;

@@ -2,7 +2,7 @@
 //  BABlock.m
 //  BookApp
 //
-//  Created by Nalin on 11/2/12.
+//  Created by Nalin on 11/11/12.
 //
 //
 
@@ -11,11 +11,13 @@
 
 @implementation BABlock
 
-@dynamic text;
 @dynamic block_number;
-@dynamic story_id;
-@dynamic id;
 @dynamic created_at;
+@dynamic id;
+@dynamic story_id;
+@dynamic text;
 @dynamic updated_at;
+@dynamic first_block;
+@dynamic last_block;
 
 @end
