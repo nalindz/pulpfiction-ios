@@ -30,6 +30,13 @@
 	</array>
 	<key>Configuration</key>
 	<string>${CONFIGURATION}</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>MetaBold.TTF</string>
+		<string>MtNoRo.TTF</string>
+		<string>MetaSerifOT-Book.otf</string>
+		<string>MtNoLFRo.TTF</string>
+	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

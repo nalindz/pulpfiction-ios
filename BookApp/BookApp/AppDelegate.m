@@ -11,6 +11,7 @@
 #import "ViewController.h"
 #import <RestKit/RestKit.h>
 #import "API.h"
+#import "DiscoverVC.h"
 
 @implementation AppDelegate
 
@@ -20,24 +21,11 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    
-    self.columnsController = [[ISColumnsController alloc] init];
     self.navigationController = [[UINavigationController alloc] init];
-    ViewController *vc = [[ViewController alloc] init];
-    vc.pageNumber = 0;
+    DiscoverVC *discoverVC = [[DiscoverVC alloc] init];
+    self.navigationController.viewControllers = [NSArray arrayWithObject:discoverVC];
     
-    ViewController *vc2 = [[ViewController alloc] init];
-    vc2.pageNumber = 1;
-    
-    ViewController *vc3 = [[ViewController alloc] init];
-    vc2.pageNumber = 2;
-    self.columnsController.viewControllers = [NSMutableArray arrayWithObjects: vc, vc2, vc3, nil];
-    
-    //[self.columnsController reloadChildViewControllers];
-    
-    self.navigationController.viewControllers = [NSArray arrayWithObject:self.columnsController];
-    
-    self.window.rootViewController = self.columnsController;
+    self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;
 }

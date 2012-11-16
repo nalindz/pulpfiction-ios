@@ -1,5 +1,7 @@
 #import <UIKit/UIKit.h>
 #import "SlideScrollView.h"
+#import "SlideViewCell.h"
+#import "Story.h"
 
 @protocol ISColumnsControllerChild <NSObject>
 @optional
@@ -10,6 +12,7 @@
 @interface ISColumnsController : UIViewController
 <UIScrollViewDelegate,
 SlideScrollDataSource,
+SlideViewCellDelegate,
 RKObjectLoaderDelegate
 >
 
@@ -17,6 +20,7 @@ RKObjectLoaderDelegate
 @property (retain, nonatomic) SlideScrollView  *scrollView;
 @property (retain, nonatomic) UILabel       *titleLabel;
 @property (retain, nonatomic) UIPageControl *pageControl;
+@property Story * story;
 - (void)reloadChildViewControllers;
 
 @end

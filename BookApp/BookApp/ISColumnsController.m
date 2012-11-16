@@ -20,8 +20,7 @@
 - (void)enqueueReusableView:(SlideViewCell *)view;
 -(void) reloadData;
 
-- (void) getStartBlock: (NSInteger) startBlock endBlock: (NSInteger) endBlock;
-    
+
 
 @property (nonatomic, assign, readwrite) CGFloat colWidth;
 @property (nonatomic, assign, readwrite) NSInteger numCols;
@@ -32,7 +31,6 @@
 @property (nonatomic, retain) NSMutableArray *viewKeysToRemove;
 @property (nonatomic, retain) NSMutableDictionary *indexToRectMap;
 
-@property NSInteger storyId;
 
 @property int firstPageNumber;
 @property int lastPageNumber;
@@ -107,15 +105,6 @@
     [self setupScrollView];
 }
 
-- (void) getStartBlock: (NSInteger) startBlock endBlock: (NSInteger) endBlock {
-    [RKObjectManager.sharedManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"stories/%d/blocks?first_block=%d&last_block=%d", self.storyId, startBlock, endBlock] delegate:self];
-}
-
-
-- (void) objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    //[self createPageFromBlock:@0 index:0 pageBuffer:@""];
-    
-}
 
 - (void) createNumberOfPages:(int) numberOfPages
           startingPageNumber: (NSNumber *) pageNumber
@@ -129,10 +118,10 @@
     int oldPageBufferLength;
     Block *currentBlock;
     while (splitIndex == pageBuffer.length) {
-        currentBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %d", startBlockNumber, self.storyId]];
+        currentBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", startBlockNumber, self.story.id]];
         if (currentBlock == nil) {
             int endBlockNumber = [startBlockNumber integerValue] + 5;
-            [RKObjectManager.sharedManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"stories/%d/blocks?first_block=%d&last_block=%d", self.storyId, [startBlockNumber integerValue], endBlockNumber] usingBlock:^(RKObjectLoader *loader) {
+            [RKObjectManager.sharedManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"stories/%@/blocks?first_block=%d&last_block=%d", self.story.id, [startBlockNumber integerValue], endBlockNumber] usingBlock:^(RKObjectLoader *loader) {
                 loader.onDidLoadObjects = ^(NSArray *objects) {
                     //NSLog(@"the page buffff:%@", pageBuffer);
                     [self createNumberOfPages: numberOfPages
@@ -159,9 +148,10 @@
         //NSLog(@"pageBuffer: '%@'", pageBuffer);
         //NSLog(@"pageBuffer length: %d", pageBuffer.length);
         
-        UIFont *pageFont = [UIFont systemFontOfSize:60];
+        UIFont *pageFont = [self fontForSlideViewCell];
         
-        splitIndex = [pageBuffer getSplitIndexWithFrame:self.view.frame andFont:pageFont];
+        
+        splitIndex = [pageBuffer getSplitIndexWithSize:[self pageSize] andFont:pageFont];
         //NSLog(@"The split index: %d", splitIndex);
         startBlockNumber = [NSNumber numberWithInt:([startBlockNumber intValue] + 1)];
         if ([currentBlock.last_block boolValue]) break;
@@ -171,7 +161,7 @@
     
     Page *newPage = [Page object];
     newPage.page_number = pageNumber;
-    newPage.story_id = [NSNumber numberWithInt:self.storyId];
+    newPage.story_id = self.story.id;
     newPage.text = [pageBuffer substringToIndex:splitIndex];
     newPage.first_block_number = startBlockNumber;
     newPage.first_block_index = [NSNumber numberWithInt:startBlockIndex];
@@ -201,6 +191,14 @@
     NSLog(@"firstPageNumber: %d, lastPageNumbeR: %d", self.firstPageNumber ,self.lastPageNumber);
 }
 
+
+- (int)pageMargin {
+    return 40;
+}
+
+- (CGSize) pageSize {
+    return CGSizeMake(self.scrollView.frame.size.width - ([self pageMargin] * 2), self.scrollView.frame.size.height - ([self pageMargin] * 2));
+}
 
 - (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     
@@ -247,11 +245,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.storyId = 2;
     self.pages = [[NSMutableDictionary alloc] init];
     self.firstPageNumber = 0;
     self.lastPageNumber = 0;
-    //[self getStartBlock:0 endBlock:2];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
     [self createNumberOfPages:2 startingPageNumber:@0 fromBlock:@0 index:0 pageBuffer:@""];
 }
 
@@ -294,13 +293,10 @@
     SlideViewCell *cell = [[SlideViewCell alloc] initWithFrame:self.view.frame];
     cell.backgroundColor = [UIColor whiteColor];
     
-    Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %d", index, self.storyId]];
-    UILabel *text = [[UILabel alloc] initWithFrame:self.view.frame];
-    text.font = [UIFont systemFontOfSize:60];
-    text.text = page.text;
-    text.numberOfLines = 0;
-    [cell addSubview:text];
+    Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", index, self.story.id]];
     
+    cell.delegate = self;
+    [cell renderWithPage:page];
     return cell;
 }
 
@@ -313,9 +309,9 @@
     int newCurrentPage = ((offset+(width/2))/width);
     if (newCurrentPage != self.pageControl.currentPage) {
         if (newCurrentPage == (self.lastPageNumber) && self.stopLoadingPages == NO) {
-            Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %d", self.pageControl.currentPage + 1, self.storyId]];
+            Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", self.pageControl.currentPage + 1, self.story.id]];
             
-            Block *lastBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %d", page.last_block_number , self.storyId]];
+            Block *lastBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", page.last_block_number , self.story.id]];
             
             if (![lastBlock.last_block boolValue]) {
                 [self createNumberOfPages:2 startingPageNumber:[NSNumber numberWithInt:(self.lastPageNumber + 1)] fromBlock:page.last_block_number index:[page.last_block_index intValue] pageBuffer:@""];
@@ -327,6 +323,10 @@
     [self.pageControl setCurrentPage:((offset+(width/2))/width)];
     NSLog(@"current page %d", self.pageControl.currentPage);
     
+}
+
+- (UIFont *) fontForSlideViewCell {
+    return [UIFont fontWithName:@"Meta Serif OT" size:30];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

@@ -9,5 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface NSString (FitInLabel)
-- (int)getSplitIndexWithFrame:(CGRect) frame andFont:(UIFont *)font;
+- (int)getSplitIndexWithSize:(CGSize) size andFont:(UIFont *)font;
 @end

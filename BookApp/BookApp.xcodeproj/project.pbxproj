@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F52AAFB21653508B007B36C1 /* DiscoverVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F52AAFB11653508B007B36C1 /* DiscoverVC.m */; };
+		F52AAFB516535632007B36C1 /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F52AAFB416535632007B36C1 /* StoryCell.m */; };
 		F530E1B616434F30003A9EDF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1B516434F30003A9EDF /* UIKit.framework */; };
 		F530E1B816434F30003A9EDF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1B716434F30003A9EDF /* Foundation.framework */; };
 		F530E1BA16434F30003A9EDF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1B916434F30003A9EDF /* CoreGraphics.framework */; };
@@ -29,6 +31,13 @@
 		F575269E165067FD005E2235 /* BABlock.m in Sources */ = {isa = PBXBuildFile; fileRef = F575269D165067FD005E2235 /* BABlock.m */; };
 		F57526A11650839B005E2235 /* BAPage.m in Sources */ = {isa = PBXBuildFile; fileRef = F57526A01650839B005E2235 /* BAPage.m */; };
 		F57526A4165083CC005E2235 /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = F57526A3165083CC005E2235 /* Page.m */; };
+		F586EFC316538AFB00488742 /* UIView+FrameUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F586EFC216538AFB00488742 /* UIView+FrameUtil.m */; };
+		F586F03C1654A8A000488742 /* MtNoLFRo.TTF in Resources */ = {isa = PBXBuildFile; fileRef = F586F0001654A8A000488742 /* MtNoLFRo.TTF */; };
+		F586F03D1654A8A000488742 /* MtNoRo.TTF in Resources */ = {isa = PBXBuildFile; fileRef = F586F0011654A8A000488742 /* MtNoRo.TTF */; };
+		F586F03F1654B0B800488742 /* MetaSerifOT-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = F586F03E1654B0B800488742 /* MetaSerifOT-Book.otf */; };
+		F586F0421655D7B600488742 /* UIView+LayoutUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F0411655D7B600488742 /* UIView+LayoutUtil.m */; };
+		F586F0441655DA9400488742 /* MetaBold.TTF in Resources */ = {isa = PBXBuildFile; fileRef = F586F0431655DA9400488742 /* MetaBold.TTF */; };
+		F586F0471655E14400488742 /* UILabel+AutoSize.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F0461655E14400488742 /* UILabel+AutoSize.m */; };
 		F59EED8F1643660A001C42F2 /* API.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED8E1643660A001C42F2 /* API.m */; };
 		F59EED9716438A8D001C42F2 /* Environments.plist in Resources */ = {isa = PBXBuildFile; fileRef = F59EED9616438A8D001C42F2 /* Environments.plist */; };
 		F59EED9A16438BED001C42F2 /* Environment.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED9916438BED001C42F2 /* Environment.m */; };
@@ -92,6 +101,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F52AAFB01653508B007B36C1 /* DiscoverVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverVC.h; sourceTree = "<group>"; };
+		F52AAFB11653508B007B36C1 /* DiscoverVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverVC.m; sourceTree = "<group>"; };
+		F52AAFB316535632007B36C1 /* StoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCell.h; sourceTree = "<group>"; };
+		F52AAFB416535632007B36C1 /* StoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCell.m; sourceTree = "<group>"; };
 		F530E1B116434F30003A9EDF /* BookApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F530E1B516434F30003A9EDF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F530E1B716434F30003A9EDF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -122,6 +135,16 @@
 		F57526A01650839B005E2235 /* BAPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAPage.m; sourceTree = "<group>"; };
 		F57526A2165083CC005E2235 /* Page.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Page.h; sourceTree = "<group>"; };
 		F57526A3165083CC005E2235 /* Page.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Page.m; sourceTree = "<group>"; };
+		F586EFC116538AFB00488742 /* UIView+FrameUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FrameUtil.h"; sourceTree = "<group>"; };
+		F586EFC216538AFB00488742 /* UIView+FrameUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+FrameUtil.m"; sourceTree = "<group>"; };
+		F586F0001654A8A000488742 /* MtNoLFRo.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = MtNoLFRo.TTF; sourceTree = "<group>"; };
+		F586F0011654A8A000488742 /* MtNoRo.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = MtNoRo.TTF; sourceTree = "<group>"; };
+		F586F03E1654B0B800488742 /* MetaSerifOT-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MetaSerifOT-Book.otf"; sourceTree = "<group>"; };
+		F586F0401655D7B600488742 /* UIView+LayoutUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LayoutUtil.h"; sourceTree = "<group>"; };
+		F586F0411655D7B600488742 /* UIView+LayoutUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LayoutUtil.m"; sourceTree = "<group>"; };
+		F586F0431655DA9400488742 /* MetaBold.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = MetaBold.TTF; sourceTree = "<group>"; };
+		F586F0451655E14400488742 /* UILabel+AutoSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+AutoSize.h"; sourceTree = "<group>"; };
+		F586F0461655E14400488742 /* UILabel+AutoSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+AutoSize.m"; sourceTree = "<group>"; };
 		F59EED8D1643660A001C42F2 /* API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = API.h; sourceTree = "<group>"; };
 		F59EED8E1643660A001C42F2 /* API.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = API.m; sourceTree = "<group>"; };
 		F59EED9616438A8D001C42F2 /* Environments.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Environments.plist; sourceTree = "<group>"; };
@@ -213,6 +236,7 @@
 		F530E1BB16434F30003A9EDF /* BookApp */ = {
 			isa = PBXGroup;
 			children = (
+				F586EFC41654A88800488742 /* Assets */,
 				F5FC6DF4164640870087137F /* Libraries */,
 				F59EED90164386AE001C42F2 /* Utilities */,
 				F530E20316435C96003A9EDF /* Models */,
@@ -258,6 +282,8 @@
 		F530E20116435C4D003A9EDF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				F52AAFB01653508B007B36C1 /* DiscoverVC.h */,
+				F52AAFB11653508B007B36C1 /* DiscoverVC.m */,
 				F5FC6EE41648FC550087137F /* SlideScrollView.h */,
 				F5FC6EE51648FC550087137F /* SlideScrollView.m */,
 				F5FC6EDE1648E54A0087137F /* MainViewController.h */,
@@ -274,6 +300,8 @@
 		F530E20216435C8D003A9EDF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F52AAFB316535632007B36C1 /* StoryCell.h */,
+				F52AAFB416535632007B36C1 /* StoryCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -300,9 +328,34 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		F586EFC41654A88800488742 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				F586EFC51654A89400488742 /* Fonts */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		F586EFC51654A89400488742 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F586F0001654A8A000488742 /* MtNoLFRo.TTF */,
+				F586F03E1654B0B800488742 /* MetaSerifOT-Book.otf */,
+				F586F0011654A8A000488742 /* MtNoRo.TTF */,
+				F586F0431655DA9400488742 /* MetaBold.TTF */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		F59EED90164386AE001C42F2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				F586F0451655E14400488742 /* UILabel+AutoSize.h */,
+				F586F0461655E14400488742 /* UILabel+AutoSize.m */,
+				F586F0401655D7B600488742 /* UIView+LayoutUtil.h */,
+				F586F0411655D7B600488742 /* UIView+LayoutUtil.m */,
+				F586EFC116538AFB00488742 /* UIView+FrameUtil.h */,
+				F586EFC216538AFB00488742 /* UIView+FrameUtil.m */,
 				F5E56591164EEA630044B956 /* NSString+FitInLabel.h */,
 				F5E56592164EEA630044B956 /* NSString+FitInLabel.m */,
 				F59EEDB81643B15F001C42F2 /* BAProtocols.h */,
@@ -434,6 +487,10 @@
 				F530E1CC16434F30003A9EDF /* Default-568h@2x.png in Resources */,
 				F530E1D216434F30003A9EDF /* ViewController.xib in Resources */,
 				F59EED9716438A8D001C42F2 /* Environments.plist in Resources */,
+				F586F03C1654A8A000488742 /* MtNoLFRo.TTF in Resources */,
+				F586F03D1654A8A000488742 /* MtNoRo.TTF in Resources */,
+				F586F03F1654B0B800488742 /* MetaSerifOT-Book.otf in Resources */,
+				F586F0441655DA9400488742 /* MetaBold.TTF in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,6 +521,11 @@
 				F575269E165067FD005E2235 /* BABlock.m in Sources */,
 				F57526A11650839B005E2235 /* BAPage.m in Sources */,
 				F57526A4165083CC005E2235 /* Page.m in Sources */,
+				F52AAFB21653508B007B36C1 /* DiscoverVC.m in Sources */,
+				F52AAFB516535632007B36C1 /* StoryCell.m in Sources */,
+				F586EFC316538AFB00488742 /* UIView+FrameUtil.m in Sources */,
+				F586F0421655D7B600488742 /* UIView+LayoutUtil.m in Sources */,
+				F586F0471655E14400488742 /* UILabel+AutoSize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
