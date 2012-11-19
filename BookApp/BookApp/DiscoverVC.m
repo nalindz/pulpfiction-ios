@@ -10,6 +10,7 @@
 #import "ISColumnsController.h"
 #import "StoryCell.h"
 #import "CaptureView.h"
+#import "Bookmark.h"
 
 @interface DiscoverVC ()
 
@@ -25,7 +26,6 @@
     self.navigationController.navigationBarHidden = YES;
     
     UILabel *label = [[UILabel alloc] initWithFrame:self.view.bounds];
-    label.text = @"meow nigga";
     [self.view addSubview:label];
     
     
@@ -46,6 +46,7 @@
     self.storiesResults.delegate = self;
     [self.view addSubview:self.storiesResults];
     [self.storiesResults registerClass:[StoryCell class] forCellWithReuseIdentifier:@"storyCell"];
+    self.storiesResults.showsHorizontalScrollIndicator = NO;
     
     self.stories = [[NSArray alloc] init];
     
@@ -100,7 +101,11 @@
     
     //StoryCell *selectedCell = (StoryCell *)[self.storiesResults viewWithTag:[self cellTagForIndexPath:indexPath]];
     
-    
+    Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", storyToSwitchTo.id, @(YES)]];
+    if (bookmark.page != nil) {
+        readViewController.startingPageNumber = bookmark.page.page_number;
+    }
+                          
    [self.navigationController pushViewController: readViewController animated:YES];
     
     NSLog(@"index path: %d", indexPath.row);

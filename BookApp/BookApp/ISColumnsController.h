@@ -21,6 +21,7 @@ RKObjectLoaderDelegate
 @property (retain, nonatomic) UILabel       *titleLabel;
 @property (retain, nonatomic) UIPageControl *pageControl;
 @property (retain, nonatomic)Story * story;
+@property (nonatomic, retain) NSNumber *startingPageNumber;
 - (void)reloadChildViewControllers;
 
 @end

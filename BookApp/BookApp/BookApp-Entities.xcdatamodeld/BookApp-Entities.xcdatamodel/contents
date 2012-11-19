@@ -10,14 +10,27 @@
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
+    <entity name="BABookmark" representedClassName="Bookmark" syncable="YES">
+        <attribute name="auto_bookmark" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="page_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="story_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="user_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="page" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="BAPage" inverseName="bookmarks" inverseEntity="BAPage" syncable="YES"/>
+        <relationship name="story" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="BAStory" inverseName="bookmarks" inverseEntity="BAStory" syncable="YES"/>
+        <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="BAUser" inverseName="bookmarks" inverseEntity="BAUser" syncable="YES"/>
+    </entity>
     <entity name="BAPage" representedClassName="Page" syncable="YES">
         <attribute name="first_block_index" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="first_block_number" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="last_block_index" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="last_block_number" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="page_number" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="story_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BABookmark" inverseName="page" inverseEntity="BABookmark" syncable="YES"/>
     </entity>
     <entity name="BAStory" representedClassName="Story" syncable="YES">
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
@@ -25,6 +38,7 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="user_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BABookmark" inverseName="story" inverseEntity="BABookmark" syncable="YES"/>
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="BAUser" inverseName="stories" inverseEntity="BAUser" syncable="YES"/>
     </entity>
     <entity name="BAUser" representedClassName="User" syncable="YES">
@@ -32,12 +46,14 @@
         <attribute name="first_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="last_name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BABookmark" inverseName="user" inverseEntity="BABookmark" syncable="YES"/>
         <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BAStory" inverseName="user" inverseEntity="BAStory" syncable="YES"/>
     </entity>
     <elements>
         <element name="BABlock" positionX="160" positionY="192" width="128" height="165"/>
-        <element name="BAStory" positionX="160" positionY="192" width="128" height="135"/>
-        <element name="BAUser" positionX="160" positionY="192" width="128" height="120"/>
-        <element name="BAPage" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="BAPage" positionX="160" positionY="192" width="128" height="180"/>
+        <element name="BAStory" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="BAUser" positionX="160" positionY="192" width="128" height="135"/>
+        <element name="BABookmark" positionX="160" positionY="192" width="128" height="180"/>
     </elements>
 </model>

@@ -6,6 +6,7 @@
 #import "Page.h"
 #import "NSString+FitInLabel.h"
 #import "API.h"
+#import "Bookmark.h"
 
 
 @interface ISColumnsController ()
@@ -247,8 +248,37 @@
     self.lastPageNumber = 0;
 }
 
+- (void) setStartingPageNumber: (NSNumber *) startingPageNumber {
+    self.firstPageNumber = [startingPageNumber intValue];
+    self.lastPageNumber = [startingPageNumber intValue];
+    _startingPageNumber = startingPageNumber;
+}
+
 - (void) viewWillAppear:(BOOL)animated {
-    [self createNumberOfPages:2 startingPageNumber:@0 fromBlock:@0 index:0 pageBuffer:@""];
+    if (self.startingPageNumber == nil) {
+        [self createNumberOfPages:3
+               startingPageNumber:@(0)
+                        fromBlock:@(0)
+                            index:0
+                       pageBuffer:@""];
+        [self startOnPageNumber: 0];
+    } else {
+        
+    Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.startingPageNumber, self.story.id]];
+        [self createNumberOfPages:3
+               startingPageNumber:@([page.page_number intValue] + 1)
+                        fromBlock:page.last_block_number
+                            index:[page.last_block_index intValue]
+                       pageBuffer:@""];
+        
+        [self startOnPageNumber: [page.page_number intValue]];
+    }
+}
+
+
+- (void)startOnPageNumber: (int) pageNumber {
+    self.scrollView.contentOffset = CGPointMake(pageNumber * self.scrollView.width, 0);
+    [self.scrollView reloadData];
 }
 
 - (void)viewDidUnload
@@ -298,9 +328,22 @@
 }
 
 - (void)backClicked {
+    Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", self.story.id, @(YES)]];
+    if (bookmark == nil) {
+        bookmark = [Bookmark object];
+    }
+    
+    bookmark.page = [self currentPage];
+    bookmark.story_id = self.story.id;
+    bookmark.auto_bookmark = @(YES);
+    [[bookmark managedObjectContext] save:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (Page *) currentPage {
+    Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", self.pageControl.currentPage, self.story.id]];
+    return page;
+}
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {

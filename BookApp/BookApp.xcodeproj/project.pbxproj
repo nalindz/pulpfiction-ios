@@ -29,7 +29,6 @@
 		F530E1FF16435AF6003A9EDF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1FE16435AF6003A9EDF /* QuartzCore.framework */; };
 		F530E20016435B07003A9EDF /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1E716435A3C003A9EDF /* libRestKit.a */; };
 		F575269E165067FD005E2235 /* BABlock.m in Sources */ = {isa = PBXBuildFile; fileRef = F575269D165067FD005E2235 /* BABlock.m */; };
-		F57526A11650839B005E2235 /* BAPage.m in Sources */ = {isa = PBXBuildFile; fileRef = F57526A01650839B005E2235 /* BAPage.m */; };
 		F57526A4165083CC005E2235 /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = F57526A3165083CC005E2235 /* Page.m */; };
 		F586EFC316538AFB00488742 /* UIView+FrameUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F586EFC216538AFB00488742 /* UIView+FrameUtil.m */; };
 		F586F03C1654A8A000488742 /* MtNoLFRo.TTF in Resources */ = {isa = PBXBuildFile; fileRef = F586F0001654A8A000488742 /* MtNoLFRo.TTF */; };
@@ -42,11 +41,14 @@
 		F586F04D1659D9E200488742 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F586F04C1659D9E200488742 /* back@2x.png */; };
 		F586F0501659DB7D00488742 /* UIButton+AutoSizeWithImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F04F1659DB7D00488742 /* UIButton+AutoSizeWithImage.m */; };
 		F586F0541659FCC600488742 /* close-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F586F0531659FCC600488742 /* close-button@2x.png */; };
+		F586F05A165A048F00488742 /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F059165A048F00488742 /* Bookmark.m */; };
+		F586F060165A0C3400488742 /* BAStory.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F05F165A0C3400488742 /* BAStory.m */; };
+		F586F063165A0C3400488742 /* BAPage.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F062165A0C3400488742 /* BAPage.m */; };
+		F586F069165A191E00488742 /* BABookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F068165A191E00488742 /* BABookmark.m */; };
 		F59EED8F1643660A001C42F2 /* API.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED8E1643660A001C42F2 /* API.m */; };
 		F59EED9716438A8D001C42F2 /* Environments.plist in Resources */ = {isa = PBXBuildFile; fileRef = F59EED9616438A8D001C42F2 /* Environments.plist */; };
 		F59EED9A16438BED001C42F2 /* Environment.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED9916438BED001C42F2 /* Environment.m */; };
 		F59EED9D16438E1E001C42F2 /* BookApp-Entities.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F59EED9B16438E1E001C42F2 /* BookApp-Entities.xcdatamodeld */; };
-		F59EEDA11643AF89001C42F2 /* BAStory.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EEDA01643AF89001C42F2 /* BAStory.m */; };
 		F59EEDA71643AF8A001C42F2 /* BAUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EEDA61643AF8A001C42F2 /* BAUser.m */; };
 		F59EEDAA1643B039001C42F2 /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EEDA91643B039001C42F2 /* Story.m */; };
 		F5E56593164EEA630044B956 /* NSString+FitInLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E56592164EEA630044B956 /* NSString+FitInLabel.m */; };
@@ -135,8 +137,6 @@
 		F530E1FE16435AF6003A9EDF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F575269C165067FD005E2235 /* BABlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BABlock.h; sourceTree = "<group>"; };
 		F575269D165067FD005E2235 /* BABlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BABlock.m; sourceTree = "<group>"; };
-		F575269F1650839B005E2235 /* BAPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAPage.h; sourceTree = "<group>"; };
-		F57526A01650839B005E2235 /* BAPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAPage.m; sourceTree = "<group>"; };
 		F57526A2165083CC005E2235 /* Page.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Page.h; sourceTree = "<group>"; };
 		F57526A3165083CC005E2235 /* Page.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Page.m; sourceTree = "<group>"; };
 		F586EFC116538AFB00488742 /* UIView+FrameUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FrameUtil.h"; sourceTree = "<group>"; };
@@ -155,14 +155,20 @@
 		F586F04E1659DB7D00488742 /* UIButton+AutoSizeWithImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+AutoSizeWithImage.h"; sourceTree = "<group>"; };
 		F586F04F1659DB7D00488742 /* UIButton+AutoSizeWithImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+AutoSizeWithImage.m"; sourceTree = "<group>"; };
 		F586F0531659FCC600488742 /* close-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close-button@2x.png"; sourceTree = "<group>"; };
+		F586F058165A048F00488742 /* Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bookmark.h; sourceTree = "<group>"; };
+		F586F059165A048F00488742 /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmark.m; sourceTree = "<group>"; };
+		F586F05E165A0C3400488742 /* BAStory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAStory.h; sourceTree = "<group>"; };
+		F586F05F165A0C3400488742 /* BAStory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAStory.m; sourceTree = "<group>"; };
+		F586F061165A0C3400488742 /* BAPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAPage.h; sourceTree = "<group>"; };
+		F586F062165A0C3400488742 /* BAPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAPage.m; sourceTree = "<group>"; };
+		F586F067165A191E00488742 /* BABookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BABookmark.h; sourceTree = "<group>"; };
+		F586F068165A191E00488742 /* BABookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BABookmark.m; sourceTree = "<group>"; };
 		F59EED8D1643660A001C42F2 /* API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = API.h; sourceTree = "<group>"; };
 		F59EED8E1643660A001C42F2 /* API.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = API.m; sourceTree = "<group>"; };
 		F59EED9616438A8D001C42F2 /* Environments.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Environments.plist; sourceTree = "<group>"; };
 		F59EED9816438BED001C42F2 /* Environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Environment.h; sourceTree = "<group>"; };
 		F59EED9916438BED001C42F2 /* Environment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Environment.m; sourceTree = "<group>"; };
 		F59EED9C16438E1E001C42F2 /* BookApp-Entities.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BookApp-Entities.xcdatamodel"; sourceTree = "<group>"; };
-		F59EED9F1643AF89001C42F2 /* BAStory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAStory.h; sourceTree = "<group>"; };
-		F59EEDA01643AF89001C42F2 /* BAStory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAStory.m; sourceTree = "<group>"; };
 		F59EEDA51643AF8A001C42F2 /* BAUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAUser.h; sourceTree = "<group>"; };
 		F59EEDA61643AF8A001C42F2 /* BAUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAUser.m; sourceTree = "<group>"; };
 		F59EEDA81643B039001C42F2 /* Story.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Story.h; sourceTree = "<group>"; };
@@ -319,17 +325,21 @@
 		F530E20316435C96003A9EDF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F575269F1650839B005E2235 /* BAPage.h */,
+				F586F067165A191E00488742 /* BABookmark.h */,
+				F586F068165A191E00488742 /* BABookmark.m */,
+				F586F061165A0C3400488742 /* BAPage.h */,
+				F586F062165A0C3400488742 /* BAPage.m */,
+				F586F05E165A0C3400488742 /* BAStory.h */,
+				F586F05F165A0C3400488742 /* BAStory.m */,
+				F586F058165A048F00488742 /* Bookmark.h */,
+				F586F059165A048F00488742 /* Bookmark.m */,
 				F57526A2165083CC005E2235 /* Page.h */,
 				F57526A3165083CC005E2235 /* Page.m */,
-				F57526A01650839B005E2235 /* BAPage.m */,
 				F575269C165067FD005E2235 /* BABlock.h */,
 				F575269D165067FD005E2235 /* BABlock.m */,
 				F59EED9B16438E1E001C42F2 /* BookApp-Entities.xcdatamodeld */,
 				F59EEDA51643AF8A001C42F2 /* BAUser.h */,
 				F59EEDA61643AF8A001C42F2 /* BAUser.m */,
-				F59EED9F1643AF89001C42F2 /* BAStory.h */,
-				F59EEDA01643AF89001C42F2 /* BAStory.m */,
 				F59EEDA81643B039001C42F2 /* Story.h */,
 				F59EEDA91643B039001C42F2 /* Story.m */,
 				F5FC6DEA1645F7110087137F /* Block.h */,
@@ -533,7 +543,6 @@
 				F59EED8F1643660A001C42F2 /* API.m in Sources */,
 				F59EED9A16438BED001C42F2 /* Environment.m in Sources */,
 				F59EED9D16438E1E001C42F2 /* BookApp-Entities.xcdatamodeld in Sources */,
-				F59EEDA11643AF89001C42F2 /* BAStory.m in Sources */,
 				F59EEDA71643AF8A001C42F2 /* BAUser.m in Sources */,
 				F59EEDAA1643B039001C42F2 /* Story.m in Sources */,
 				F5FC6DEC1645F7110087137F /* Block.m in Sources */,
@@ -545,7 +554,6 @@
 				F5FC6EE61648FC550087137F /* SlideScrollView.m in Sources */,
 				F5E56593164EEA630044B956 /* NSString+FitInLabel.m in Sources */,
 				F575269E165067FD005E2235 /* BABlock.m in Sources */,
-				F57526A11650839B005E2235 /* BAPage.m in Sources */,
 				F57526A4165083CC005E2235 /* Page.m in Sources */,
 				F52AAFB21653508B007B36C1 /* DiscoverVC.m in Sources */,
 				F52AAFB516535632007B36C1 /* StoryCell.m in Sources */,
@@ -554,6 +562,10 @@
 				F586F0471655E14400488742 /* UILabel+AutoSize.m in Sources */,
 				F586F04A1659C08900488742 /* CaptureView.m in Sources */,
 				F586F0501659DB7D00488742 /* UIButton+AutoSizeWithImage.m in Sources */,
+				F586F05A165A048F00488742 /* Bookmark.m in Sources */,
+				F586F060165A0C3400488742 /* BAStory.m in Sources */,
+				F586F063165A0C3400488742 /* BAPage.m in Sources */,
+				F586F069165A191E00488742 /* BABookmark.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
