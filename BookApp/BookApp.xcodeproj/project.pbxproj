@@ -38,6 +38,10 @@
 		F586F0421655D7B600488742 /* UIView+LayoutUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F0411655D7B600488742 /* UIView+LayoutUtil.m */; };
 		F586F0441655DA9400488742 /* MetaBold.TTF in Resources */ = {isa = PBXBuildFile; fileRef = F586F0431655DA9400488742 /* MetaBold.TTF */; };
 		F586F0471655E14400488742 /* UILabel+AutoSize.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F0461655E14400488742 /* UILabel+AutoSize.m */; };
+		F586F04A1659C08900488742 /* CaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F0491659C08900488742 /* CaptureView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F586F04D1659D9E200488742 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F586F04C1659D9E200488742 /* back@2x.png */; };
+		F586F0501659DB7D00488742 /* UIButton+AutoSizeWithImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F04F1659DB7D00488742 /* UIButton+AutoSizeWithImage.m */; };
+		F586F0541659FCC600488742 /* close-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F586F0531659FCC600488742 /* close-button@2x.png */; };
 		F59EED8F1643660A001C42F2 /* API.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED8E1643660A001C42F2 /* API.m */; };
 		F59EED9716438A8D001C42F2 /* Environments.plist in Resources */ = {isa = PBXBuildFile; fileRef = F59EED9616438A8D001C42F2 /* Environments.plist */; };
 		F59EED9A16438BED001C42F2 /* Environment.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED9916438BED001C42F2 /* Environment.m */; };
@@ -145,6 +149,12 @@
 		F586F0431655DA9400488742 /* MetaBold.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = MetaBold.TTF; sourceTree = "<group>"; };
 		F586F0451655E14400488742 /* UILabel+AutoSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+AutoSize.h"; sourceTree = "<group>"; };
 		F586F0461655E14400488742 /* UILabel+AutoSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+AutoSize.m"; sourceTree = "<group>"; };
+		F586F0481659C08900488742 /* CaptureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CaptureView.h; path = Utilities/CaptureView.h; sourceTree = "<group>"; };
+		F586F0491659C08900488742 /* CaptureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CaptureView.m; path = Utilities/CaptureView.m; sourceTree = "<group>"; };
+		F586F04C1659D9E200488742 /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
+		F586F04E1659DB7D00488742 /* UIButton+AutoSizeWithImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+AutoSizeWithImage.h"; sourceTree = "<group>"; };
+		F586F04F1659DB7D00488742 /* UIButton+AutoSizeWithImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+AutoSizeWithImage.m"; sourceTree = "<group>"; };
+		F586F0531659FCC600488742 /* close-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close-button@2x.png"; sourceTree = "<group>"; };
 		F59EED8D1643660A001C42F2 /* API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = API.h; sourceTree = "<group>"; };
 		F59EED8E1643660A001C42F2 /* API.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = API.m; sourceTree = "<group>"; };
 		F59EED9616438A8D001C42F2 /* Environments.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Environments.plist; sourceTree = "<group>"; };
@@ -331,6 +341,7 @@
 		F586EFC41654A88800488742 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				F586F04B1659D9CE00488742 /* Images */,
 				F586EFC51654A89400488742 /* Fonts */,
 			);
 			name = Assets;
@@ -347,9 +358,22 @@
 			name = Fonts;
 			sourceTree = "<group>";
 		};
+		F586F04B1659D9CE00488742 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				F586F04C1659D9E200488742 /* back@2x.png */,
+				F586F0531659FCC600488742 /* close-button@2x.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
 		F59EED90164386AE001C42F2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				F586F04E1659DB7D00488742 /* UIButton+AutoSizeWithImage.h */,
+				F586F04F1659DB7D00488742 /* UIButton+AutoSizeWithImage.m */,
+				F586F0481659C08900488742 /* CaptureView.h */,
+				F586F0491659C08900488742 /* CaptureView.m */,
 				F586F0451655E14400488742 /* UILabel+AutoSize.h */,
 				F586F0461655E14400488742 /* UILabel+AutoSize.m */,
 				F586F0401655D7B600488742 /* UIView+LayoutUtil.h */,
@@ -491,6 +515,8 @@
 				F586F03D1654A8A000488742 /* MtNoRo.TTF in Resources */,
 				F586F03F1654B0B800488742 /* MetaSerifOT-Book.otf in Resources */,
 				F586F0441655DA9400488742 /* MetaBold.TTF in Resources */,
+				F586F04D1659D9E200488742 /* back@2x.png in Resources */,
+				F586F0541659FCC600488742 /* close-button@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,6 +552,8 @@
 				F586EFC316538AFB00488742 /* UIView+FrameUtil.m in Sources */,
 				F586F0421655D7B600488742 /* UIView+LayoutUtil.m in Sources */,
 				F586F0471655E14400488742 /* UILabel+AutoSize.m in Sources */,
+				F586F04A1659C08900488742 /* CaptureView.m in Sources */,
+				F586F0501659DB7D00488742 /* UIButton+AutoSizeWithImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

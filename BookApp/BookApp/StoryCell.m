@@ -41,7 +41,6 @@
     return self;
 }
 
-
 - (void)renderWithStory: (Story *)story indexPath: (NSIndexPath *) indexPath {
     [self.titleLabel setText:story.title fixedWidth:YES];
     [self.titleLabel stickToBottomOf:self.centeredView];

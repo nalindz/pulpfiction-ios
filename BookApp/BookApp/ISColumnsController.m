@@ -8,7 +8,6 @@
 #import "API.h"
 
 
-
 @interface ISColumnsController ()
 
 - (void)enableScrollsToTop;
@@ -18,9 +17,7 @@
 - (NSInteger)numberOfPages;
 - (SlideViewCell *) viewAtIndex: (NSInteger) index;
 - (void)enqueueReusableView:(SlideViewCell *)view;
--(void) reloadData;
-
-
+- (void) reloadData;
 
 @property (nonatomic, assign, readwrite) CGFloat colWidth;
 @property (nonatomic, assign, readwrite) NSInteger numCols;
@@ -193,7 +190,7 @@
 
 
 - (int)pageMargin {
-    return 40;
+    return 60;
 }
 
 - (CGSize) pageSize {
@@ -298,6 +295,10 @@
     cell.delegate = self;
     [cell renderWithPage:page];
     return cell;
+}
+
+- (void)backClicked {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

@@ -20,7 +20,7 @@ RKObjectLoaderDelegate
 @property (retain, nonatomic) SlideScrollView  *scrollView;
 @property (retain, nonatomic) UILabel       *titleLabel;
 @property (retain, nonatomic) UIPageControl *pageControl;
-@property Story * story;
+@property (retain, nonatomic)Story * story;
 - (void)reloadChildViewControllers;
 
 @end

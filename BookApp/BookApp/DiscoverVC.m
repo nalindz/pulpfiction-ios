@@ -9,6 +9,7 @@
 #import "DiscoverVC.h"
 #import "ISColumnsController.h"
 #import "StoryCell.h"
+#import "CaptureView.h"
 
 @interface DiscoverVC ()
 
@@ -96,7 +97,11 @@
     
     ISColumnsController *readViewController = [[ISColumnsController alloc] init];
     readViewController.story = storyToSwitchTo;
-    [self.navigationController pushViewController: readViewController animated:YES];
+    
+    //StoryCell *selectedCell = (StoryCell *)[self.storiesResults viewWithTag:[self cellTagForIndexPath:indexPath]];
+    
+    
+   [self.navigationController pushViewController: readViewController animated:YES];
     
     NSLog(@"index path: %d", indexPath.row);
     
@@ -110,7 +115,12 @@
     
     
     [cell renderWithStory:story indexPath:indexPath];
+    cell.tag = [self cellTagForIndexPath: indexPath];
     return cell;
+}
+
+- (NSInteger)cellTagForIndexPath: (NSIndexPath *) indexPath {
+    return 1000 + indexPath.row;
 }
 
 @end
