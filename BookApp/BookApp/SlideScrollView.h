@@ -18,7 +18,9 @@
 
 @interface SlideScrollView : UIScrollView
 @property (nonatomic, assign) id <SlideScrollDataSource> dataSource;
--(void) reloadData;
+- (void)reloadData;
+- (void)loadNewData;
+- (void)reloadIndex: (int) index;
 @end
 
 

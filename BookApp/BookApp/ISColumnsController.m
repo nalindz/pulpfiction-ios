@@ -10,6 +10,8 @@
 #import <dispatch/dispatch.h>
 
 
+#define pagesToBuffer 5
+
 @interface ISColumnsController ()
 
 - (void)enableScrollsToTop;
@@ -41,6 +43,7 @@
 @end
 
 @implementation ISColumnsController
+
 
 #pragma mark - life cycle
 
@@ -112,7 +115,7 @@
     
     NSLog(@"requesting page number: %@", pageNumber);
     int splitIndex = pageBuffer.length;
-    int oldPageBufferLength;
+    int oldPageBufferLength = 0;
     Block *currentBlock;
     while (splitIndex == pageBuffer.length) {
         currentBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", startBlockNumber, self.story.id]];
@@ -263,14 +266,24 @@
     self.firstPageNumber = 0;
     self.lastPageNumber = 0;
     
- [[NSNotificationCenter defaultCenter] addObserver:self
-        selector:@selector(receiveTestNotification)
-        name:@"changesMerged"
-        object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveManagedObjectUpdate:)
+                                                 name:@"changesMerged"
+                                               object:nil];
 }
-- (void)receiveTestNotification {
-    NSLog(@"updated meow here");
-    [self.scrollView reloadData];
+- (void)receiveManagedObjectUpdate: (NSNotification *) notification {
+    NSLog(@"updated meow here: %@", notification);
+    NSArray *insertedData = [notification.userInfo objectForKey:@"inserted"];
+    NSLog(@"the data: %@", insertedData);
+    for (NSManagedObject *object in insertedData) {
+        if ([object class] == [Page class]) {
+            Page *page = (Page *)object;
+            [self.scrollView reloadIndex:([page.page_number intValue])];
+        }
+    }
+    
+    
+    [self.scrollView loadNewData];
 }
 
 
@@ -284,7 +297,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     if (self.startingPageNumber == nil) {
                 dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void) {
-                    [self createNumberOfPages:2
+                    [self createNumberOfPages:pagesToBuffer
                startingPageNumber:@(0)
                         fromBlock:@(0)
                             index:0
@@ -295,7 +308,7 @@
         
     Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.startingPageNumber, self.story.id]];
                 dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void) {
-                    [self createNumberOfPages:2
+                    [self createNumberOfPages:pagesToBuffer
                startingPageNumber:@([page.page_number intValue] + 1)
                         fromBlock:page.last_block_number
                             index:[page.last_block_index intValue]
@@ -352,15 +365,15 @@
     SlideViewCell *cell = [[SlideViewCell alloc] initWithFrame:self.view.frame];
     cell.backgroundColor = [UIColor whiteColor];
     
-    Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", index, self.story.id]];
+   // Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", index, self.story.id]];
     
     
-    Page *unfaultedPage = [page unfault];
+   // Page *unfaultedPage = [page unfault];
     
 //NSLog(@"The page: %@", page);
-    NSLog(@"The unfaulted page: %@", unfaultedPage);
+    //NSLog(@"The unfaulted page: %@", unfaultedPage);
     cell.delegate = self;
-    [cell renderWithPage:unfaultedPage];
+    [cell renderWithPageNumber:@(index) storyId:self.story.id];
     return cell;
 }
 
@@ -390,7 +403,7 @@
     CGFloat width = self.scrollView.frame.size.width;
     int newCurrentPage = ((offset+(width/2))/width);
     if (newCurrentPage != self.pageControl.currentPage) {
-        if (newCurrentPage == (self.lastPageNumber) && self.stopLoadingPages == NO) {
+        if (newCurrentPage > (self.lastPageNumber - pagesToBuffer + 1) && self.stopLoadingPages == NO) {
             Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", self.pageControl.currentPage + 1, self.story.id]];
             
             
@@ -401,7 +414,7 @@
             
             if (![lastBlock.last_block boolValue]) {
                 dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void) {
-                [self createNumberOfPages:2 startingPageNumber:[NSNumber numberWithInt:(self.lastPageNumber + 1)] fromBlock:unfaultedPage.last_block_number index:[unfaultedPage.last_block_index intValue] pageBuffer:@""];
+                [self createNumberOfPages:pagesToBuffer startingPageNumber:[NSNumber numberWithInt:(self.lastPageNumber + 1)] fromBlock:unfaultedPage.last_block_number index:[unfaultedPage.last_block_index intValue] pageBuffer:@""];
                 });
             } else {
                 self.stopLoadingPages = YES;

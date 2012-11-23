@@ -111,15 +111,21 @@
     [view removeFromSuperview];
 }
 
-- (void)relayoutViews {
+
+
+
+- (void)relayoutViews: (BOOL) allViews {
     
     // Reset all state
-    [self.visibleViews enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        SlideViewCell *view = (SlideViewCell *)obj;
-        [self enqueueReusableView:view];
-    }];
-    [self.visibleViews removeAllObjects];
-    [self.viewKeysToRemove removeAllObjects];
+    if (allViews) {
+        [self.visibleViews enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            SlideViewCell *view = (SlideViewCell *)obj;
+            [self enqueueReusableView:view];
+        }];
+        [self.visibleViews removeAllObjects];
+        [self.viewKeysToRemove removeAllObjects];
+    }
+    
     [self.indexToRectMap removeAllObjects];
     
     
@@ -233,8 +239,17 @@
     [self removeAndAddCellsIfNecessary];
 }
 
--(void) reloadData {
-    [self relayoutViews];
+- (void) reloadData {
+    [self relayoutViews:YES];
+}
+
+- (void)loadNewData {
+    [self relayoutViews:NO];
+}
+
+- (void)reloadIndex: (int) index {
+    SlideViewCell *cell = [self.visibleViews objectForKey:[NSString stringWithFormat:@"%d", index]];
+    [cell reRender];
 }
 
 

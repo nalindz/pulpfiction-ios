@@ -15,10 +15,12 @@
 @end
 
 @interface SlideViewCell : UIView
-- (void) prepareForReuse;
-- (void) renderWithPage: (Page *) page;
 @property (nonatomic, strong) UILabel *textLabel;
 @property (nonatomic, assign) id<SlideViewCellDelegate> delegate;
+
+- (void)prepareForReuse;
+- (void)renderWithPageNumber: (NSNumber *) pageNumber storyId: (NSNumber *) storyId;
+- (void)reRender;
 @end
 
 

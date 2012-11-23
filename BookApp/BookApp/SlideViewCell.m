@@ -12,6 +12,9 @@
 @interface SlideViewCell()
 @property (nonatomic, strong) UIView *titleBar;
 @property (nonatomic, strong) UIButton *backButton;
+@property (nonatomic, strong) NSNumber *pageNumber;
+@property (nonatomic, strong) NSNumber *storyId;
+
 @end
 
 @implementation SlideViewCell
@@ -40,16 +43,26 @@
     return self;
 }
 
-- (void) prepareForReuse {
+- (void)prepareForReuse {
     self.transform = CGAffineTransformIdentity;
 }
 
 
-- (void) renderWithPage: (Page *) page {
+- (void)renderWithPageNumber: (NSNumber *) pageNumber storyId: (NSNumber *) storyId {
+    self.storyId = storyId;
+    self.pageNumber = pageNumber;
+    Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.pageNumber, self.storyId]];
     self.textLabel.font = [self.delegate fontForSlideViewCell];
     [self.textLabel positionCenterOf:self withMargin:[self.delegate pageMargin]];
     self.textLabel.text = page.text;
     //self.backButton.x = [self.delegate pageMargin];
 }
+
+-  (void)reRender {
+    //Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.pageNumber, self.storyId]];
+    //NSLog(@"The NEW PAGE MEOWZILLA: %@", page);
+    [self renderWithPageNumber:self.pageNumber storyId:self.storyId];
+}
+
 
 @end
