@@ -24,7 +24,7 @@
     <entity name="BAPage" representedClassName="Page" syncable="YES">
         <attribute name="first_block_index" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="first_block_number" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="last_block_index" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="last_block_number" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="page_number" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
@@ -51,9 +51,9 @@
     </entity>
     <elements>
         <element name="BABlock" positionX="160" positionY="192" width="128" height="165"/>
+        <element name="BABookmark" positionX="160" positionY="192" width="128" height="180"/>
         <element name="BAPage" positionX="160" positionY="192" width="128" height="180"/>
         <element name="BAStory" positionX="160" positionY="192" width="128" height="150"/>
         <element name="BAUser" positionX="160" positionY="192" width="128" height="135"/>
-        <element name="BABookmark" positionX="160" positionY="192" width="128" height="180"/>
     </elements>
 </model>

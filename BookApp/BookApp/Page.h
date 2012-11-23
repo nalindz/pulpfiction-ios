@@ -9,5 +9,5 @@
 #import "BAPage.h"
 
 @interface Page : BAPage
-
+- (Page *) unfault;
 @end

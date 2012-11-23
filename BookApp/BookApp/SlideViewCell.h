@@ -17,6 +17,7 @@
 @interface SlideViewCell : UIView
 - (void) prepareForReuse;
 - (void) renderWithPage: (Page *) page;
+@property (nonatomic, strong) UILabel *textLabel;
 @property (nonatomic, assign) id<SlideViewCellDelegate> delegate;
 @end
 

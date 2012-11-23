@@ -10,7 +10,6 @@
 #import "UIButton+AutoSizeWithImage.h"
 
 @interface SlideViewCell()
-@property (nonatomic, strong) UILabel *textLabel;
 @property (nonatomic, strong) UIView *titleBar;
 @property (nonatomic, strong) UIButton *backButton;
 @end
@@ -47,7 +46,6 @@
 
 
 - (void) renderWithPage: (Page *) page {
-    //self.textLabel.font = [UIFont fontWithName:@"Meta Serif OT" size:30];
     self.textLabel.font = [self.delegate fontForSlideViewCell];
     [self.textLabel positionCenterOf:self withMargin:[self.delegate pageMargin]];
     self.textLabel.text = page.text;
