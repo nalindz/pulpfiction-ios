@@ -10,4 +10,5 @@
 
 @interface Page : BAPage
 - (Page *) unfault;
+- (BOOL)isLastPage;
 @end

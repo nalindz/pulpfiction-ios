@@ -171,7 +171,7 @@
         }
     }
     
-    int lastBlockIndex = splitIndex - oldPageBufferLength;
+    int lastBlockIndex = splitIndex - oldPageBufferLength + startBlockIndex;
     
     Page *newPage = [Page object];
     newPage.page_number = pageNumber;
@@ -197,7 +197,7 @@
     
     [[newPage managedObjectContext] save:&error];
     
-    if ([currentBlock.last_block boolValue]) {
+    if ([newPage isLastPage]) {
         numberOfPages = 0;
         self.loadingPages = NO;
         self.pagesOutstanding = 0;
@@ -209,7 +209,7 @@
         }
     }
     
-    if (numberOfPages > 0 && ![currentBlock.last_block boolValue]) {
+    if (numberOfPages > 0) {
         
         dispatch_async(self.backgroundQueue, ^(void) {
             [self createNumberOfPages:numberOfPages
@@ -223,6 +223,7 @@
     //[self.scrollView  reloadData];
     NSLog(@"firstPageNumber: %d, lastPageNumbeR: %d", self.firstPageNumber ,self.lastPageNumber);
 }
+
 
 
 - (int)pageMargin {
@@ -320,10 +321,8 @@
     } else {
         Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.startingPageNumber, self.story.id]];
         
-    Block *lastBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", page.last_block_number , self.story.id]];
     
-    if (![lastBlock.last_block boolValue]) {
-        
+        if (![page isLastPage]) {
         dispatch_async(self.backgroundQueue, ^(void) {
             [self createNumberOfPages:pagesToBuffer
                    startingPageNumber:@([page.page_number intValue] + 1)
@@ -343,36 +342,6 @@
     [self.scrollView reloadData];
 }
 
-- (void)viewDidUnload
-{
-    self.scrollView = nil;
-    
-    [super viewDidUnload];
-}
-
-
-- (void)didChangeCurrentPage:(NSInteger)currentIndex previousPage:(NSInteger)previousIndex
-{
-   /*
-    NSLog(@"meow");
-    UIViewController <ISColumnsControllerChild> *previousViewController = [self.viewControllers objectAtIndex:previousIndex];
-    if ([previousViewController respondsToSelector:@selector(didResignActive)]) {
-        [previousViewController didResignActive];
-    }
-    
-    if (currentIndex == (self.viewControllers.count - 1)) {
-        ViewController *nextPage = [[ViewController alloc] init];
-        nextPage.pageNumber = ((ViewController *)previousViewController).pageNumber + 1;
-        [self.viewControllers addObject:nextPage];
-    }
-    UIViewController <ISColumnsControllerChild> *currentViewController = [self.viewControllers objectAtIndex:currentIndex];
-    if ([currentViewController respondsToSelector:@selector(didBecomeActive)]) {
-        [currentViewController didBecomeActive];
-    }
-
-    self.titleLabel.text = currentViewController.navigationItem.title;
-    */
-}
 
 - (NSInteger)numberOfPages {
     return self.lastPageNumber + 1;
@@ -382,14 +351,6 @@
     NSLog(@"Loading page: %d", index);
     SlideViewCell *cell = [[SlideViewCell alloc] initWithFrame:self.view.frame];
     cell.backgroundColor = [UIColor whiteColor];
-    
-   // Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", index, self.story.id]];
-    
-    
-   // Page *unfaultedPage = [page unfault];
-    
-//NSLog(@"The page: %@", page);
-    //NSLog(@"The unfaulted page: %@", unfaultedPage);
     cell.delegate = self;
     [cell renderWithPageNumber:@(index) storyId:self.story.id];
     return cell;
@@ -439,9 +400,7 @@
     
     Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", self.lastPageNumber, self.story.id]];
     
-    Block *lastBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", page.last_block_number , self.story.id]];
-    
-    if (![lastBlock.last_block boolValue]) {
+    if (![page isLastPage]) {
         self.pagesOutstanding = pagesToBuffer;
         dispatch_async(self.backgroundQueue, ^(void) {
             [self createNumberOfPages:pagesToBuffer startingPageNumber:[NSNumber numberWithInt:(self.lastPageNumber + 1)] fromBlock:@([page.last_block_number intValue]) index:[page.last_block_index intValue] pageBuffer:@""];

@@ -12,8 +12,18 @@
 		<string>cache-debug.sqlite</string>
 	</dict>
 	<key>Stage</key>
-	<string></string>
+	<dict>
+		<key>apiURL</key>
+		<string>http://bookapp-stage.herokuapp.com</string>
+		<key>ObjectStoreFilename</key>
+		<string>cache-debug.sqlite</string>
+	</dict>
 	<key>Release</key>
-	<string></string>
+	<dict>
+		<key>apiURL</key>
+		<string></string>
+		<key>ObjectStoreFilename</key>
+		<string>cache-debug.sqlite</string>
+	</dict>
 </dict>
 </plist>
