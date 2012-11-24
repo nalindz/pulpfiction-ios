@@ -319,6 +319,11 @@
         [self startOnPageNumber: 0];
     } else {
         Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.startingPageNumber, self.story.id]];
+        
+    Block *lastBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", page.last_block_number , self.story.id]];
+    
+    if (![lastBlock.last_block boolValue]) {
+        
         dispatch_async(self.backgroundQueue, ^(void) {
             [self createNumberOfPages:pagesToBuffer
                    startingPageNumber:@([page.page_number intValue] + 1)
@@ -326,6 +331,7 @@
                                 index:[page.last_block_index intValue]
                            pageBuffer:@""];
         });
+    }
         
         [self startOnPageNumber: [page.page_number intValue]];
     }
