@@ -249,7 +249,9 @@
 
 - (void)reloadIndex: (int) index {
     SlideViewCell *cell = [self.visibleViews objectForKey:[NSString stringWithFormat:@"%d", index]];
-    [cell reRender];
+    if (cell != nil) {
+        [cell reRender];
+    }
 }
 
 

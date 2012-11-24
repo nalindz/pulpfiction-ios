@@ -32,10 +32,15 @@
 @property (atomic, retain) NSMutableArray *viewKeysToRemove;
 @property (atomic, retain) NSMutableDictionary *indexToRectMap;
 
+@property (retain) dispatch_queue_t backgroundQueue;
 
 @property (atomic) int firstPageNumber;
 @property (atomic) int lastPageNumber;
+
+@property (atomic) int pagesOutstanding;
+
 @property BOOL stopLoadingPages;
+@property BOOL loadingPages;
 
 
 - (void)removeAndAddCellsIfNecessary;
@@ -46,6 +51,7 @@
 
 
 #pragma mark - life cycle
+
 
 - (id)init
 {
@@ -61,6 +67,7 @@
         */
         
         //[self reloadData];
+        self.backgroundQueue = dispatch_queue_create("backgroundQueue", NULL);
     }
     return self;
 }
@@ -112,7 +119,6 @@
                        index:(NSInteger) startBlockIndex
                   pageBuffer: (NSString *) pageBuffer {
     
-    
     NSLog(@"requesting page number: %@", pageNumber);
     int splitIndex = pageBuffer.length;
     int oldPageBufferLength = 0;
@@ -124,12 +130,12 @@
             [RKObjectManager.sharedManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"stories/%@/blocks?first_block=%d&last_block=%d", self.story.id, [startBlockNumber integerValue], endBlockNumber] usingBlock:^(RKObjectLoader *loader) {
                 loader.onDidLoadObjects = ^(NSArray *objects) {
                     
-                dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void) {
+                dispatch_async( self.backgroundQueue,  ^(void) {
                     [self createNumberOfPages: numberOfPages
-                           startingPageNumber: pageNumber
-                                    fromBlock:startBlockNumber
+                           startingPageNumber: @([pageNumber intValue])
+                                    fromBlock:@([startBlockNumber intValue])
                                         index:startBlockIndex
-                                   pageBuffer:pageBuffer];
+                                   pageBuffer:[NSString stringWithFormat:@"%@", pageBuffer]];
                 });
                 };
             }];
@@ -179,8 +185,6 @@
     
     NSError *error;
     
-    
-    
     NSLog(@"last block index: %d", lastBlockIndex);
     
     if ([pageNumber intValue] > self.lastPageNumber) {
@@ -191,15 +195,26 @@
         self.firstPageNumber = [pageNumber intValue];
     }
     
-    numberOfPages--;
-    
     [[newPage managedObjectContext] save:&error];
+    
+    if ([currentBlock.last_block boolValue]) {
+        numberOfPages = 0;
+        self.loadingPages = NO;
+        self.pagesOutstanding = 0;
+    } else {
+        numberOfPages--;
+        self.pagesOutstanding--;
+        if (self.pagesOutstanding == 0) {
+            self.loadingPages = NO;
+        }
+    }
+    
     if (numberOfPages > 0 && ![currentBlock.last_block boolValue]) {
         
-        dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void) {
+        dispatch_async(self.backgroundQueue, ^(void) {
             [self createNumberOfPages:numberOfPages
                    startingPageNumber:[NSNumber numberWithInt:([pageNumber intValue] + 1)]
-                            fromBlock:newPage.last_block_number
+                            fromBlock:@([newPage.last_block_number intValue])
                                 index:[newPage.last_block_index intValue]
                            pageBuffer:@""];
         });
@@ -221,8 +236,6 @@
 - (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     
 }
-
-
 
 - (void) setupScrollView {
 
@@ -287,7 +300,6 @@
 }
 
 
-
 - (void) setStartingPageNumber: (NSNumber *) startingPageNumber {
     self.firstPageNumber = [startingPageNumber intValue];
     self.lastPageNumber = [startingPageNumber intValue];
@@ -295,25 +307,25 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    self.pagesOutstanding = pagesToBuffer;
     if (self.startingPageNumber == nil) {
-                dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void) {
-                    [self createNumberOfPages:pagesToBuffer
-               startingPageNumber:@(0)
-                        fromBlock:@(0)
-                            index:0
-                       pageBuffer:@""];
-                });
+        dispatch_async(self.backgroundQueue, ^(void) {
+            [self createNumberOfPages:pagesToBuffer
+                   startingPageNumber:@(0)
+                            fromBlock:@(0)
+                                index:0
+                           pageBuffer:@""];
+        });
         [self startOnPageNumber: 0];
     } else {
-        
-    Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.startingPageNumber, self.story.id]];
-                dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void) {
-                    [self createNumberOfPages:pagesToBuffer
-               startingPageNumber:@([page.page_number intValue] + 1)
-                        fromBlock:page.last_block_number
-                            index:[page.last_block_index intValue]
-                       pageBuffer:@""];
-                });
+        Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.startingPageNumber, self.story.id]];
+        dispatch_async(self.backgroundQueue, ^(void) {
+            [self createNumberOfPages:pagesToBuffer
+                   startingPageNumber:@([page.page_number intValue] + 1)
+                            fromBlock:page.last_block_number
+                                index:[page.last_block_index intValue]
+                           pageBuffer:@""];
+        });
         
         [self startOnPageNumber: [page.page_number intValue]];
     }
@@ -403,27 +415,32 @@
     CGFloat width = self.scrollView.frame.size.width;
     int newCurrentPage = ((offset+(width/2))/width);
     if (newCurrentPage != self.pageControl.currentPage) {
-        if (newCurrentPage > (self.lastPageNumber - pagesToBuffer + 1) && self.stopLoadingPages == NO) {
-            Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", self.pageControl.currentPage + 1, self.story.id]];
-            
-            
-            Page *unfaultedPage = [page unfault];
-            NSLog(@"delecerate The unfaulted page: %@", unfaultedPage);
-            
-            Block *lastBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", unfaultedPage.last_block_number , self.story.id]];
-            
-            if (![lastBlock.last_block boolValue]) {
-                dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void) {
-                [self createNumberOfPages:pagesToBuffer startingPageNumber:[NSNumber numberWithInt:(self.lastPageNumber + 1)] fromBlock:unfaultedPage.last_block_number index:[unfaultedPage.last_block_index intValue] pageBuffer:@""];
-                });
-            } else {
-                self.stopLoadingPages = YES;
-            }
+        if (newCurrentPage > (self.lastPageNumber - pagesToBuffer + 1)) {
+            [self getMorePages];
+        } else {
+            //self.stopLoadingPages = YES;
         }
     }
     [self.pageControl setCurrentPage:((offset+(width/2))/width)];
     NSLog(@"current page %d", self.pageControl.currentPage);
+}
+
+- (void) getMorePages {
+    if (self.pagesOutstanding > 0) return;
+    if (self.loadingPages) return;
+    self.loadingPages = YES;
+    NSLog(@"The last page: %d", self.lastPageNumber);
     
+    Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", self.lastPageNumber, self.story.id]];
+    
+    Block *lastBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", page.last_block_number , self.story.id]];
+    
+    if (![lastBlock.last_block boolValue]) {
+        self.pagesOutstanding = pagesToBuffer;
+        dispatch_async(self.backgroundQueue, ^(void) {
+            [self createNumberOfPages:pagesToBuffer startingPageNumber:[NSNumber numberWithInt:(self.lastPageNumber + 1)] fromBlock:@([page.last_block_number intValue]) index:[page.last_block_index intValue] pageBuffer:@""];
+        });
+    }
 }
 
 - (UIFont *) fontForSlideViewCell {
@@ -434,11 +451,8 @@
 {
     
     CGFloat offset = scrollView.contentOffset.x;
-    int currentPage = floor(offset / self.scrollView.frame.size.width);
     
     for (UIView *viewController in self.scrollView.subviews) {
-        //SlideViewCell *viewController = [self.scrollView.subviews objectAtIndex:i];
-        //NSLog(@"thetext : %@, the height :%f, width: %f, x: %f, y: %f", viewController.text.text, viewController.view.frame.size.height, viewController.view.frame.size.width, viewController.view.frame.origin.x, viewController.view.frame.origin.y);
         CGFloat width = self.scrollView.frame.size.width;
         int i = viewController.frame.origin.x / width;
         CGFloat y = i * width;
