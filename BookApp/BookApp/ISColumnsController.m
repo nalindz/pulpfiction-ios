@@ -305,6 +305,7 @@
     self.firstPageNumber = [startingPageNumber intValue];
     self.lastPageNumber = [startingPageNumber intValue];
     _startingPageNumber = startingPageNumber;
+    self.pageControl.currentPage = [startingPageNumber intValue];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
