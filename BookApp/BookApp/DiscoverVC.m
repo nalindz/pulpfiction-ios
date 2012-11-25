@@ -11,11 +11,15 @@
 #import "StoryCell.h"
 #import "CaptureView.h"
 #import "Bookmark.h"
+#import "History.h"
 
 @interface DiscoverVC ()
 
 @property (nonatomic, strong) UICollectionView *storiesResults;
 @property (nonatomic, strong) NSArray *stories;
+@property (nonatomic, strong) UITextField *searchBox;
+@property (nonatomic, strong) UIButton *historyButton;
+@property (nonatomic, strong) UIButton *homeButton;
 @end
 
 @implementation DiscoverVC
@@ -24,15 +28,49 @@
 {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
+    self.view.backgroundColor = [UIColor whiteColor];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:label];
     
+   self.searchBox = [[UITextField alloc] initWithFrame:CGRectMake(40, 40, 100, 100)];
+    
+    self.searchBox.width = self.view.width * 0.6;
+    self.searchBox.height = 50;
+    self.searchBox.font = [UIFont fontWithName:@"MetaBoldLF-Roman" size:30];
+    [self.searchBox putInRightEdgeOf:self.view withMargin:40];
+    self.searchBox.returnKeyType = UIReturnKeySearch;
+    self.searchBox.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.searchBox.layer.borderWidth = 1.0;
+    
+    
+    self.homeButton = [[UIButton alloc] initWithFrame:CGRectZero];
+    [self.homeButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    self.homeButton.titleLabel.font = [UIFont fontWithName:@"MetaBoldLF-Roman" size:20];
+    [self.homeButton autoSizeWithText:@"home" fixedWidth:NO];
+    self.homeButton.height = self.searchBox.height;
+    [self.homeButton positionLeftOf:self.searchBox withMargin:30];
+    [self.homeButton addTarget:self action:@selector(homePressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.homeButton];
+    
+    self.historyButton = [[UIButton alloc] initWithFrame:CGRectZero];
+    [self.historyButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    self.historyButton.titleLabel.font = [UIFont fontWithName:@"MetaBoldLF-Roman" size:20];
+    [self.historyButton autoSizeWithText:@"history" fixedWidth:NO];
+    self.historyButton.height = self.searchBox.height;
+    [self.historyButton positionLeftOf:self.homeButton withMargin:30];
+    [self.historyButton addTarget:self action:@selector(historyPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.historyButton];
+    
+    
+    
+    
+    
+    [self.searchBox addTarget:self
+                  action:@selector(textFieldFinished:)
+             forControlEvents:UIControlEventEditingDidEndOnExit];
     
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    
     
     
     self.storiesResults = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:flowLayout];
@@ -52,19 +90,38 @@
     
     NSLog(@"the width: %f", self.storiesResults.frame.size.width);
     
-    
-    [self fetchStories];
+    [self fetchStoriesWithQuery:nil];
 }
 
-- (void) fetchStories {
-    [RKObjectManager.sharedManager loadObjectsAtResourcePath:@"stories" delegate:self];
+- (void) textFieldFinished: (id) sender {
+    [self fetchStoriesWithQuery:self.searchBox.text];
+}
+
+
+- (void) historyPressed {
+    [RKObjectManager.sharedManager loadObjectsAtResourcePath:@"history" delegate:self];
+}
+
+- (void) homePressed {
+    [self fetchStoriesWithQuery:nil];
+}
+
+
+- (void) fetchStoriesWithQuery: (NSString *) query {
+    NSString *resourcePath = @"stories";
+    if (query != nil) {
+        resourcePath = [NSString stringWithFormat:@"%@?query=%@", resourcePath, query];
+    }
+    [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath delegate:self];
 }
 
 
 - (void) objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    NSLog(@"The stories : %@", objects);
-    self.stories = [NSArray arrayWithArray:objects];
-    [self.storiesResults reloadData];
+    if ([objectLoader.resourcePath hasPrefix:@"stories"] || [objectLoader.resourcePath hasPrefix:@"history"]) {
+        NSLog(@"The stories : %@", objects);
+        self.stories = [NSArray arrayWithArray:objects];
+        [self.storiesResults reloadData];
+    }
 }
 
 - (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
@@ -105,11 +162,23 @@
     if (bookmark.page != nil) {
         readViewController.startingPageNumber = bookmark.page.page_number;
     }
+    
+    
+    [self addToHistory: storyToSwitchTo.id];
+    
                           
    [self.navigationController pushViewController: readViewController animated:YES];
     
     NSLog(@"index path: %d", indexPath.row);
     
+}
+
+
+- (void)addToHistory: (NSNumber *) story_id {
+    History *newHistory = [[History alloc] init];
+    newHistory.story_id = story_id;
+    
+    [[RKObjectManager sharedManager]  postObject:newHistory delegate:self];
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {

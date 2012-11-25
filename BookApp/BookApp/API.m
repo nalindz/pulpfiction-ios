@@ -11,6 +11,7 @@
 #import <RestKit/RKErrorMessage.h>
 #import "Story.h"
 #import "Block.h"
+#import "History.h"
 
 
 static API* _sharedInstance = nil;
@@ -77,6 +78,15 @@ static API* _sharedInstance = nil;
     [Block configureMapping:blockMapping];
     [objectManager.mappingProvider registerMapping:blockMapping
                                    withRootKeyPath:@"block"];
+    
+    
+    RKObjectMapping* historyMapping = [RKObjectMapping mappingForClass:[History class]];
+    [History configureMapping:historyMapping];
+    [objectManager.mappingProvider addObjectMapping:historyMapping];
+    [objectManager.mappingProvider setSerializationMapping:historyMapping.inverseMapping forClass:History.class];
+    
+    
+    [objectManager.router routeClass:History.class toResourcePath:@"/history" forMethod:RKRequestMethodPOST];
     
 }
 

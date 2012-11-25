@@ -40,12 +40,13 @@
 		F586F0471655E14400488742 /* UILabel+AutoSize.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F0461655E14400488742 /* UILabel+AutoSize.m */; };
 		F586F04A1659C08900488742 /* CaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F0491659C08900488742 /* CaptureView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F586F04D1659D9E200488742 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F586F04C1659D9E200488742 /* back@2x.png */; };
-		F586F0501659DB7D00488742 /* UIButton+AutoSizeWithImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F04F1659DB7D00488742 /* UIButton+AutoSizeWithImage.m */; };
+		F586F0501659DB7D00488742 /* UIButton+AutoSize.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F04F1659DB7D00488742 /* UIButton+AutoSize.m */; };
 		F586F0541659FCC600488742 /* close-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F586F0531659FCC600488742 /* close-button@2x.png */; };
 		F586F05A165A048F00488742 /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F059165A048F00488742 /* Bookmark.m */; };
 		F586F060165A0C3400488742 /* BAStory.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F05F165A0C3400488742 /* BAStory.m */; };
 		F586F063165A0C3400488742 /* BAPage.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F062165A0C3400488742 /* BAPage.m */; };
 		F586F069165A191E00488742 /* BABookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F068165A191E00488742 /* BABookmark.m */; };
+		F58FE1D31661EE4C001B98A3 /* History.m in Sources */ = {isa = PBXBuildFile; fileRef = F58FE1D21661EE4C001B98A3 /* History.m */; };
 		F59EED8F1643660A001C42F2 /* API.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED8E1643660A001C42F2 /* API.m */; };
 		F59EED9716438A8D001C42F2 /* Environments.plist in Resources */ = {isa = PBXBuildFile; fileRef = F59EED9616438A8D001C42F2 /* Environments.plist */; };
 		F59EED9A16438BED001C42F2 /* Environment.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED9916438BED001C42F2 /* Environment.m */; };
@@ -155,8 +156,8 @@
 		F586F0481659C08900488742 /* CaptureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CaptureView.h; path = Utilities/CaptureView.h; sourceTree = "<group>"; };
 		F586F0491659C08900488742 /* CaptureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CaptureView.m; path = Utilities/CaptureView.m; sourceTree = "<group>"; };
 		F586F04C1659D9E200488742 /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
-		F586F04E1659DB7D00488742 /* UIButton+AutoSizeWithImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+AutoSizeWithImage.h"; sourceTree = "<group>"; };
-		F586F04F1659DB7D00488742 /* UIButton+AutoSizeWithImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+AutoSizeWithImage.m"; sourceTree = "<group>"; };
+		F586F04E1659DB7D00488742 /* UIButton+AutoSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+AutoSize.h"; sourceTree = "<group>"; };
+		F586F04F1659DB7D00488742 /* UIButton+AutoSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+AutoSize.m"; sourceTree = "<group>"; };
 		F586F0531659FCC600488742 /* close-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close-button@2x.png"; sourceTree = "<group>"; };
 		F586F058165A048F00488742 /* Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bookmark.h; sourceTree = "<group>"; };
 		F586F059165A048F00488742 /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmark.m; sourceTree = "<group>"; };
@@ -166,6 +167,8 @@
 		F586F062165A0C3400488742 /* BAPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAPage.m; sourceTree = "<group>"; };
 		F586F067165A191E00488742 /* BABookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BABookmark.h; sourceTree = "<group>"; };
 		F586F068165A191E00488742 /* BABookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BABookmark.m; sourceTree = "<group>"; };
+		F58FE1D11661EE4C001B98A3 /* History.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = History.h; sourceTree = "<group>"; };
+		F58FE1D21661EE4C001B98A3 /* History.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = History.m; sourceTree = "<group>"; };
 		F59EED8D1643660A001C42F2 /* API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = API.h; sourceTree = "<group>"; };
 		F59EED8E1643660A001C42F2 /* API.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = API.m; sourceTree = "<group>"; };
 		F59EED9616438A8D001C42F2 /* Environments.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Environments.plist; sourceTree = "<group>"; };
@@ -330,6 +333,8 @@
 		F530E20316435C96003A9EDF /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F58FE1D11661EE4C001B98A3 /* History.h */,
+				F58FE1D21661EE4C001B98A3 /* History.m */,
 				F586F067165A191E00488742 /* BABookmark.h */,
 				F586F068165A191E00488742 /* BABookmark.m */,
 				F586F061165A0C3400488742 /* BAPage.h */,
@@ -385,8 +390,8 @@
 		F59EED90164386AE001C42F2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				F586F04E1659DB7D00488742 /* UIButton+AutoSizeWithImage.h */,
-				F586F04F1659DB7D00488742 /* UIButton+AutoSizeWithImage.m */,
+				F586F04E1659DB7D00488742 /* UIButton+AutoSize.h */,
+				F586F04F1659DB7D00488742 /* UIButton+AutoSize.m */,
 				F586F0481659C08900488742 /* CaptureView.h */,
 				F586F0491659C08900488742 /* CaptureView.m */,
 				F586F0451655E14400488742 /* UILabel+AutoSize.h */,
@@ -566,12 +571,13 @@
 				F586F0421655D7B600488742 /* UIView+LayoutUtil.m in Sources */,
 				F586F0471655E14400488742 /* UILabel+AutoSize.m in Sources */,
 				F586F04A1659C08900488742 /* CaptureView.m in Sources */,
-				F586F0501659DB7D00488742 /* UIButton+AutoSizeWithImage.m in Sources */,
+				F586F0501659DB7D00488742 /* UIButton+AutoSize.m in Sources */,
 				F586F05A165A048F00488742 /* Bookmark.m in Sources */,
 				F586F060165A0C3400488742 /* BAStory.m in Sources */,
 				F586F063165A0C3400488742 /* BAPage.m in Sources */,
 				F586F069165A191E00488742 /* BABookmark.m in Sources */,
 				55125FBA1662C8330006D538 /* LoginViewController.m in Sources */,
+				F58FE1D31661EE4C001B98A3 /* History.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
