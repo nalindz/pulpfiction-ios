@@ -37,6 +37,17 @@
 		<string>MetaSerifOT-Book.otf</string>
 		<string>MtNoLFRo.TTF</string>
 	</array>
+	<key>FacebookAppID</key>
+	<string>226241254101495</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb226241254101495</string>
+			</array>
+		</dict>
+	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

@@ -8,7 +8,6 @@
 
 #import "AppDelegate.h"
 
-#import "ViewController.h"
 #import <RestKit/RestKit.h>
 #import "API.h"
 #import "LoginViewController.h"
@@ -28,6 +27,17 @@
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    // FBSample logic
+    // We need to handle URLs by passing them to FBSession in order for SSO authentication
+    // to work.
+    return [FBSession.activeSession handleOpenURL:url];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

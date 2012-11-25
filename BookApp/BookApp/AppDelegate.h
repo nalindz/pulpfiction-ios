@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "ISColumnsController.h"
 
-@class ViewController;
-
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;

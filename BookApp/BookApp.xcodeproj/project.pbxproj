@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		55125FBA1662C8330006D538 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55125FB91662C8330006D538 /* LoginViewController.m */; };
+		5575A0771662D6A0004D1576 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5575A0761662D6A0004D1576 /* FacebookSDK.framework */; };
+		5575A07A1662D6E3004D1576 /* FacebookSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5575A0791662D6E3004D1576 /* FacebookSDKResources.bundle */; };
+		5575A07C1662D752004D1576 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5575A07B1662D752004D1576 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		5575A07E1662D75A004D1576 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5575A07D1662D75A004D1576 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		5575A0801662D766004D1576 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5575A07F1662D766004D1576 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F52AAFB21653508B007B36C1 /* DiscoverVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F52AAFB11653508B007B36C1 /* DiscoverVC.m */; };
 		F52AAFB516535632007B36C1 /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F52AAFB416535632007B36C1 /* StoryCell.m */; };
 		F530E1B616434F30003A9EDF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1B516434F30003A9EDF /* UIKit.framework */; };
@@ -111,6 +116,11 @@
 /* Begin PBXFileReference section */
 		55125FB81662C8330006D538 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		55125FB91662C8330006D538 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		5575A0761662D6A0004D1576 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../Frameworks/FacebookSDK.framework; sourceTree = "<group>"; };
+		5575A0791662D6E3004D1576 /* FacebookSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = FacebookSDKResources.bundle; path = ../Frameworks/FacebookSDK.framework/Versions/A/Resources/FacebookSDKResources.bundle; sourceTree = "<group>"; };
+		5575A07B1662D752004D1576 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		5575A07D1662D75A004D1576 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		5575A07F1662D766004D1576 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		F52AAFB01653508B007B36C1 /* DiscoverVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverVC.h; sourceTree = "<group>"; };
 		F52AAFB11653508B007B36C1 /* DiscoverVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverVC.m; sourceTree = "<group>"; };
 		F52AAFB316535632007B36C1 /* StoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCell.h; sourceTree = "<group>"; };
@@ -203,6 +213,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5575A0801662D766004D1576 /* Social.framework in Frameworks */,
+				5575A07E1662D75A004D1576 /* AdSupport.framework in Frameworks */,
+				5575A07C1662D752004D1576 /* Accounts.framework in Frameworks */,
 				F530E20016435B07003A9EDF /* libRestKit.a in Frameworks */,
 				F530E1FF16435AF6003A9EDF /* QuartzCore.framework in Frameworks */,
 				F530E1FD16435AEE003A9EDF /* libxml2.dylib in Frameworks */,
@@ -214,6 +227,7 @@
 				F530E1B616434F30003A9EDF /* UIKit.framework in Frameworks */,
 				F530E1B816434F30003A9EDF /* Foundation.framework in Frameworks */,
 				F530E1BA16434F30003A9EDF /* CoreGraphics.framework in Frameworks */,
+				5575A0771662D6A0004D1576 /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,6 +237,9 @@
 		F530E1A616434F30003A9EDF = {
 			isa = PBXGroup;
 			children = (
+				5575A07F1662D766004D1576 /* Social.framework */,
+				5575A07D1662D75A004D1576 /* AdSupport.framework */,
+				5575A07B1662D752004D1576 /* Accounts.framework */,
 				F530E1BB16434F30003A9EDF /* BookApp */,
 				F530E1B216434F30003A9EDF /* Products */,
 			);
@@ -239,6 +256,8 @@
 		F530E1B416434F30003A9EDF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5575A0791662D6E3004D1576 /* FacebookSDKResources.bundle */,
+				5575A0761662D6A0004D1576 /* FacebookSDK.framework */,
 				F530E1FE16435AF6003A9EDF /* QuartzCore.framework */,
 				F530E1FC16435AEE003A9EDF /* libxml2.dylib */,
 				F530E1FA16435AE6003A9EDF /* SystemConfiguration.framework */,
@@ -537,6 +556,7 @@
 				F586F0441655DA9400488742 /* MetaBold.TTF in Resources */,
 				F586F04D1659D9E200488742 /* back@2x.png in Resources */,
 				F586F0541659FCC600488742 /* close-button@2x.png in Resources */,
+				5575A07A1662D6E3004D1576 /* FacebookSDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -666,7 +686,10 @@
 		F530E1D616434F30003A9EDF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks/RestKit/Headers\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Frameworks/RestKit/Headers\"",
+					"\"$(SRCROOT)/../Frameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BookApp/BookApp-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -677,6 +700,7 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
+					"-lsqlite3.0",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -686,7 +710,10 @@
 		F530E1D716434F30003A9EDF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks/RestKit/Headers\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Frameworks/RestKit/Headers\"",
+					"\"$(SRCROOT)/../Frameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BookApp/BookApp-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -697,6 +724,7 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
+					"-lsqlite3.0",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -735,7 +763,10 @@
 		F59EED9516438A61001C42F2 /* Stage */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks/RestKit/Headers\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Frameworks/RestKit/Headers\"",
+					"\"$(SRCROOT)/../Frameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BookApp/BookApp-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -746,6 +777,7 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
+					"-lsqlite3.0",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
