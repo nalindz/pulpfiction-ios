@@ -14,5 +14,6 @@
 - (void) putInCenterOf: (UIView *) superView withMargin: (CGFloat) margin;
 - (void) positionCenterOf: (UIView *) superView withMargin: (CGFloat) margin;
 - (void) putInRightEdgeOf: (UIView *) superView withMargin: (CGFloat) margin;
+- (void) positionLeftOf: (UIView *) anchorView withMargin: (CGFloat) margin;
     
 @end

@@ -33,4 +33,11 @@
     [superView addSubview:self];
 }
 
+- (void) positionLeftOf: (UIView *) anchorView withMargin: (CGFloat) margin {
+    CGRect frame = self.frame;
+    frame.origin.x = anchorView.x - self.width - margin;
+    frame.origin.y = anchorView.y;
+    self.frame = frame;
+}
+
 @end

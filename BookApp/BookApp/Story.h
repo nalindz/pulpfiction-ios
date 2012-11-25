@@ -8,7 +8,6 @@
 
 #import "BAStory.h"
 #import "BAProtocols.h"
-#import <RestKit/RestKit.h>
 
 @interface Story : BAStory <HasRKManagedObjectMapping>
 

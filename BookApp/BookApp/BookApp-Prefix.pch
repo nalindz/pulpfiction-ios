@@ -17,4 +17,5 @@
     #import "UIView+LayoutUtil.h"
     #import "UIView+FrameUtil.h"
     #import "UILabel+AutoSize.h"
+    #import "UIButton+AutoSize.h"
 #endif

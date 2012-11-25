@@ -7,7 +7,6 @@
 //
 
 #import "StoryCell.h"
-#import "UILabel+AutoSize.h"
 
 @interface StoryCell()
 @property (nonatomic, strong) UIView *centeredView;

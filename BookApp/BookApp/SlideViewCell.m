@@ -7,7 +7,6 @@
 //
 
 #import "SlideViewCell.h"
-#import "UIButton+AutoSizeWithImage.h"
 
 @interface SlideViewCell()
 @property (nonatomic, strong) UIView *titleBar;

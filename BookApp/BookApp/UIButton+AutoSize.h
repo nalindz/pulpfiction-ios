@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIButton (AutoSizeWithImage)
+@interface UIButton (AutoSize)
 
 - (void)autoSizeWithImage: (NSString *) imageName;
+- (void) autoSizeWithText: (NSString *) text fixedWidth: (BOOL) fixedWidth;
 @end
