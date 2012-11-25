@@ -26,4 +26,11 @@
     self.frame = CGRectMake(margin, margin, superView.frame.size.width - 2 * margin, superView.frame.size.height - 2 * margin);
 }
 
+- (void) putInRightEdgeOf: (UIView *) superView withMargin: (CGFloat) margin {
+    CGRect frame = self.frame;
+    frame.origin.x = superView.frame.size.width - frame.size.width - margin;
+    self.frame = frame;
+    [superView addSubview:self];
+}
+
 @end

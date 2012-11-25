@@ -16,6 +16,7 @@
 
 @property (nonatomic, strong) UICollectionView *storiesResults;
 @property (nonatomic, strong) NSArray *stories;
+@property (nonatomic, strong) UITextField *searchBox;
 @end
 
 @implementation DiscoverVC
@@ -24,10 +25,22 @@
 {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
+    self.view.backgroundColor = [UIColor whiteColor];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:label];
     
+   self.searchBox = [[UITextField alloc] initWithFrame:CGRectMake(40, 40, 100, 100)];
+    
+    self.searchBox.width = self.view.width * 0.6;
+    self.searchBox.height = 50;
+    self.searchBox.font = [UIFont fontWithName:@"MetaBoldLF-Roman" size:30];
+    [self.searchBox putInRightEdgeOf:self.view withMargin:40];
+    self.searchBox.returnKeyType = UIReturnKeySearch;
+    self.searchBox.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.searchBox.layer.borderWidth = 1.0;
+    
+    [self.searchBox addTarget:self
+                  action:@selector(textFieldFinished:)
+             forControlEvents:UIControlEventEditingDidEndOnExit];
     
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
@@ -52,12 +65,20 @@
     
     NSLog(@"the width: %f", self.storiesResults.frame.size.width);
     
-    
-    [self fetchStories];
+    [self fetchStoriesWithQuery:nil];
 }
 
-- (void) fetchStories {
-    [RKObjectManager.sharedManager loadObjectsAtResourcePath:@"stories" delegate:self];
+- (void) textFieldFinished: (id) sender {
+    [self fetchStoriesWithQuery:self.searchBox.text];
+}
+
+
+- (void) fetchStoriesWithQuery: (NSString *) query {
+    NSString *resourcePath = @"stories";
+    if (query != nil) {
+        resourcePath = [NSString stringWithFormat:@"%@?query=%@", resourcePath, query];
+    }
+    [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath delegate:self];
 }
 
 
