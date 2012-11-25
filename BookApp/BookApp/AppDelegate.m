@@ -11,7 +11,7 @@
 #import "ViewController.h"
 #import <RestKit/RestKit.h>
 #import "API.h"
-#import "DiscoverVC.h"
+#import "LoginViewController.h"
 
 @implementation AppDelegate
 
@@ -22,8 +22,8 @@
     // Override point for customization after application launch.
     
     self.navigationController = [[UINavigationController alloc] init];
-    DiscoverVC *discoverVC = [[DiscoverVC alloc] init];
-    self.navigationController.viewControllers = [NSArray arrayWithObject:discoverVC];
+    LoginViewController *loginVC = [[LoginViewController alloc] init];
+    self.navigationController.viewControllers = [NSArray arrayWithObject:loginVC];
     
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];

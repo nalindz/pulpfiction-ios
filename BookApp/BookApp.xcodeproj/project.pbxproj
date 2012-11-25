@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		55125FBA1662C8330006D538 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55125FB91662C8330006D538 /* LoginViewController.m */; };
 		F52AAFB21653508B007B36C1 /* DiscoverVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F52AAFB11653508B007B36C1 /* DiscoverVC.m */; };
 		F52AAFB516535632007B36C1 /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F52AAFB416535632007B36C1 /* StoryCell.m */; };
 		F530E1B616434F30003A9EDF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1B516434F30003A9EDF /* UIKit.framework */; };
@@ -107,6 +108,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		55125FB81662C8330006D538 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		55125FB91662C8330006D538 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		F52AAFB01653508B007B36C1 /* DiscoverVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverVC.h; sourceTree = "<group>"; };
 		F52AAFB11653508B007B36C1 /* DiscoverVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverVC.m; sourceTree = "<group>"; };
 		F52AAFB316535632007B36C1 /* StoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCell.h; sourceTree = "<group>"; };
@@ -309,6 +312,8 @@
 				F530E1CD16434F30003A9EDF /* ViewController.h */,
 				F530E1CE16434F30003A9EDF /* ViewController.m */,
 				F530E1D016434F30003A9EDF /* ViewController.xib */,
+				55125FB81662C8330006D538 /* LoginViewController.h */,
+				55125FB91662C8330006D538 /* LoginViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -566,6 +571,7 @@
 				F586F060165A0C3400488742 /* BAStory.m in Sources */,
 				F586F063165A0C3400488742 /* BAPage.m in Sources */,
 				F586F069165A191E00488742 /* BABookmark.m in Sources */,
+				55125FBA1662C8330006D538 /* LoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
