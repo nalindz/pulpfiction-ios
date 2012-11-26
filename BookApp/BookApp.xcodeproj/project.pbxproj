@@ -13,6 +13,8 @@
 		5575A07C1662D752004D1576 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5575A07B1662D752004D1576 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5575A07E1662D75A004D1576 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5575A07D1662D75A004D1576 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5575A0801662D766004D1576 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5575A07F1662D766004D1576 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		5575A0831662FE89004D1576 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 5575A0821662FE89004D1576 /* User.m */; };
+		5575A09A16633E0B004D1576 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5575A09916633E0A004D1576 /* ProfileViewController.m */; };
 		F52AAFB21653508B007B36C1 /* DiscoverVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F52AAFB11653508B007B36C1 /* DiscoverVC.m */; };
 		F52AAFB516535632007B36C1 /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F52AAFB416535632007B36C1 /* StoryCell.m */; };
 		F530E1B616434F30003A9EDF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1B516434F30003A9EDF /* UIKit.framework */; };
@@ -121,6 +123,10 @@
 		5575A07B1662D752004D1576 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		5575A07D1662D75A004D1576 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		5575A07F1662D766004D1576 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		5575A0811662FE89004D1576 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		5575A0821662FE89004D1576 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		5575A09816633E0A004D1576 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
+		5575A09916633E0A004D1576 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		F52AAFB01653508B007B36C1 /* DiscoverVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverVC.h; sourceTree = "<group>"; };
 		F52AAFB11653508B007B36C1 /* DiscoverVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverVC.m; sourceTree = "<group>"; };
 		F52AAFB316535632007B36C1 /* StoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCell.h; sourceTree = "<group>"; };
@@ -336,6 +342,8 @@
 				F530E1D016434F30003A9EDF /* ViewController.xib */,
 				55125FB81662C8330006D538 /* LoginViewController.h */,
 				55125FB91662C8330006D538 /* LoginViewController.m */,
+				5575A09816633E0A004D1576 /* ProfileViewController.h */,
+				5575A09916633E0A004D1576 /* ProfileViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -373,6 +381,8 @@
 				F59EEDA91643B039001C42F2 /* Story.m */,
 				F5FC6DEA1645F7110087137F /* Block.h */,
 				F5FC6DEB1645F7110087137F /* Block.m */,
+				5575A0811662FE89004D1576 /* User.h */,
+				5575A0821662FE89004D1576 /* User.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -598,6 +608,8 @@
 				F586F069165A191E00488742 /* BABookmark.m in Sources */,
 				55125FBA1662C8330006D538 /* LoginViewController.m in Sources */,
 				F58FE1D31661EE4C001B98A3 /* History.m in Sources */,
+				5575A0831662FE89004D1576 /* User.m in Sources */,
+				5575A09A16633E0B004D1576 /* ProfileViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

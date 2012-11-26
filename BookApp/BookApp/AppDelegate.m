@@ -14,9 +14,12 @@
 
 @implementation AppDelegate
 
+@synthesize currentUser;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [API sharedInstance];
+    self.currentUser = nil;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
