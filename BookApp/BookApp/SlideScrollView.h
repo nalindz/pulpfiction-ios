@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SlideViewCell.h"
+#import "Page.h"
 
 @protocol SlideScrollDataSource
 
@@ -20,7 +21,9 @@
 @property (nonatomic, assign) id <SlideScrollDataSource> dataSource;
 - (void)reloadData;
 - (void)loadNewData;
-- (void)reloadIndex: (int) index;
+- (void)reloadPage: (Page *)page;
+
+- (void) softReset;
 @end
 
 

@@ -11,4 +11,5 @@
 @interface Page : BAPage
 - (Page *) unfault;
 - (BOOL)isLastPage;
++ (Page *)pageWithNumber: (NSNumber *)pageNumber storyId: (NSNumber *) storyId;
 @end

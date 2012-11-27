@@ -48,6 +48,8 @@
 
 
 - (void)renderWithPageNumber: (NSNumber *) pageNumber storyId: (NSNumber *) storyId {
+    CGAffineTransform currentTransform = self.transform;
+    self.transform = CGAffineTransformIdentity;
     self.storyId = storyId;
     self.pageNumber = pageNumber;
     Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.pageNumber, self.storyId]];
@@ -55,12 +57,16 @@
     [self.textLabel positionCenterOf:self withMargin:[self.delegate pageMargin]];
     self.textLabel.text = page.text;
     //self.backButton.x = [self.delegate pageMargin];
+    self.transform = currentTransform;
 }
 
 -  (void)reRender {
     //Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.pageNumber, self.storyId]];
     //NSLog(@"The NEW PAGE MEOWZILLA: %@", page);
+    CGAffineTransform currentTransform = self.transform;
+    self.transform = CGAffineTransformIdentity;
     [self renderWithPageNumber:self.pageNumber storyId:self.storyId];
+    self.transform = currentTransform;
 }
 
 

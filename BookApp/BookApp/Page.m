@@ -37,5 +37,10 @@
     return (lastBlock.last_block && [self.last_block_index intValue] == lastBlock.text.length);
 }
 
++ (Page *)pageWithNumber: (NSNumber *)pageNumber storyId: (NSNumber *) storyId {
+    return [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", pageNumber, storyId]];
+    
+}
+
 
 @end

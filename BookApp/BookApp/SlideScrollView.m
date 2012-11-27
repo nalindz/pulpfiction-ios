@@ -111,7 +111,14 @@
     [view removeFromSuperview];
 }
 
-
+- (void) softReset {
+    
+    for (id key in [self.visibleViews allKeys]) {
+        UIView *view = [self.visibleViews objectForKey:key];
+        [view removeFromSuperview];
+    }
+    [self.visibleViews removeAllObjects];
+}
 
 
 - (void)relayoutViews: (BOOL) allViews {
@@ -247,10 +254,10 @@
     [self relayoutViews:NO];
 }
 
-- (void)reloadIndex: (int) index {
-    SlideViewCell *cell = [self.visibleViews objectForKey:[NSString stringWithFormat:@"%d", index]];
+- (void)reloadPage: (Page *)page {
+    SlideViewCell *cell = [self.visibleViews objectForKey:[NSString stringWithFormat:@"%@", page.page_number]];
     if (cell != nil) {
-        [cell reRender];
+        [cell renderWithPageNumber:page.page_number storyId:page.story_id];
     }
 }
 

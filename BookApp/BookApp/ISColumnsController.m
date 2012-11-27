@@ -8,6 +8,7 @@
 #import "API.h"
 #import "Bookmark.h"
 #import <dispatch/dispatch.h>
+#include <math.h>
 
 
 #define pagesToBuffer 100
@@ -42,6 +43,14 @@
 @property BOOL stopLoadingPages;
 @property BOOL loadingPages;
 @property (nonatomic, strong) UIFont *pageFont;
+
+
+
+// bleh globals - should be in a closure
+@property (nonatomic, strong) NSNumber *viewingBlockNumber;
+@property (nonatomic, strong) NSNumber *viewingBlockIndex;
+
+
 
 
 - (void)removeAndAddCellsIfNecessary;
@@ -108,18 +117,20 @@
     int splitIndex = pageBuffer.length;
     int oldPageBufferLength = 0;
     Block *currentBlock;
+    int currentBlockNumber = [startBlockNumber intValue];
+    int currentBlockIndex = startBlockIndex;
     while (splitIndex == pageBuffer.length) {
-        currentBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", startBlockNumber, self.story.id]];
+        currentBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", @(currentBlockNumber), self.story.id]];
         if (currentBlock == nil) {
-            int endBlockNumber = [startBlockNumber integerValue] + 5;
-            [RKObjectManager.sharedManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"stories/%@/blocks?first_block=%d&last_block=%d", self.story.id, [startBlockNumber integerValue], endBlockNumber] usingBlock:^(RKObjectLoader *loader) {
+            int endBlockNumber = currentBlockNumber + 10;
+            [RKObjectManager.sharedManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"stories/%@/blocks?first_block=%d&last_block=%d", self.story.id, currentBlockNumber, endBlockNumber] usingBlock:^(RKObjectLoader *loader) {
                 loader.onDidLoadObjects = ^(NSArray *objects) {
                     
                 dispatch_async( self.backgroundQueue,  ^(void) {
                     [self createNumberOfPages: numberOfPages
                            startingPageNumber: @([pageNumber intValue])
-                                    fromBlock:@([startBlockNumber intValue])
-                                        index:startBlockIndex
+                                    fromBlock:@(currentBlockNumber)
+                                        index:currentBlockIndex
                                    pageBuffer:[NSString stringWithFormat:@"%@", pageBuffer]];
                 });
                 };
@@ -129,10 +140,10 @@
         
         oldPageBufferLength = pageBuffer.length;
         NSLog(@"old pageBuffer length: %d", pageBuffer.length);
-        NSString *textToAdd = [currentBlock.text substringFromIndex:startBlockIndex];
+        NSString *textToAdd = [currentBlock.text substringFromIndex:currentBlockIndex];
         if ([pageBuffer hasSuffix:@"\n"] &&
-            [[currentBlock.text substringFromIndex:startBlockIndex] hasPrefix:@" "]) {
-            textToAdd = [[currentBlock.text substringFromIndex:startBlockIndex] substringFromIndex:1];
+            [[currentBlock.text substringFromIndex:currentBlockIndex] hasPrefix:@" "]) {
+            textToAdd = [[currentBlock.text substringFromIndex:currentBlockIndex] substringFromIndex:1];
         }
             
         pageBuffer = [NSString stringWithFormat:@"%@%@",
@@ -145,18 +156,20 @@
         
         splitIndex = [pageBuffer getSplitIndexWithSize:[self pageSize] andFont:self.pageFont];
         NSLog(@"The split index: %d", splitIndex);
-        startBlockNumber = [NSNumber numberWithInt:([startBlockNumber intValue] + 1)];
+        currentBlockNumber++;
         if ([currentBlock.last_block boolValue]) break;
-        startBlockIndex = 0;
+        currentBlockIndex = 0;
         if (splitIndex < 0) {
             splitIndex = oldPageBufferLength;
             break;
         }
     }
     
-    int lastBlockIndex = splitIndex - oldPageBufferLength + startBlockIndex;
+    int lastBlockIndex = splitIndex - oldPageBufferLength + currentBlockIndex;
     
-    Page *newPage = [Page object];
+    
+    Page *newPage = [Page pageWithNumber:pageNumber storyId:self.story.id];
+    if (newPage == nil) newPage = [Page object];
     newPage.page_number = pageNumber;
     newPage.story_id = self.story.id;
     newPage.text = [pageBuffer substringToIndex:splitIndex];
@@ -184,6 +197,7 @@
         numberOfPages = 0;
         self.loadingPages = NO;
         self.pagesOutstanding = 0;
+        [self scrollToCorrectPage];
     } else {
         numberOfPages--;
         self.pagesOutstanding--;
@@ -203,10 +217,8 @@
         });
          
     }
-    //[self.scrollView  reloadData];
     NSLog(@"firstPageNumber: %d, lastPageNumbeR: %d", self.firstPageNumber ,self.lastPageNumber);
 }
-
 
 
 - (int)pageMargin {
@@ -271,11 +283,16 @@
 - (void)receiveManagedObjectUpdate: (NSNotification *) notification {
     NSLog(@"updated meow here: %@", notification);
     NSArray *insertedData = [notification.userInfo objectForKey:@"inserted"];
-    NSLog(@"the data: %@", insertedData);
-    for (NSManagedObject *object in insertedData) {
+    NSArray *updatedData = [notification.userInfo objectForKey:@"updated"];
+    NSMutableArray *insertedAndUpdatedData = [[NSMutableArray alloc] init];
+    [insertedAndUpdatedData addObjectsFromArray:insertedData];
+    [insertedAndUpdatedData addObjectsFromArray:updatedData];
+    
+    NSLog(@"the data: %@", insertedAndUpdatedData);
+    for (NSManagedObject *object in insertedAndUpdatedData) {
         if ([object class] == [Page class]) {
             Page *page = (Page *)object;
-            [self.scrollView reloadIndex:([page.page_number intValue])];
+            [self.scrollView reloadPage:page];
         }
     }
     
@@ -295,6 +312,7 @@
     self.pagesOutstanding = pagesToBuffer;
     if (self.startingPageNumber == nil) {
         [self buildAllPages];
+        [self startOnPageNumber: 0];
     } else {
         Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.startingPageNumber, self.story.id]];
         if (![page isLastPage]) {
@@ -318,6 +336,47 @@
 }
 
 
+
+
+- (BOOL) isBlockNumber:(int) blockNumber andIndex: (int) index inPage: (Page *) page {
+    if ([page.first_block_number intValue] <= [self.viewingBlockNumber intValue]
+        && [page.last_block_number intValue] >= [self.viewingBlockNumber intValue]) {
+        if ([page.first_block_number intValue] == blockNumber) {
+            if ([page.first_block_index intValue] <= index) return true;
+        } else if ([page.last_block_number intValue] == blockNumber) {
+            if ([page.last_block_index intValue] >= index) {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+    return false;
+}
+
+-(void) scrollToCorrectPage {
+    if (self.viewingBlockNumber == nil) {
+        return;
+    }
+    int pageToScrollTo = 0;
+    Page *page;
+    while (pageToScrollTo <= self.lastPageNumber) {
+        page = [Page pageWithNumber:@(pageToScrollTo) storyId:self.story.id];
+        if ([self isBlockNumber:[self.viewingBlockNumber intValue] andIndex:[self.viewingBlockIndex intValue] inPage:page]) break;
+        pageToScrollTo++;
+    }
+    
+    //[self startOnPageNumber:[page.page_number intValue]];
+    int pageNumber = [page.page_number intValue];
+    //self.scrollView.contentOffset = CGPointMake((pageNumber * self.scrollView.width )+ 2, 0);
+    [self.scrollView setContentOffset:CGPointMake((pageNumber * self.scrollView.width )+ 10, 0) animated:NO];
+    [self.scrollView softReset];
+    [self.scrollView layoutSubviews];
+    //[self.scrollView performSelector:@selector(layoutSubviews) withObject:nil afterDelay:2.0];
+    //page = [Page pageWithNumber:@(pageToScrollTo) storyId:self.story.id];
+    
+}
+
 - (void) buildAllPages {
     dispatch_async(self.backgroundQueue, ^(void) {
         [self createNumberOfPages:pagesToBuffer
@@ -326,7 +385,6 @@
                             index:0
                        pageBuffer:@""];
     });
-    [self startOnPageNumber: 0];
 }
 
 - (NSInteger)numberOfPages {
@@ -344,10 +402,10 @@
 
 - (void)fontIncrease {
     Page *currentPage = [self currentPage];
-    NSNumber *firstBlockIndex = [currentPage.first_block_index copy];
-    NSNumber *firstBlockNumber = [currentPage.first_block_number copy];
+    self.viewingBlockIndex = [currentPage.first_block_index copy];
+    self.viewingBlockNumber =  [currentPage.first_block_number copy];
     
-    self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:40];
+    self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:35];
     [self buildAllPages];
 }
 

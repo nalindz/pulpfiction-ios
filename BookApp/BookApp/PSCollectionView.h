@@ -77,4 +77,6 @@
 - (PSCollectionViewCell *)collectionView:(PSCollectionView *)collectionView viewAtIndex:(NSInteger)index;
 - (CGFloat)heightForViewAtIndex:(NSInteger)index;
 
+- (void)removeAndAddCellsIfNecessary;
+    
 @end
