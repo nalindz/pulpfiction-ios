@@ -12,6 +12,8 @@
 #import "CaptureView.h"
 #import "Bookmark.h"
 #import "History.h"
+#import "SpringboardLayout.h"
+#import "SBLayout.h"
 
 @interface DiscoverVC ()
 
@@ -69,13 +71,10 @@
              forControlEvents:UIControlEventEditingDidEndOnExit];
     
     
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    SBLayout *sbLayout = [[SBLayout alloc] init];
     
-    
-    self.storiesResults = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:flowLayout];
+    self.storiesResults = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:sbLayout];
     self.storiesResults.backgroundColor = [UIColor whiteColor];
-    [self.storiesResults setCollectionViewLayout:flowLayout];
     self.storiesResults.pagingEnabled = YES;
     
     [self.storiesResults setY:200];
@@ -90,13 +89,13 @@
     
     NSLog(@"the width: %f", self.storiesResults.frame.size.width);
     
+    
     [self fetchStoriesWithQuery:nil];
 }
 
 - (void) textFieldFinished: (id) sender {
     [self fetchStoriesWithQuery:self.searchBox.text];
 }
-
 
 - (void) historyPressed {
     [RKObjectManager.sharedManager loadObjectsAtResourcePath:@"history" delegate:self];
