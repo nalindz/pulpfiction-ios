@@ -10,7 +10,7 @@
 #import <dispatch/dispatch.h>
 
 
-#define pagesToBuffer 5
+#define pagesToBuffer 100
 
 @interface ISColumnsController ()
 
@@ -41,6 +41,7 @@
 
 @property BOOL stopLoadingPages;
 @property BOOL loadingPages;
+@property (nonatomic, strong) UIFont *pageFont;
 
 
 - (void)removeAndAddCellsIfNecessary;
@@ -52,6 +53,14 @@
 
 #pragma mark - life cycle
 
+- (UIFont *)pageFont {
+    if (_pageFont == nil) {
+        //default font
+       _pageFont = [UIFont fontWithName:@"Meta Serif OT" size:30];
+    }
+    return _pageFont;
+}
+
 
 - (id)init
 {
@@ -59,14 +68,6 @@
     if (self) {
         [self view];
         [self loadTitleView];
-        /*
-        [self addObserver:self
-              forKeyPath:@"viewControllers"
-                  options:NSKeyValueObservingOptionNew
-                  context:nil];
-        */
-        
-        //[self reloadData];
         self.backgroundQueue = dispatch_queue_create("backgroundQueue", NULL);
     }
     return self;
@@ -88,22 +89,6 @@
                          action:@selector(didTapPageControl)
                forControlEvents:UIControlEventValueChanged];
     
-    [titleView addSubview:self.pageControl];
-    
-    self.titleLabel = [[[UILabel alloc] init] autorelease];
-    self.titleLabel.frame = CGRectMake(0, 5, 150, 24);
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:18];
-    self.titleLabel.backgroundColor = [UIColor clearColor];
-    self.titleLabel.textAlignment = UITextAlignmentCenter;
-    self.titleLabel.textColor = [UIColor whiteColor];
-    self.titleLabel.shadowColor = [UIColor darkGrayColor];
-    self.titleLabel.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|
-                                        UIViewAutoresizingFlexibleBottomMargin|
-                                        UIViewAutoresizingFlexibleHeight);
-    
-    [titleView addSubview:self.titleLabel];
-    
-    self.navigationItem.titleView = titleView;
 }
 
 - (void)loadView
@@ -157,10 +142,8 @@
         NSLog(@"pageBuffer: '%@'", pageBuffer);
         NSLog(@"pageBuffer length: %d", pageBuffer.length);
         
-        UIFont *pageFont = [self fontForSlideViewCell];
         
-        
-        splitIndex = [pageBuffer getSplitIndexWithSize:[self pageSize] andFont:pageFont];
+        splitIndex = [pageBuffer getSplitIndexWithSize:[self pageSize] andFont:self.pageFont];
         NSLog(@"The split index: %d", splitIndex);
         startBlockNumber = [NSNumber numberWithInt:([startBlockNumber intValue] + 1)];
         if ([currentBlock.last_block boolValue]) break;
@@ -311,18 +294,9 @@
 - (void) viewWillAppear:(BOOL)animated {
     self.pagesOutstanding = pagesToBuffer;
     if (self.startingPageNumber == nil) {
-        dispatch_async(self.backgroundQueue, ^(void) {
-            [self createNumberOfPages:pagesToBuffer
-                   startingPageNumber:@(0)
-                            fromBlock:@(0)
-                                index:0
-                           pageBuffer:@""];
-        });
-        [self startOnPageNumber: 0];
+        [self buildAllPages];
     } else {
         Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.startingPageNumber, self.story.id]];
-        
-    
         if (![page isLastPage]) {
         dispatch_async(self.backgroundQueue, ^(void) {
             [self createNumberOfPages:pagesToBuffer
@@ -344,6 +318,17 @@
 }
 
 
+- (void) buildAllPages {
+    dispatch_async(self.backgroundQueue, ^(void) {
+        [self createNumberOfPages:pagesToBuffer
+               startingPageNumber:@(0)
+                        fromBlock:@(0)
+                            index:0
+                       pageBuffer:@""];
+    });
+    [self startOnPageNumber: 0];
+}
+
 - (NSInteger)numberOfPages {
     return self.lastPageNumber + 1;
 }
@@ -355,6 +340,15 @@
     cell.delegate = self;
     [cell renderWithPageNumber:@(index) storyId:self.story.id];
     return cell;
+}
+
+- (void)fontIncrease {
+    Page *currentPage = [self currentPage];
+    NSNumber *firstBlockIndex = [currentPage.first_block_index copy];
+    NSNumber *firstBlockNumber = [currentPage.first_block_number copy];
+    
+    self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:40];
+    [self buildAllPages];
 }
 
 - (void)backClicked {
@@ -410,7 +404,7 @@
 }
 
 - (UIFont *) fontForSlideViewCell {
-    return [UIFont fontWithName:@"Meta Serif OT" size:30];
+    return self.pageFont;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

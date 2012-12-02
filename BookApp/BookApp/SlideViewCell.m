@@ -33,7 +33,7 @@
         self.backButton = [[UIButton alloc] init];
         [self.backButton autoSizeWithImage:@"close-button"];
         self.backButton.x = self.width - self.backButton.width - 20;
-        [self.backButton addTarget:self.delegate action:@selector(backClicked) forControlEvents:UIControlEventTouchUpInside];
+        [self.backButton addTarget:self.delegate action:@selector(fontIncrease) forControlEvents:UIControlEventTouchUpInside];
         
         
         [self addSubview:self.backButton];
