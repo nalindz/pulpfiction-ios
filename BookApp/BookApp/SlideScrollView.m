@@ -254,12 +254,6 @@
     [self relayoutViews:NO];
 }
 
-- (void)reloadPage: (Page *)page {
-    SlideViewCell *cell = [self.visibleViews objectForKey:[NSString stringWithFormat:@"%@", page.page_number]];
-    if (cell != nil) {
-        [cell renderWithPageNumber:page.page_number storyId:page.story_id];
-    }
-}
 
 
 

@@ -13,11 +13,13 @@
 <UIScrollViewDelegate,
 SlideScrollDataSource,
 SlideViewCellDelegate,
+UICollectionViewDataSource,
+UICollectionViewDelegate,
 RKObjectLoaderDelegate
 >
 
 @property (retain, nonatomic) NSMutableArray       *viewControllers;
-@property (retain, nonatomic) SlideScrollView  *scrollView;
+@property (retain, nonatomic) UICollectionView  *scrollView;
 @property (retain, nonatomic) UILabel       *titleLabel;
 @property (retain, nonatomic) UIPageControl *pageControl;
 @property (retain, nonatomic)Story * story;

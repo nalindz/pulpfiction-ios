@@ -9,6 +9,7 @@
 #import "Bookmark.h"
 #import <dispatch/dispatch.h>
 #include <math.h>
+#include "PageCell.h"
 
 
 #define pagesToBuffer 100
@@ -81,6 +82,7 @@
     }
     return self;
 }
+
 
 - (void)loadTitleView
 {
@@ -221,6 +223,8 @@
 }
 
 
+
+
 - (int)pageMargin {
     return 60;
 }
@@ -234,38 +238,23 @@
 }
 
 - (void) setupScrollView {
+    
+    
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 
-    self.scrollView = [[[SlideScrollView alloc] initWithFrame:CGRectZero] autorelease];
+    self.scrollView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:flowLayout];
+    
     self.scrollView.backgroundColor = [UIColor blackColor];
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.showsVerticalScrollIndicator = NO;
     self.scrollView.scrollsToTop = NO;
     self.scrollView.delegate = self;
-    self.scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
-    self.scrollView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    self.scrollView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
-    [self.view addSubview:self.scrollView];
     self.scrollView.dataSource = self;
+    [self.scrollView registerClass:[SlideViewCell class] forCellWithReuseIdentifier:@"slideViewCell"];
     
-    CALayer *topShadowLayer = [CALayer layer];
-    UIBezierPath *path = [UIBezierPath bezierPathWithRect:CGRectMake(-10, -10, 10000, 13)];
-    topShadowLayer.frame = CGRectMake(-320, 0, 10000, 20);
-    topShadowLayer.masksToBounds = YES;
-    topShadowLayer.shadowOffset = CGSizeMake(2.5, 2.5);
-    topShadowLayer.shadowOpacity = 0.5;
-    topShadowLayer.shadowPath = [path CGPath];
-    [self.scrollView.layer addSublayer:topShadowLayer];
-
-    CALayer *bottomShadowLayer = [CALayer layer];
-    path = [UIBezierPath bezierPathWithRect:CGRectMake(10, 10, 10000, 13)];
-    bottomShadowLayer.frame = CGRectMake(-320, self.scrollView.frame.size.height-58, 10000, 20);
-    bottomShadowLayer.masksToBounds = YES;
-    bottomShadowLayer.shadowOffset = CGSizeMake(-2.5, -2.5);
-    bottomShadowLayer.shadowOpacity = 0.5;
-    bottomShadowLayer.shadowPath = [path CGPath];
-    [self.scrollView.layer addSublayer:bottomShadowLayer];
-    [self.scrollView reloadData];
+    [self.view addSubview:self.scrollView];
     
 }
 
@@ -273,7 +262,7 @@
 {
     [super viewDidLoad];
     self.firstPageNumber = 0;
-    self.lastPageNumber = 0;
+    self.lastPageNumber = -1;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveManagedObjectUpdate:)
@@ -284,20 +273,36 @@
     NSLog(@"updated meow here: %@", notification);
     NSArray *insertedData = [notification.userInfo objectForKey:@"inserted"];
     NSArray *updatedData = [notification.userInfo objectForKey:@"updated"];
-    NSMutableArray *insertedAndUpdatedData = [[NSMutableArray alloc] init];
-    [insertedAndUpdatedData addObjectsFromArray:insertedData];
-    [insertedAndUpdatedData addObjectsFromArray:updatedData];
     
-    NSLog(@"the data: %@", insertedAndUpdatedData);
-    for (NSManagedObject *object in insertedAndUpdatedData) {
+    
+    NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc] init];
+    for (NSManagedObject *object in insertedData) {
         if ([object class] == [Page class]) {
             Page *page = (Page *)object;
-            [self.scrollView reloadPage:page];
+            [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
+            
+        }
+    }
+    if (indexPathsToInsert.count > 0) {
+        [self.scrollView insertItemsAtIndexPaths:indexPathsToInsert];
+    }
+    
+    NSMutableArray *indexPathsToReload = [[NSMutableArray alloc] init];
+    for (NSManagedObject *object in updatedData) {
+        if ([object class] == [Page class]) {
+            Page *page = (Page *)object;
+            [indexPathsToReload addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
         }
     }
     
+    if (indexPathsToReload.count > 0) {
+        [self.scrollView reloadData];
+    }
     
-    [self.scrollView loadNewData];
+    
+    if (insertedData.count > 0) {
+        //[self.scrollView reloadData];
+    }
 }
 
 
@@ -310,33 +315,20 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     self.pagesOutstanding = pagesToBuffer;
+    [self buildAllPages];
     if (self.startingPageNumber == nil) {
-        [self buildAllPages];
-        [self startOnPageNumber: 0];
+        //[self scrollToPageNumber:0];
     } else {
-        Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", self.startingPageNumber, self.story.id]];
-        if (![page isLastPage]) {
-        dispatch_async(self.backgroundQueue, ^(void) {
-            [self createNumberOfPages:pagesToBuffer
-                   startingPageNumber:@([page.page_number intValue] + 1)
-                            fromBlock:page.last_block_number
-                                index:[page.last_block_index intValue]
-                           pageBuffer:@""];
-        });
-    }
-        
-        [self startOnPageNumber: [page.page_number intValue]];
+        [self scrollToPageNumber:[self.startingPageNumber intValue]];
     }
 }
 
 
-- (void)startOnPageNumber: (int) pageNumber {
-    self.scrollView.contentOffset = CGPointMake(pageNumber * self.scrollView.width, 0);
-    [self.scrollView reloadData];
+- (void)scrollToPageNumber: (int) pageNumber {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(pageNumber) inSection:0];
+    [self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:YES];
+    //[self.scrollView reloadItemsAtIndexPaths:@[indexPath]];
 }
-
-
-
 
 - (BOOL) isBlockNumber:(int) blockNumber andIndex: (int) index inPage: (Page *) page {
     if ([page.first_block_number intValue] <= [self.viewingBlockNumber intValue]
@@ -366,15 +358,7 @@
         pageToScrollTo++;
     }
     
-    //[self startOnPageNumber:[page.page_number intValue]];
-    int pageNumber = [page.page_number intValue];
-    //self.scrollView.contentOffset = CGPointMake((pageNumber * self.scrollView.width )+ 2, 0);
-    [self.scrollView setContentOffset:CGPointMake((pageNumber * self.scrollView.width )+ 10, 0) animated:NO];
-    [self.scrollView softReset];
-    [self.scrollView layoutSubviews];
-    //[self.scrollView performSelector:@selector(layoutSubviews) withObject:nil afterDelay:2.0];
-    //page = [Page pageWithNumber:@(pageToScrollTo) storyId:self.story.id];
-    
+    [self scrollToPageNumber:pageToScrollTo];
 }
 
 - (void) buildAllPages {
@@ -396,7 +380,7 @@
     SlideViewCell *cell = [[SlideViewCell alloc] initWithFrame:self.view.frame];
     cell.backgroundColor = [UIColor whiteColor];
     cell.delegate = self;
-    [cell renderWithPageNumber:@(index) storyId:self.story.id];
+    [cell renderWithPageNumber:@(index) storyId:self.story.id font:self.pageFont margin:[self pageMargin]];
     return cell;
 }
 
@@ -485,5 +469,41 @@
         layer.shadowPath = [UIBezierPath bezierPathWithRect:viewController.bounds].CGPath;
     }
 }
+
+#pragma mark collectionView delegate methods
+
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.lastPageNumber + 1;
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { 
+    return 1;
+}
+
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 0;
+}
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 0;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    SlideViewCell *cell = [self.scrollView dequeueReusableCellWithReuseIdentifier:@"slideViewCell" forIndexPath:indexPath];
+    
+    [cell renderWithPageNumber:@(indexPath.row) storyId:self.story.id font:self.pageFont margin:[self pageMargin]];
+    //cell.tag = [self cellTagForIndexPath: indexPath];
+    return cell;
+}
+
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(self.scrollView.width , self.scrollView.height);
+}
+
+
+
 
 @end

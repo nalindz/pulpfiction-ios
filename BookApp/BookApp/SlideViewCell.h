@@ -14,13 +14,15 @@
 - (int) pageMargin;
 @end
 
-@interface SlideViewCell : UIView
+@interface SlideViewCell : UICollectionViewCell
 @property (nonatomic, strong) UILabel *textLabel;
 @property (nonatomic, assign) id<SlideViewCellDelegate> delegate;
 
 - (void)prepareForReuse;
-- (void)renderWithPageNumber: (NSNumber *) pageNumber storyId: (NSNumber *) storyId;
-- (void)reRender;
+- (void)renderWithPageNumber: (NSNumber *) pageNumber
+                     storyId: (NSNumber *) storyId
+                        font: (UIFont *) font
+                      margin: (CGFloat) margin;
 @end
 
 
