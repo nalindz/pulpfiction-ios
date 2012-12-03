@@ -21,7 +21,9 @@
     while (length < self.length && textSize.height <= size.height)
     {
         NSRange range = NSMakeRange (length, 1);
-        if ([[self substringWithRange:range] isEqualToString:@" "])
+        if ([[self substringWithRange:range] isEqualToString:@" "]
+            || [[self substringWithRange:range] isEqualToString:@"\n"]
+            || [[self substringWithRange:range] isEqualToString:@"\r"])
         {
             lastSpace = length;
         }
@@ -29,7 +31,7 @@
         cutText = [self substringToIndex:length];
         textSize = [cutText sizeWithFont:font constrainedToSize:CGSizeMake(size.width, size.height + 500)];
     }
-    if (length == self.length) lastSpace = length;
+    if (length == self.length && textSize.height <= size.height) lastSpace = length;
     return lastSpace;
 }
 

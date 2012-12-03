@@ -12,7 +12,10 @@
 #include "PageCell.h"
 
 
-#define pagesToBuffer 100
+#define pagesToBuffer 10000
+
+#define FONT_MAX_SIZE 50.0
+#define FONT_MIN_SIZE 10.0
 
 @interface ISColumnsController ()
 
@@ -42,7 +45,7 @@
 @property (atomic) int pagesOutstanding;
 
 @property BOOL stopLoadingPages;
-@property BOOL loadingPages;
+@property (atomic) BOOL loadingPages;
 @property (nonatomic, strong) UIFont *pageFont;
 
 
@@ -121,6 +124,12 @@
     Block *currentBlock;
     int currentBlockNumber = [startBlockNumber intValue];
     int currentBlockIndex = startBlockIndex;
+    
+    
+    NSString *oldBuffer;
+    NSString *addingText;
+    
+    
     while (splitIndex == pageBuffer.length) {
         currentBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", @(currentBlockNumber), self.story.id]];
         if (currentBlock == nil) {
@@ -141,12 +150,19 @@
         }
         
         oldPageBufferLength = pageBuffer.length;
+        oldBuffer = [pageBuffer copy];
         NSLog(@"old pageBuffer length: %d", pageBuffer.length);
         NSString *textToAdd = [currentBlock.text substringFromIndex:currentBlockIndex];
+        
+        
+        /*
         if ([pageBuffer hasSuffix:@"\n"] &&
             [[currentBlock.text substringFromIndex:currentBlockIndex] hasPrefix:@" "]) {
             textToAdd = [[currentBlock.text substringFromIndex:currentBlockIndex] substringFromIndex:1];
         }
+         */
+        
+        addingText = [textToAdd copy];
             
         pageBuffer = [NSString stringWithFormat:@"%@%@",
                       pageBuffer,
@@ -193,13 +209,18 @@
         self.firstPageNumber = [pageNumber intValue];
     }
     
+    @try {
     [[newPage managedObjectContext] save:&error];
+    } @catch (NSException *e){
+        [[newPage managedObjectContext] save:&error];
+    }
     
     if ([newPage isLastPage]) {
+        //[self.scrollView reloadData];
         numberOfPages = 0;
-        self.loadingPages = NO;
         self.pagesOutstanding = 0;
         [self scrollToCorrectPage];
+        self.loadingPages = NO;
     } else {
         numberOfPages--;
         self.pagesOutstanding--;
@@ -219,7 +240,6 @@
         });
          
     }
-    NSLog(@"firstPageNumber: %d, lastPageNumbeR: %d", self.firstPageNumber ,self.lastPageNumber);
 }
 
 
@@ -362,6 +382,8 @@
 }
 
 - (void) buildAllPages {
+    self.loadingPages = YES;
+    self.lastPageNumber = -1;
     dispatch_async(self.backgroundQueue, ^(void) {
         [self createNumberOfPages:pagesToBuffer
                startingPageNumber:@(0)
@@ -375,23 +397,30 @@
     return self.lastPageNumber + 1;
 }
 
-- (SlideViewCell *) viewAtIndex: (NSInteger) index {
-    NSLog(@"Loading page: %d", index);
-    SlideViewCell *cell = [[SlideViewCell alloc] initWithFrame:self.view.frame];
-    cell.backgroundColor = [UIColor whiteColor];
-    cell.delegate = self;
-    [cell renderWithPageNumber:@(index) storyId:self.story.id font:self.pageFont margin:[self pageMargin]];
-    return cell;
-}
-
 - (void)fontIncrease {
-    Page *currentPage = [self currentPage];
-    self.viewingBlockIndex = [currentPage.first_block_index copy];
-    self.viewingBlockNumber =  [currentPage.first_block_number copy];
-    
-    self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:35];
+    if (self.loadingPages) return;
+    CGFloat fontSize = self.pageFont.pointSize;
+    fontSize += 5.0;
+    if (fontSize >= FONT_MAX_SIZE) {
+        return;
+    }
+    self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:fontSize];
     [self buildAllPages];
 }
+
+- (void)fontDecrease {
+    if (self.loadingPages) return;
+    CGFloat fontSize = self.pageFont.pointSize;
+    fontSize -= 5.0;
+    if (fontSize <= FONT_MIN_SIZE) {
+        return;
+    }
+    self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:fontSize];
+    [self buildAllPages];
+}
+
+
+
 
 - (void)backClicked {
     Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", self.story.id, @(YES)]];
@@ -474,8 +503,9 @@
 
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.lastPageNumber + 1;
+    return [self numberOfPages];
 }
+
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { 
     return 1;
@@ -494,6 +524,7 @@
     SlideViewCell *cell = [self.scrollView dequeueReusableCellWithReuseIdentifier:@"slideViewCell" forIndexPath:indexPath];
     
     [cell renderWithPageNumber:@(indexPath.row) storyId:self.story.id font:self.pageFont margin:[self pageMargin]];
+    cell.delegate = self;
     //cell.tag = [self cellTagForIndexPath: indexPath];
     return cell;
 }

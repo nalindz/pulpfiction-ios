@@ -11,6 +11,8 @@
 @interface SlideViewCell()
 @property (nonatomic, strong) UIView *titleBar;
 @property (nonatomic, strong) UIButton *backButton;
+@property (nonatomic, strong) UIButton *fontIncrease;
+@property (nonatomic, strong) UIButton *fontDecrease;
 @property (nonatomic, strong) NSNumber *pageNumber;
 @property (nonatomic, strong) NSNumber *storyId;
 
@@ -34,18 +36,41 @@
         self.backButton = [[UIButton alloc] init];
         [self.backButton autoSizeWithImage:@"close-button"];
         self.backButton.x = self.width - self.backButton.width - 20;
-        [self.backButton addTarget:self.delegate action:@selector(fontIncrease) forControlEvents:UIControlEventTouchUpInside];
-        
+        [self.backButton addTarget:self.delegate action:@selector(backClicked) forControlEvents:UIControlEventTouchUpInside];
         
         [self addSubview:self.backButton];
         self.backButton.y = 20;
+        
+        self.fontIncrease = [[UIButton alloc] init];
+        self.fontIncrease.titleLabel.font =[UIFont fontWithName:@"MetaBoldLF-Roman" size:30];
+        [self.fontIncrease setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [self.fontIncrease autoSizeWithText:@"+" fixedWidth:NO];
+        [self.fontIncrease positionLeftOf:self.backButton withMargin:20];
+        [self.fontIncrease addTarget:self.delegate action:@selector(fontIncrease) forControlEvents:UIControlEventTouchUpInside];
+        self.fontIncrease.height = self.backButton.height;
+        [self addSubview:self.fontIncrease];
+        
+        
+        self.fontDecrease = [[UIButton alloc] init];
+        self.fontDecrease.titleLabel.font =[UIFont fontWithName:@"MetaBoldLF-Roman" size:30];
+        [self.fontDecrease setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [self.fontDecrease autoSizeWithText:@"-" fixedWidth:NO];
+        self.fontDecrease.width = self.fontDecrease.width + 15;
+        [self.fontDecrease positionLeftOf:self.fontIncrease withMargin:20];
+        [self.fontDecrease addTarget:self.delegate action:@selector(fontDecrease) forControlEvents:UIControlEventTouchUpInside];
+        self.fontDecrease.height = self.backButton.height;
+        [self addSubview:self.fontDecrease];
+        
+        
     }
     return self;
 }
 
+
 - (void)prepareForReuse {
     self.transform = CGAffineTransformIdentity;
     self.textLabel.text = @"";
+    self.delegate = nil;
 }
 
 
