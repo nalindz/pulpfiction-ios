@@ -180,18 +180,16 @@
     newPage.first_block_index = [NSNumber numberWithInt:startBlockIndex];
     newPage.last_block_number = currentBlock.block_number;
     newPage.last_block_index = [NSNumber numberWithInt:lastBlockIndex];
+    newPage.font_size = @(self.pageFont.pointSize);
     
     
     NSError *error;
     
-    if ([pageNumber intValue] > self.lastPageNumber) {
-        self.lastPageNumber = [pageNumber intValue];
-    }
     
     if ([pageNumber intValue] < self.firstPageNumber) {
         self.firstPageNumber = [pageNumber intValue];
     }
-    
+   
     if ([newPage isLastPage]) {
         //[self.scrollView reloadData];
         numberOfPages = 0;
@@ -267,6 +265,7 @@
 }
 
 - (void)receiveManagedObjectUpdate: (NSNotification *) notification {
+    if (self.stopAddingJobs) return;
     NSLog(@"updated meow here: %@", notification);
     NSArray *insertedData = [notification.userInfo objectForKey:@"inserted"];
     NSArray *updatedData = [notification.userInfo objectForKey:@"updated"];
@@ -281,15 +280,14 @@
     }
     
     NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc] init];
-    NSMutableArray *indexPathsToReload = [[NSMutableArray alloc] init];
     for (NSManagedObject *object in insertedAndUpdatedData) {
         if ([object class] == [Page class]) {
             Page *page = (Page *)object;
-            //if ([page.page_number intValue] < self.lastPageNumber) {
-            if (1) {
+            if ([page.font_size floatValue] != self.pageFont.pointSize) break;
+            if ([page.page_number intValue] - self.lastPageNumber == 1) {
+                NSLog(@"The number of views: %d", [self.scrollView numberOfItemsInSection:0]);
                 [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
-            } else {
-                [indexPathsToReload addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
+                self.lastPageNumber = [page.page_number intValue];
             }
         }
         
@@ -388,8 +386,6 @@
 }
 
 - (void) buildAllPages {
-    self.loadingPages = YES;
-    self.LP = YES;
     self.lastPageNumber = -1;
     if (self.stopAddingJobs) return;
     dispatch_async(self.backgroundQueue, ^(void) {
@@ -401,9 +397,6 @@
     });
 }
 
-- (NSInteger)numberOfPages {
-    return self.lastPageNumber + 1;
-}
 
 - (void)fontIncrease {
     CGFloat fontSize = self.pageFont.pointSize;
@@ -411,39 +404,31 @@
     if (fontSize >= FONT_MAX_SIZE) {
         return;
     }
-    //self.stopAddingJobs = YES;
-    dispatch_async(self.backgroundQueue, ^{[self moreFontIncrease];});
+    self.stopAddingJobs = YES;
+    self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:fontSize];
+    dispatch_async(self.backgroundQueue, ^{[self finishFontChange];});
 }
 
-- (void) moreFontIncrease {
-    //self.stopAddingJobs = NO;
+- (void) finishFontChange {
     self.lastPageNumber = -1;
     [self.scrollView reloadData];
     
-   // self.lastPageNumber = -1;
-    
-    CGFloat fontSize = self.pageFont.pointSize;
-    fontSize += 5.0;
-    if (fontSize >= FONT_MAX_SIZE) {
-        return;
-    }
-    self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:fontSize];
+    NSLog(@"The number of views: %d", [self.scrollView.dataSource collectionView:self.scrollView numberOfItemsInSection:0]);
+    self.stopAddingJobs = NO;
     [self buildAllPages];
 }
 
 - (void)fontDecrease {
-    
-    //dispatch_release(self.backgroundQueue);
-    //self.backgroundQueue = dispatch_queue_create("backgroundQueue2", NULL);
-    //if (self.loadingPages) return;
     CGFloat fontSize = self.pageFont.pointSize;
     fontSize -= 5.0;
     if (fontSize <= FONT_MIN_SIZE) {
         return;
     }
     self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:fontSize];
-    [self buildAllPages];
+    self.stopAddingJobs = YES;
+    dispatch_async(self.backgroundQueue, ^{[self finishFontChange];});
 }
+
 
 
 - (void)backClicked {
@@ -532,15 +517,13 @@
 #pragma mark collectionView delegate methods
 
 
--(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self numberOfPages];
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return (self.lastPageNumber + 1);
 }
-
-
--(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { 
+                                       
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
-
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
     return 0;

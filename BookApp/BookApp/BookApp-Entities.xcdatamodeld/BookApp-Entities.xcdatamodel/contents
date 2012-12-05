@@ -24,6 +24,7 @@
     <entity name="BAPage" representedClassName="Page" syncable="YES">
         <attribute name="first_block_index" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="first_block_number" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="font_size" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="last_block_index" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="last_block_number" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -52,7 +53,7 @@
     <elements>
         <element name="BABlock" positionX="160" positionY="192" width="128" height="165"/>
         <element name="BABookmark" positionX="160" positionY="192" width="128" height="180"/>
-        <element name="BAPage" positionX="160" positionY="192" width="128" height="180"/>
+        <element name="BAPage" positionX="160" positionY="192" width="128" height="195"/>
         <element name="BAStory" positionX="160" positionY="192" width="128" height="150"/>
         <element name="BAUser" positionX="160" positionY="192" width="128" height="135"/>
     </elements>
