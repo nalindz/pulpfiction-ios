@@ -152,18 +152,21 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     Story *storyToSwitchTo = [self.stories objectAtIndex:indexPath.row];
     
+    
     ISColumnsController *readViewController = [[ISColumnsController alloc] init];
     readViewController.story = storyToSwitchTo;
     
     //StoryCell *selectedCell = (StoryCell *)[self.storiesResults viewWithTag:[self cellTagForIndexPath:indexPath]];
     
+    /*
     Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", storyToSwitchTo.id, @(YES)]];
     if (bookmark.page != nil) {
         readViewController.startingPageNumber = bookmark.page.page_number;
     }
+     */
     
     
-    [self addToHistory: storyToSwitchTo.id];
+    //[self addToHistory: storyToSwitchTo.id];
     
                           
    [self.navigationController pushViewController: readViewController animated:YES];

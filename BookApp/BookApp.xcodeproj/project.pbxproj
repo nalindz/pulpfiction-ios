@@ -63,9 +63,7 @@
 		F59EEDAA1643B039001C42F2 /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EEDA91643B039001C42F2 /* Story.m */; };
 		F5E56593164EEA630044B956 /* NSString+FitInLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E56592164EEA630044B956 /* NSString+FitInLabel.m */; };
 		F5FC6DEC1645F7110087137F /* Block.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6DEB1645F7110087137F /* Block.m */; };
-		F5FC6DF8164640C00087137F /* ISColumnsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6DF7164640C00087137F /* ISColumnsController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		F5FC6EDC1648E2B90087137F /* PSCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6ED91648E2B90087137F /* PSCollectionView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		F5FC6EDD1648E2B90087137F /* PSCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6EDB1648E2B90087137F /* PSCollectionViewCell.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F5FC6DF8164640C00087137F /* ISColumnsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6DF7164640C00087137F /* ISColumnsController.m */; };
 		F5FC6EE01648E54A0087137F /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6EDF1648E54A0087137F /* MainViewController.m */; };
 		F5FC6EE31648E6DD0087137F /* SlideViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6EE21648E6DD0087137F /* SlideViewCell.m */; };
 		F5FC6EE61648FC550087137F /* SlideScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6EE51648FC550087137F /* SlideScrollView.m */; };
@@ -205,10 +203,6 @@
 		F5FC6DEB1645F7110087137F /* Block.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Block.m; sourceTree = "<group>"; };
 		F5FC6DF6164640C00087137F /* ISColumnsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISColumnsController.h; sourceTree = "<group>"; };
 		F5FC6DF7164640C00087137F /* ISColumnsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISColumnsController.m; sourceTree = "<group>"; };
-		F5FC6ED81648E2B90087137F /* PSCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSCollectionView.h; sourceTree = "<group>"; };
-		F5FC6ED91648E2B90087137F /* PSCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSCollectionView.m; sourceTree = "<group>"; };
-		F5FC6EDA1648E2B90087137F /* PSCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSCollectionViewCell.h; sourceTree = "<group>"; };
-		F5FC6EDB1648E2B90087137F /* PSCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSCollectionViewCell.m; sourceTree = "<group>"; };
 		F5FC6EDE1648E54A0087137F /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		F5FC6EDF1648E54A0087137F /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		F5FC6EE11648E6DD0087137F /* SlideViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideViewCell.h; sourceTree = "<group>"; };
@@ -446,10 +440,6 @@
 		F5FC6DF4164640870087137F /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				F5FC6ED81648E2B90087137F /* PSCollectionView.h */,
-				F5FC6ED91648E2B90087137F /* PSCollectionView.m */,
-				F5FC6EDA1648E2B90087137F /* PSCollectionViewCell.h */,
-				F5FC6EDB1648E2B90087137F /* PSCollectionViewCell.m */,
 				F5FC6DF5164640910087137F /* ISColumnsController */,
 			);
 			name = Libraries;
@@ -592,8 +582,6 @@
 				F59EEDAA1643B039001C42F2 /* Story.m in Sources */,
 				F5FC6DEC1645F7110087137F /* Block.m in Sources */,
 				F5FC6DF8164640C00087137F /* ISColumnsController.m in Sources */,
-				F5FC6EDC1648E2B90087137F /* PSCollectionView.m in Sources */,
-				F5FC6EDD1648E2B90087137F /* PSCollectionViewCell.m in Sources */,
 				F5FC6EE01648E54A0087137F /* MainViewController.m in Sources */,
 				F5FC6EE31648E6DD0087137F /* SlideViewCell.m in Sources */,
 				F5FC6EE61648FC550087137F /* SlideScrollView.m in Sources */,

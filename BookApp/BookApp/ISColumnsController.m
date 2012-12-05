@@ -17,27 +17,16 @@
 #define FONT_MAX_SIZE 50.0
 #define FONT_MIN_SIZE 10.0
 
+
 @interface ISColumnsController ()
 
-- (void)enableScrollsToTop;
-- (void)disableScrollsToTop;
 - (void) setupScrollView;
 
 - (NSInteger)numberOfPages;
-- (SlideViewCell *) viewAtIndex: (NSInteger) index;
-- (void)enqueueReusableView:(SlideViewCell *)view;
 - (void) reloadData;
 
-@property (nonatomic, assign, readwrite) CGFloat colWidth;
-@property (nonatomic, assign, readwrite) NSInteger numCols;
-@property (nonatomic, assign) UIInterfaceOrientation orientation;
-
-@property (atomic, retain) NSMutableSet *reuseableViews;
-@property (atomic, retain) NSMutableDictionary *visibleViews;
-@property (atomic, retain) NSMutableArray *viewKeysToRemove;
-@property (atomic, retain) NSMutableDictionary *indexToRectMap;
-
-@property (retain) dispatch_queue_t backgroundQueue;
+@property (atomic, strong) dispatch_queue_t backgroundQueue;
+@property (atomic, strong) dispatch_queue_t fontQueue;
 
 @property (atomic) int firstPageNumber;
 @property (atomic) int lastPageNumber;
@@ -45,16 +34,20 @@
 @property (atomic) int pagesOutstanding;
 
 @property BOOL stopLoadingPages;
-@property (atomic) BOOL loadingPages;
+
+@property  BOOL loadingPages;
+@property (atomic) BOOL lastPageSeen;
+
+
+@property  BOOL LP;
+@property  (atomic) BOOL stopAddingJobs;
+
+
 @property (nonatomic, strong) UIFont *pageFont;
-
-
 
 // bleh globals - should be in a closure
 @property (nonatomic, strong) NSNumber *viewingBlockNumber;
 @property (nonatomic, strong) NSNumber *viewingBlockIndex;
-
-
 
 
 - (void)removeAndAddCellsIfNecessary;
@@ -81,7 +74,7 @@
     if (self) {
         [self view];
         [self loadTitleView];
-        self.backgroundQueue = dispatch_queue_create("backgroundQueue", NULL);
+        self.backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     }
     return self;
 }
@@ -89,11 +82,11 @@
 
 - (void)loadTitleView
 {
-    UIView *titleView = [[[UIView alloc] init] autorelease];
+    UIView *titleView = [[UIView alloc] init];
     titleView.frame = CGRectMake(0, 0, 150, 44);
     titleView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     
-    self.pageControl = [[[UIPageControl alloc] init] autorelease];
+    self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = 200;
     self.pageControl.frame = CGRectMake(0, 27, 150, 14);
     self.pageControl.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|
@@ -126,10 +119,6 @@
     int currentBlockIndex = startBlockIndex;
     
     
-    NSString *oldBuffer;
-    NSString *addingText;
-    
-    
     while (splitIndex == pageBuffer.length) {
         currentBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", @(currentBlockNumber), self.story.id]];
         if (currentBlock == nil) {
@@ -137,7 +126,8 @@
             [RKObjectManager.sharedManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"stories/%@/blocks?first_block=%d&last_block=%d", self.story.id, currentBlockNumber, endBlockNumber] usingBlock:^(RKObjectLoader *loader) {
                 loader.onDidLoadObjects = ^(NSArray *objects) {
                     
-                dispatch_async( self.backgroundQueue,  ^(void) {
+                    if (self.stopAddingJobs) return;
+                    dispatch_async( self.backgroundQueue,  ^(void) {
                     [self createNumberOfPages: numberOfPages
                            startingPageNumber: @([pageNumber intValue])
                                     fromBlock:@(currentBlockNumber)
@@ -150,7 +140,6 @@
         }
         
         oldPageBufferLength = pageBuffer.length;
-        oldBuffer = [pageBuffer copy];
         NSLog(@"old pageBuffer length: %d", pageBuffer.length);
         NSString *textToAdd = [currentBlock.text substringFromIndex:currentBlockIndex];
         
@@ -162,18 +151,14 @@
         }
          */
         
-        addingText = [textToAdd copy];
-            
+        
         pageBuffer = [NSString stringWithFormat:@"%@%@",
                       pageBuffer,
                       textToAdd];
         
-        NSLog(@"pageBuffer: '%@'", pageBuffer);
-        NSLog(@"pageBuffer length: %d", pageBuffer.length);
         
-        
-        splitIndex = [pageBuffer getSplitIndexWithSize:[self pageSize] andFont:self.pageFont];
-        NSLog(@"The split index: %d", splitIndex);
+        CGSize size = [self pageSize];
+        splitIndex = [pageBuffer getSplitIndexWithSize:size andFont:self.pageFont];
         currentBlockNumber++;
         if ([currentBlock.last_block boolValue]) break;
         currentBlockIndex = 0;
@@ -183,7 +168,7 @@
         }
     }
     
-    int lastBlockIndex = splitIndex - oldPageBufferLength + currentBlockIndex;
+   int lastBlockIndex = splitIndex - oldPageBufferLength + currentBlockIndex;
     
     
     Page *newPage = [Page pageWithNumber:pageNumber storyId:self.story.id];
@@ -199,8 +184,6 @@
     
     NSError *error;
     
-    NSLog(@"last block index: %d", lastBlockIndex);
-    
     if ([pageNumber intValue] > self.lastPageNumber) {
         self.lastPageNumber = [pageNumber intValue];
     }
@@ -209,18 +192,14 @@
         self.firstPageNumber = [pageNumber intValue];
     }
     
-    @try {
-    [[newPage managedObjectContext] save:&error];
-    } @catch (NSException *e){
-        [[newPage managedObjectContext] save:&error];
-    }
-    
     if ([newPage isLastPage]) {
         //[self.scrollView reloadData];
         numberOfPages = 0;
         self.pagesOutstanding = 0;
         [self scrollToCorrectPage];
+        self.lastPageSeen = YES;
         self.loadingPages = NO;
+        self.LP = NO;
     } else {
         numberOfPages--;
         self.pagesOutstanding--;
@@ -229,8 +208,10 @@
         }
     }
     
+    [[newPage managedObjectContext] save:&error];
+    
     if (numberOfPages > 0) {
-        
+        if (self.stopAddingJobs) return;
         dispatch_async(self.backgroundQueue, ^(void) {
             [self createNumberOfPages:numberOfPages
                    startingPageNumber:[NSNumber numberWithInt:([pageNumber intValue] + 1)]
@@ -241,8 +222,6 @@
          
     }
 }
-
-
 
 
 - (int)pageMargin {
@@ -258,8 +237,6 @@
 }
 
 - (void) setupScrollView {
-    
-    
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 
@@ -275,7 +252,6 @@
     [self.scrollView registerClass:[SlideViewCell class] forCellWithReuseIdentifier:@"slideViewCell"];
     
     [self.view addSubview:self.scrollView];
-    
 }
 
 - (void)viewDidLoad
@@ -289,20 +265,47 @@
                                                  name:@"changesMerged"
                                                object:nil];
 }
+
 - (void)receiveManagedObjectUpdate: (NSNotification *) notification {
     NSLog(@"updated meow here: %@", notification);
     NSArray *insertedData = [notification.userInfo objectForKey:@"inserted"];
     NSArray *updatedData = [notification.userInfo objectForKey:@"updated"];
+    NSMutableArray *insertedAndUpdatedData = [[NSMutableArray alloc] init];
     
+    
+    if (insertedData != nil && insertedData.count > 0) {
+        [insertedAndUpdatedData addObjectsFromArray:insertedData];
+    }
+    if (updatedData != nil && updatedData.count > 0) {
+        [insertedAndUpdatedData addObjectsFromArray:updatedData];
+    }
     
     NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc] init];
-    for (NSManagedObject *object in insertedData) {
+    NSMutableArray *indexPathsToReload = [[NSMutableArray alloc] init];
+    for (NSManagedObject *object in insertedAndUpdatedData) {
         if ([object class] == [Page class]) {
             Page *page = (Page *)object;
-            [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
-            
+            //if ([page.page_number intValue] < self.lastPageNumber) {
+            if (1) {
+                [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
+            } else {
+                [indexPathsToReload addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
+            }
         }
+        
     }
+    
+    if (indexPathsToInsert.count > 0) {
+        NSLog(@"inserting: %d", indexPathsToInsert.count);
+        for (NSIndexPath *path in indexPathsToInsert) {
+            NSLog(@"the index path: %@", path);
+        }
+        [self.scrollView insertItemsAtIndexPaths:indexPathsToInsert];
+    }
+
+    
+    
+    /*
     if (indexPathsToInsert.count > 0) {
         [self.scrollView insertItemsAtIndexPaths:indexPathsToInsert];
     }
@@ -311,18 +314,21 @@
     for (NSManagedObject *object in updatedData) {
         if ([object class] == [Page class]) {
             Page *page = (Page *)object;
+            
             [indexPathsToReload addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
         }
     }
     
     if (indexPathsToReload.count > 0) {
-        [self.scrollView reloadData];
+        [self.scrollView reloadItemsAtIndexPaths:indexPathsToInsert];
+        //[self.scrollView reloadData];
     }
     
     
     if (insertedData.count > 0) {
         //[self.scrollView reloadData];
     }
+     */
 }
 
 
@@ -339,7 +345,7 @@
     if (self.startingPageNumber == nil) {
         //[self scrollToPageNumber:0];
     } else {
-        [self scrollToPageNumber:[self.startingPageNumber intValue]];
+        //[self scrollToPageNumber:[self.startingPageNumber intValue]];
     }
 }
 
@@ -383,7 +389,9 @@
 
 - (void) buildAllPages {
     self.loadingPages = YES;
+    self.LP = YES;
     self.lastPageNumber = -1;
+    if (self.stopAddingJobs) return;
     dispatch_async(self.backgroundQueue, ^(void) {
         [self createNumberOfPages:pagesToBuffer
                startingPageNumber:@(0)
@@ -398,7 +406,22 @@
 }
 
 - (void)fontIncrease {
-    if (self.loadingPages) return;
+    CGFloat fontSize = self.pageFont.pointSize;
+    fontSize += 5.0;
+    if (fontSize >= FONT_MAX_SIZE) {
+        return;
+    }
+    //self.stopAddingJobs = YES;
+    dispatch_async(self.backgroundQueue, ^{[self moreFontIncrease];});
+}
+
+- (void) moreFontIncrease {
+    //self.stopAddingJobs = NO;
+    self.lastPageNumber = -1;
+    [self.scrollView reloadData];
+    
+   // self.lastPageNumber = -1;
+    
     CGFloat fontSize = self.pageFont.pointSize;
     fontSize += 5.0;
     if (fontSize >= FONT_MAX_SIZE) {
@@ -409,7 +432,10 @@
 }
 
 - (void)fontDecrease {
-    if (self.loadingPages) return;
+    
+    //dispatch_release(self.backgroundQueue);
+    //self.backgroundQueue = dispatch_queue_create("backgroundQueue2", NULL);
+    //if (self.loadingPages) return;
     CGFloat fontSize = self.pageFont.pointSize;
     fontSize -= 5.0;
     if (fontSize <= FONT_MIN_SIZE) {
@@ -420,9 +446,8 @@
 }
 
 
-
-
 - (void)backClicked {
+    /*
     Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", self.story.id, @(YES)]];
     if (bookmark == nil) {
         bookmark = [Bookmark object];
@@ -432,7 +457,11 @@
     bookmark.story_id = self.story.id;
     bookmark.auto_bookmark = @(YES);
     [[bookmark managedObjectContext] save:nil];
-    [self.scrollView reloadData];
+   */
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void) viewPop {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -449,7 +478,7 @@
     int newCurrentPage = ((offset+(width/2))/width);
     if (newCurrentPage != self.pageControl.currentPage) {
         if (newCurrentPage > (self.lastPageNumber - pagesToBuffer + 1)) {
-            [self getMorePages];
+            //[self getMorePages];
         } else {
             //self.stopLoadingPages = YES;
         }
@@ -468,6 +497,7 @@
     
     if (![page isLastPage]) {
         self.pagesOutstanding = pagesToBuffer;
+        if (self.stopAddingJobs) return;
         dispatch_async(self.backgroundQueue, ^(void) {
             [self createNumberOfPages:pagesToBuffer startingPageNumber:[NSNumber numberWithInt:(self.lastPageNumber + 1)] fromBlock:@([page.last_block_number intValue]) index:[page.last_block_index intValue] pageBuffer:@""];
         });

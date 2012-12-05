@@ -31,6 +31,7 @@
         cutText = [self substringToIndex:length];
         textSize = [cutText sizeWithFont:font constrainedToSize:CGSizeMake(size.width, size.height + 500)];
     }
+    cutText = nil;
     if (length == self.length && textSize.height <= size.height) lastSpace = length;
     return lastSpace;
 }

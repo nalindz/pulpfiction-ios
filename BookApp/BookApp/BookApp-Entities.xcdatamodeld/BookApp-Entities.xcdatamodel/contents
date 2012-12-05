@@ -28,7 +28,7 @@
         <attribute name="last_block_index" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="last_block_number" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="page_number" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
-        <attribute name="story_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="story_id" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BABookmark" inverseName="page" inverseEntity="BABookmark" syncable="YES"/>
     </entity>
