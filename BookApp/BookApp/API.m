@@ -12,6 +12,7 @@
 #import "Story.h"
 #import "Block.h"
 #import "History.h"
+#import "User.h"
 
 
 static API* _sharedInstance = nil;
@@ -66,6 +67,13 @@ static API* _sharedInstance = nil;
     // Enable automatic network activity indicator management
     objectManager.client.requestQueue.showsNetworkActivityIndicatorWhenBusy = YES;
     [self createErrorMapping];
+    
+    RKManagedObjectMapping* userMapping = [RKManagedObjectMapping mappingForEntityWithName:@"BAUser"
+                                                                       inManagedObjectStore:objectManager.objectStore];
+    [User configureMapping:userMapping];
+    [objectManager.mappingProvider registerMapping:userMapping
+                                   withRootKeyPath:@"user"];
+    
     
     RKManagedObjectMapping* storyMapping = [RKManagedObjectMapping mappingForEntityWithName:@"BAStory"
                                                                        inManagedObjectStore:objectManager.objectStore];

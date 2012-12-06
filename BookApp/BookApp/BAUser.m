@@ -16,6 +16,8 @@
 @dynamic first_name;
 @dynamic last_name;
 @dynamic facebook_id;
+@dynamic email;
 @dynamic stories;
+@dynamic bookmarks;
 
 @end

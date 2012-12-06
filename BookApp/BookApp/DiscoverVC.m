@@ -14,6 +14,7 @@
 #import "History.h"
 #import "SpringboardLayout.h"
 #import "SBLayout.h"
+#import "ProfileViewController.h"
 
 @interface DiscoverVC ()
 
@@ -22,6 +23,7 @@
 @property (nonatomic, strong) UITextField *searchBox;
 @property (nonatomic, strong) UIButton *historyButton;
 @property (nonatomic, strong) UIButton *homeButton;
+@property (nonatomic, strong) UIButton *profileButton;
 @end
 
 @implementation DiscoverVC
@@ -61,6 +63,15 @@
     [self.historyButton positionLeftOf:self.homeButton withMargin:30];
     [self.historyButton addTarget:self action:@selector(historyPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.historyButton];
+    
+    self.profileButton = [[UIButton alloc] initWithFrame:CGRectZero];
+    [self.profileButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    self.profileButton.titleLabel.font = [UIFont fontWithName:@"MetaBoldLF-Roman" size:20];
+    [self.profileButton autoSizeWithText:@"profile" fixedWidth:NO];
+    self.profileButton.height = self.searchBox.height;
+    [self.profileButton positionLeftOf:self.historyButton withMargin:30];
+    [self.profileButton addTarget:self action:@selector(profilePressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.profileButton];
     
     
     
@@ -103,6 +114,11 @@
 
 - (void) homePressed {
     [self fetchStoriesWithQuery:nil];
+}
+
+- (void) profilePressed {
+    ProfileViewController *profileVC = [[ProfileViewController alloc] init];
+    [self.navigationController pushViewController:profileVC animated: YES];
 }
 
 

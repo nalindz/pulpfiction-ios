@@ -9,6 +9,8 @@
 #import "LoginViewController.h"
 #import "DiscoverVC.h"
 #import "AppDelegate.h"
+#import "User.h"
+#import "AppDelegate.h"
 
 @interface LoginViewController ()
 
@@ -48,30 +50,85 @@
 - (void)performFbLogin
 {
     NSLog(@"try facebook login");
+    [self clearCurrentUser];
     [self openSessionWithAllowLoginUI:YES];
 }
 
 - (void)performFakeLogin
 {
     NSLog(@"try fake login");
-    [self loginSuccess];
+    [self clearCurrentUser];
+    [self fetchUserWithUserId:@"1"];
 }
 
-- (void) loginSuccess {
+- (void)fbLoginSuccess {
     NSLog(@"login success");
+    if (FBSession.activeSession.isOpen) {
+        [[FBRequest requestForMe] startWithCompletionHandler:
+         ^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
+             if (!error) {
+                 NSString *firstName = [user objectForKey:@"first_name"];
+                 NSString *lastName = [user objectForKey:@"last_name"];
+                 NSString *facebookId = [user objectForKey:@"id"];
+                 NSString *email = [user objectForKey:@"email"];
+                 [self fetchUserWithFacebookId:facebookId andFirstName:firstName andLastName:lastName andEmail: email];
+             }
+         }];
+    }
+}
+
+- (void)loginSuccess: (User*) user {
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    appDelegate.currentUser = user;
     DiscoverVC *discoverVC = [[DiscoverVC alloc] init];
     [self.navigationController pushViewController:discoverVC animated:YES];
 }
 
 - (void)fbLoginFailed {
     NSLog(@"facebook login failed");
+    [self clearCurrentUser];
     [self.navigationController popToRootViewControllerAnimated:NO];
+}
+
+- (void)clearCurrentUser{
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    appDelegate.currentUser = nil;
+}
+
+/* RESTKIT SECTION */
+
+- (void) fetchUserWithUserId: (NSString *) userId {
+    NSString *resourcePath = @"users";
+    if (userId != nil) {
+        resourcePath = [NSString stringWithFormat:@"%@?id=%@", resourcePath, userId];
+    }
+    [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath delegate:self];
+}
+
+- (void) fetchUserWithFacebookId: (NSString *) facebookId andFirstName: (NSString *) firstName andLastName: (NSString*) lastName andEmail:(NSString*) email{
+    NSString *resourcePath = @"users";
+    if (facebookId != nil) {
+        resourcePath = [NSString stringWithFormat:@"%@?facebook_id=%@&first_name=%@&last_name=%@&email=%@", resourcePath, facebookId, firstName, lastName, email];
+    }
+    [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath delegate:self];
+}
+
+- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObject:(id)object{
+    if ([objectLoader.resourcePath hasPrefix:@"users"]) {
+        NSLog(@"The user : %@", object);
+        [self loginSuccess:object];
+    }
+}
+
+- (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+    
 }
 
 /* FACEBOOK SECTION */
 
 - (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI {
-    return [FBSession openActiveSessionWithReadPermissions:nil
+    NSArray *permissions = [[NSArray alloc] initWithObjects:@"email", nil];
+    return [FBSession openActiveSessionWithReadPermissions:permissions
                                               allowLoginUI:allowLoginUI
                                          completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
                                              [self sessionStateChanged:session state:state error:error];
@@ -88,7 +145,7 @@
     // is opened successfully, hide the login controller and show the main UI.
     switch (state) {
         case FBSessionStateOpen: {
-            [self loginSuccess];
+            [self fbLoginSuccess];
             
             // FBSample logic
             // Pre-fetch and cache the friends for the friend picker as soon as possible to improve
@@ -101,7 +158,7 @@
             // FBSample logic
             // Once the user has logged out, we want them to be looking at the root view.            
             [FBSession.activeSession closeAndClearTokenInformation];
-            
+            [self clearCurrentUser];
             [self performSelector:@selector(fbLoginFailed)
                        withObject:nil
                        afterDelay:0.5f];
@@ -112,6 +169,7 @@
             // the login view, however we do it with a slight delay in order to
             // account for a race between this and the login view dissappearing
             // a moment before
+            [self clearCurrentUser];
             [self performSelector:@selector(fbLoginFailed)
                        withObject:nil
                        afterDelay:0.5f];
@@ -122,6 +180,7 @@
     }
     
     if (error) {
+        [self clearCurrentUser];
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Error: %@",
                                                                      [self FBErrorCodeDescription:error.code]]
                                                             message:error.localizedDescription
@@ -161,10 +220,6 @@
             return @"[Unknown]";
     }
 }
-
-
-/* END OF FACEBOOK SECTION */
-
 
 
 - (void)didReceiveMemoryWarning
