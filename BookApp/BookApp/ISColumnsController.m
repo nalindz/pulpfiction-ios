@@ -200,7 +200,7 @@
         [[newPage managedObjectContext] save:&error];
         
         
-        currentPageNumber = [pageNumber intValue] + 1;
+        currentPageNumber++;
         currentBlockIndex = [newPage.last_block_index intValue];
         currentBlockNumber = [newPage.last_block_number intValue];
         myPageBuffer = @"";
@@ -269,7 +269,7 @@
     for (NSManagedObject *object in insertedAndUpdatedData) {
         if ([object class] == [Page class]) {
             Page *page = (Page *)object;
-            if ([page.font_size floatValue] == self.pageFont.pointSize && [page.page_number intValue] > self.lastPageNumber) {
+            if ([page.font_size floatValue] == self.pageFont.pointSize && [page.page_number intValue] - self.lastPageNumber == 1) {
                 NSLog(@"The number of views: %d", [self.scrollView numberOfItemsInSection:0]);
                 [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
                 self.lastPageNumber = [page.page_number intValue];
@@ -384,7 +384,7 @@
 
 
 - (void)fontIncrease {
-    if (self.fontClickDisabled) return;
+//    if (self.fontClickDisabled) return;
     self.fontClickDisabled = YES;
     CGFloat fontSize = self.pageFont.pointSize;
     fontSize += 5.0;
