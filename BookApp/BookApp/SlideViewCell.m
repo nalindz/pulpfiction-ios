@@ -46,7 +46,7 @@
         [self.fontIncrease setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         [self.fontIncrease autoSizeWithText:@"+" fixedWidth:NO];
         [self.fontIncrease positionLeftOf:self.backButton withMargin:20];
-        [self.fontIncrease addTarget:self.delegate action:@selector(fontIncrease) forControlEvents:UIControlEventTouchUpInside];
+        [self.fontIncrease addTarget:self action:@selector(clickedFontIncrease) forControlEvents:UIControlEventTouchUpInside];
         self.fontIncrease.height = self.backButton.height;
         [self addSubview:self.fontIncrease];
         
@@ -57,13 +57,24 @@
         [self.fontDecrease autoSizeWithText:@"-" fixedWidth:NO];
         self.fontDecrease.width = self.fontDecrease.width + 15;
         [self.fontDecrease positionLeftOf:self.fontIncrease withMargin:20];
-        [self.fontDecrease addTarget:self.delegate action:@selector(fontDecrease) forControlEvents:UIControlEventTouchUpInside];
+        [self.fontDecrease addTarget:self action:@selector(clickedFontDecrease) forControlEvents:UIControlEventTouchUpInside];
         self.fontDecrease.height = self.backButton.height;
         [self addSubview:self.fontDecrease];
         
         
     }
     return self;
+}
+
+
+- (void) clickedFontIncrease {
+    //self.fontIncrease.enabled = NO;
+    [self.delegate fontIncrease];
+}
+
+- (void) clickedFontDecrease {
+//    self.fontDecrease.enabled = NO;
+    [self.delegate fontDecrease];
 }
 
 
@@ -88,6 +99,16 @@
     self.textLabel.text = page.text;
     //self.backButton.x = [self.delegate pageMargin];
     self.transform = currentTransform;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(enableFontButtons)
+                                                 name:@"enableFontButons"
+                                               object:nil];
+}
+
+- (void)enableFontButtons {
+    self.fontDecrease.enabled = YES;
+    self.fontIncrease.enabled = YES;
 }
 
 

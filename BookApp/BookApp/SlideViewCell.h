@@ -12,6 +12,10 @@
 @protocol SlideViewCellDelegate
 - (UIFont *) fontForSlideViewCell;
 - (int) pageMargin;
+- (void) fontIncrease;
+- (void) fontDecrease;
+- (BOOL) isFontDecreaseEnabled;
+- (BOOL) isFontIncreaseEnabled;
 @end
 
 @interface SlideViewCell : UICollectionViewCell
