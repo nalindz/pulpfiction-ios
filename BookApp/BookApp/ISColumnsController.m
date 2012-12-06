@@ -26,22 +26,13 @@
 - (void) reloadData;
 
 @property (atomic, strong) dispatch_queue_t backgroundQueue;
-@property (atomic, strong) dispatch_queue_t fontQueue;
 
 @property (atomic) int firstPageNumber;
 @property (atomic) int lastPageNumber;
 
-@property (atomic) int pagesOutstanding;
 
-@property BOOL stopLoadingPages;
-
-@property  BOOL loadingPages;
-@property (atomic) BOOL lastPageSeen;
-
-
-@property  BOOL LP;
+@property (nonatomic, strong) UIView *loadingShot;
 @property  (atomic) BOOL stopAddingJobs;
-
 
 @property (nonatomic, strong) UIFont *pageFont;
 
@@ -63,7 +54,7 @@
 - (UIFont *)pageFont {
     if (_pageFont == nil) {
         //default font
-       _pageFont = [UIFont fontWithName:@"Meta Serif OT" size:30];
+       _pageFont = [UIFont fontWithName:@"Meta Serif OT" size:20];
     }
     return _pageFont;
 }
@@ -188,21 +179,23 @@
         
         
         NSError *error;
-        
+        if (![[newPage managedObjectContext] save:&error]) {
+            NSLog(@"Save failed: %@", error);
+        }
         
         if ([newPage isLastPage]) {
             numberOfPages = 0;
-            //[self scrollToCorrectPage];
+            [self scrollToCorrectPage];
         } else {
             numberOfPages--;
         }
-        
-        [[newPage managedObjectContext] save:&error];
         
         
         currentPageNumber++;
         currentBlockIndex = [newPage.last_block_index intValue];
         currentBlockNumber = [newPage.last_block_number intValue];
+        startBlockIndex = currentBlockIndex;
+        startBlockNumber = @(currentBlockNumber);
         myPageBuffer = @"";
     }
 }
@@ -323,7 +316,6 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    self.pagesOutstanding = pagesToBuffer;
     [self buildAllPages];
     if (self.startingPageNumber == nil) {
         //[self scrollToPageNumber:0];
@@ -335,13 +327,13 @@
 
 - (void)scrollToPageNumber: (int) pageNumber {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(pageNumber) inSection:0];
-    [self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{[self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];});
     //[self.scrollView reloadItemsAtIndexPaths:@[indexPath]];
 }
 
 - (BOOL) isBlockNumber:(int) blockNumber andIndex: (int) index inPage: (Page *) page {
-    if ([page.first_block_number intValue] <= [self.viewingBlockNumber intValue]
-        && [page.last_block_number intValue] >= [self.viewingBlockNumber intValue]) {
+    if ([page.first_block_number intValue] <= blockNumber
+    && [page.last_block_number intValue] >= blockNumber) {
         if ([page.first_block_number intValue] == blockNumber) {
             if ([page.first_block_index intValue] <= index) return true;
         } else if ([page.last_block_number intValue] == blockNumber) {
@@ -356,9 +348,7 @@
 }
 
 -(void) scrollToCorrectPage {
-    if (self.viewingBlockNumber == nil) {
-        return;
-    }
+    if (self.viewingBlockNumber == nil) return;
     int pageToScrollTo = 0;
     Page *page;
     while (pageToScrollTo <= self.lastPageNumber) {
@@ -368,6 +358,9 @@
     }
     
     [self scrollToPageNumber:pageToScrollTo];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{self.loadingShot.hidden = YES;});
+    //[self.scrollView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.pageControl.currentPage inSection:0]]];
 }
 
 - (void) buildAllPages {
@@ -384,20 +377,55 @@
 
 
 - (void)fontIncrease {
-//    if (self.fontClickDisabled) return;
-    self.fontClickDisabled = YES;
     CGFloat fontSize = self.pageFont.pointSize;
     fontSize += 5.0;
-    if (fontSize >= FONT_MAX_SIZE) {
-        return;
-    }
+    if (fontSize >= FONT_MAX_SIZE) return;
+    self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:fontSize];
+    [self fontChangeWithSize:fontSize];
+}
+
+- (void)fontDecrease {
+    CGFloat fontSize = self.pageFont.pointSize;
+    fontSize -= 5.0;
+    if (fontSize <= FONT_MIN_SIZE) return;
+    [self fontChangeWithSize:fontSize];
+}
+
+- (void) fontChangeWithSize: (CGFloat) fontSize {
     self.stopAddingJobs = YES;
     self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:fontSize];
+    
+    // save current page info
+    
+    Page *currentPage = [self currentPage];
+    self.viewingBlockIndex = [currentPage.first_block_index copy];
+    self.viewingBlockNumber = [currentPage.first_block_number copy];
+    
+   
+    
+    //UICollectionViewCell *cell = [self.scrollView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+    UIGraphicsBeginImageContextWithOptions(self.scrollView.frame.size,NO, 1);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [self.view.layer renderInContext:context];
+    UIImage *capturedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    self.loadingShot = [[UIImageView alloc] initWithImage:capturedImage];
+    self.loadingShot.userInteractionEnabled = NO;
+    
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    spinner.center = self.loadingShot.center;
+    [self.loadingShot addSubview:spinner];
+    [spinner startAnimating];
+   
+    [self.view addSubview:self.loadingShot];
+    
+    
     dispatch_async(self.backgroundQueue, ^{[self finishFontChange];});
+    
 }
 
 - (void) finishFontChange {
-//    self.fontClickDisabled = YES;
     self.lastPageNumber = -1;
     [self.scrollView reloadData];
     
@@ -406,21 +434,6 @@
     self.fontClickDisabled = NO;
     [self buildAllPages];
 }
-
-- (void)fontDecrease {
-    //if (self.fontClickDisabled) return;
-    self.fontClickDisabled = YES;
-    CGFloat fontSize = self.pageFont.pointSize;
-    fontSize -= 5.0;
-    if (fontSize <= FONT_MIN_SIZE) {
-        return;
-    }
-    self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:fontSize];
-    self.stopAddingJobs = YES;
-    dispatch_async(self.backgroundQueue, ^{[self finishFontChange];});
-}
-
-
 
 - (void)backClicked {
     /*
@@ -463,6 +476,7 @@
     NSLog(@"current page %d", self.pageControl.currentPage);
 }
 
+/*
 - (void) getMorePages {
     if (self.pagesOutstanding > 0) return;
     if (self.loadingPages) return;
@@ -479,6 +493,7 @@
         });
     }
 }
+ */
 
 - (UIFont *) fontForSlideViewCell {
     return self.pageFont;
