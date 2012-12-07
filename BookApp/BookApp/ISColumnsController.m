@@ -31,7 +31,7 @@
 @property (atomic) int lastPageNumber;
 
 
-@property (nonatomic, strong) UIView *loadingShot;
+@property (atomic, strong) UIView *loadingShot;
 @property  (atomic) BOOL stopAddingJobs;
 
 @property (nonatomic, strong) UIFont *pageFont;
@@ -93,7 +93,6 @@
 - (void)loadView
 {
     [super loadView];
-    [self setupScrollView];
 }
 
 
@@ -234,6 +233,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setupScrollView];
     self.firstPageNumber = 0;
     self.lastPageNumber = -1;
     
@@ -266,6 +266,7 @@
                 NSLog(@"The number of views: %d", [self.scrollView numberOfItemsInSection:0]);
                 [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
                 self.lastPageNumber = [page.page_number intValue];
+                
             }
         }
         
@@ -280,29 +281,9 @@
     }
 
     
-    
     /*
-    if (indexPathsToInsert.count > 0) {
-        [self.scrollView insertItemsAtIndexPaths:indexPathsToInsert];
-    }
-    
-    NSMutableArray *indexPathsToReload = [[NSMutableArray alloc] init];
-    for (NSManagedObject *object in updatedData) {
-        if ([object class] == [Page class]) {
-            Page *page = (Page *)object;
-            
-            [indexPathsToReload addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
-        }
-    }
-    
-    if (indexPathsToReload.count > 0) {
-        [self.scrollView reloadItemsAtIndexPaths:indexPathsToInsert];
-        //[self.scrollView reloadData];
-    }
-    
-    
-    if (insertedData.count > 0) {
-        //[self.scrollView reloadData];
+    if (self.lastPageNumber > [self.startingPageNumber intValue] + 1 && self.startingPageNumber != nil) {
+        [self scrollToCorrectPage];
     }
      */
 }
@@ -316,11 +297,22 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    if ([self.startingPageNumber intValue] == 0) {
+        self.startingPageNumber = nil;
+    }
     [self buildAllPages];
-    if (self.startingPageNumber == nil) {
-        //[self scrollToPageNumber:0];
-    } else {
-        //[self scrollToPageNumber:[self.startingPageNumber intValue]];
+    [self showLoadingPage];
+}
+
+- (void) showLoadingPage {
+    if (self.startingPageNumber != nil) {
+        self.loadingShot = [[UIView alloc] initWithFrame:self.view.bounds];
+        self.loadingShot.backgroundColor = [UIColor blackColor];
+        UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0,0,100,100)];
+        spinner.center = self.view.center;
+        [self.loadingShot addSubview:spinner];
+        [spinner startAnimating];
+        [self.view addSubview:self.loadingShot];
     }
 }
 
@@ -348,18 +340,30 @@
 }
 
 -(void) scrollToCorrectPage {
-    if (self.viewingBlockNumber == nil) return;
     int pageToScrollTo = 0;
-    Page *page;
-    while (pageToScrollTo <= self.lastPageNumber) {
-        page = [Page pageWithNumber:@(pageToScrollTo) storyId:self.story.id];
-        if ([self isBlockNumber:[self.viewingBlockNumber intValue] andIndex:[self.viewingBlockIndex intValue] inPage:page]) break;
-        pageToScrollTo++;
+    if (self.startingPageNumber != nil) {
+        pageToScrollTo = [self.startingPageNumber intValue];
+        self.startingPageNumber = nil;
+    }
+    else if (self.viewingBlockNumber == nil) {
+        return;
+    } else {
+        Page *page;
+        while (pageToScrollTo <= self.lastPageNumber) {
+            page = [Page pageWithNumber:@(pageToScrollTo) storyId:self.story.id];
+            if ([self isBlockNumber:[self.viewingBlockNumber intValue] andIndex:[self.viewingBlockIndex intValue] inPage:page]) break;
+            pageToScrollTo++;
+        }
     }
     
-    [self scrollToPageNumber:pageToScrollTo];
+   [self scrollToPageNumber:pageToScrollTo];
     
-    dispatch_async(dispatch_get_main_queue(), ^{self.loadingShot.hidden = YES;});
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"the loading shot: %d", self.loadingShot.hidden);
+        self.loadingShot.hidden = YES;
+        [self.view bringSubviewToFront:self.scrollView];
+        NSLog(@"the loading shot: %d", self.loadingShot.hidden);
+    });
     //self.loadingShot.hidden = YES;
     //[self.scrollView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.pageControl.currentPage inSection:0]]];
 }
@@ -367,6 +371,8 @@
 - (void) buildAllPages {
     self.lastPageNumber = -1;
     if (self.stopAddingJobs) return;
+    
+    [self showLoadingPage];
     dispatch_async(self.backgroundQueue, ^(void) {
         [self createNumberOfPages:pagesToBuffer
                startingPageNumber:@(0)
@@ -437,7 +443,7 @@
 }
 
 - (void)backClicked {
-    /*
+    
     Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", self.story.id, @(YES)]];
     if (bookmark == nil) {
         bookmark = [Bookmark object];
@@ -447,7 +453,6 @@
     bookmark.story_id = self.story.id;
     bookmark.auto_bookmark = @(YES);
     [[bookmark managedObjectContext] save:nil];
-   */
     [self.navigationController popViewControllerAnimated:YES];
 }
 
