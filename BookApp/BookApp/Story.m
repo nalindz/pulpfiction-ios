@@ -23,6 +23,8 @@
     RKObjectManager* manager = [RKObjectManager sharedManager];
     [mapping mapAttributes:
      @"id",
+     @"blocks_count",
+     @"total_length",
      @"created_at",
      @"updated_at",
      @"title",

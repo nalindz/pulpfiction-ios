@@ -2,14 +2,14 @@
 //  BAStory.h
 //  BookApp
 //
-//  Created by Nalin on 11/18/12.
+//  Created by Nalin on 12/6/12.
 //
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class BABookmark, User;
+@class Bookmark, User;
 
 @interface BAStory : NSManagedObject
 
@@ -18,14 +18,16 @@
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSNumber * user_id;
-@property (nonatomic, retain) User *user;
+@property (nonatomic, retain) NSNumber * blocks_count;
+@property (nonatomic, retain) NSNumber * total_length;
 @property (nonatomic, retain) NSSet *bookmarks;
+@property (nonatomic, retain) User *user;
 @end
 
 @interface BAStory (CoreDataGeneratedAccessors)
 
-- (void)addBookmarksObject:(BABookmark *)value;
-- (void)removeBookmarksObject:(BABookmark *)value;
+- (void)addBookmarksObject:(Bookmark *)value;
+- (void)removeBookmarksObject:(Bookmark *)value;
 - (void)addBookmarks:(NSSet *)values;
 - (void)removeBookmarks:(NSSet *)values;
 

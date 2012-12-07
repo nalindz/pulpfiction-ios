@@ -7,6 +7,9 @@
 //
 
 #import "SlideViewCell.h"
+#import "BAProgressBarView.h"
+#import "Story.h"
+#import "Block.h"
 
 @interface SlideViewCell()
 @property (nonatomic, strong) UIView *titleBar;
@@ -15,6 +18,7 @@
 @property (nonatomic, strong) UIButton *fontDecrease;
 @property (nonatomic, strong) NSNumber *pageNumber;
 @property (nonatomic, strong) NSNumber *storyId;
+@property (nonatomic, strong) BAProgressBarView *progressBar;
 
 @end
 
@@ -62,6 +66,7 @@
         [self addSubview:self.fontDecrease];
         
         
+        
     }
     return self;
 }
@@ -99,12 +104,37 @@
     self.textLabel.text = page.text;
     //self.backButton.x = [self.delegate pageMargin];
     self.transform = currentTransform;
+    Story *story = [Story findFirstByAttribute:@"id" withValue:storyId];
+    Block *firstBlock = [Block blockWithStoryId:storyId blockNumber:page.first_block_number];
+    Block *lastBlock = [Block blockWithStoryId:storyId blockNumber:page.last_block_number];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(enableFontButtons)
-                                                 name:@"enableFontButons"
-                                               object:nil];
+    CGFloat progress = ([lastBlock.total_start_index floatValue] + [page.last_block_index floatValue]) / [story.total_length floatValue];
+    
+    
+    NSLog(@"progress :%f", progress);
+    NSLog(@"firstBlock total start index :%f", [firstBlock.total_start_index floatValue]);
+    NSLog(@"page first block index :%f", [page.first_block_index floatValue]);
+    
+    self.progressBar = [[BAProgressBarView alloc] initWithFrame:CGRectMake(margin * 2 ,self.height - 80, self.width - margin * 4, 50)];
+    [self.progressBar setPercentage:progress];
+    [self addSubview:self.progressBar];
+    
 }
+
+- (void) showActions {
+    self.progressBar.hidden = NO;
+    self.fontDecrease.hidden = NO;
+    self.fontIncrease.hidden = NO;
+    self.backButton.hidden = NO;
+}
+
+- (void) hideActions {
+    self.progressBar.hidden = YES;
+    self.fontDecrease.hidden = YES;
+    self.fontIncrease.hidden = YES;
+    self.backButton.hidden = YES;
+}
+
 
 - (void)enableFontButtons {
     self.fontDecrease.enabled = YES;

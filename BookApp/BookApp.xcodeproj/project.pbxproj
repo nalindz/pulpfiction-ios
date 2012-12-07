@@ -16,6 +16,9 @@
 		5575A0831662FE89004D1576 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 5575A0821662FE89004D1576 /* User.m */; };
 		5575A09A16633E0B004D1576 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5575A09916633E0A004D1576 /* ProfileViewController.m */; };
 		F515C9AA1671AF05000078D2 /* PageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F515C9A91671AF05000078D2 /* PageView.m */; };
+		F515C9AD1671B1CE000078D2 /* BAProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = F515C9AC1671B1CE000078D2 /* BAProgressBarView.m */; };
+		F515C9B31671D5B1000078D2 /* BAStory.m in Sources */ = {isa = PBXBuildFile; fileRef = F515C9B21671D5B1000078D2 /* BAStory.m */; };
+		F515C9B61671D6AB000078D2 /* BABlock.m in Sources */ = {isa = PBXBuildFile; fileRef = F515C9B51671D6AB000078D2 /* BABlock.m */; };
 		F52AAFB21653508B007B36C1 /* DiscoverVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F52AAFB11653508B007B36C1 /* DiscoverVC.m */; };
 		F52AAFB516535632007B36C1 /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F52AAFB416535632007B36C1 /* StoryCell.m */; };
 		F530E1B616434F30003A9EDF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1B516434F30003A9EDF /* UIKit.framework */; };
@@ -37,7 +40,6 @@
 		F530E1FD16435AEE003A9EDF /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1FC16435AEE003A9EDF /* libxml2.dylib */; };
 		F530E1FF16435AF6003A9EDF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1FE16435AF6003A9EDF /* QuartzCore.framework */; };
 		F530E20016435B07003A9EDF /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1E716435A3C003A9EDF /* libRestKit.a */; };
-		F575269E165067FD005E2235 /* BABlock.m in Sources */ = {isa = PBXBuildFile; fileRef = F575269D165067FD005E2235 /* BABlock.m */; };
 		F57526A4165083CC005E2235 /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = F57526A3165083CC005E2235 /* Page.m */; };
 		F579D705166F562500313B07 /* BAPage.m in Sources */ = {isa = PBXBuildFile; fileRef = F579D704166F562500313B07 /* BAPage.m */; };
 		F586EFC316538AFB00488742 /* UIView+FrameUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F586EFC216538AFB00488742 /* UIView+FrameUtil.m */; };
@@ -52,7 +54,6 @@
 		F586F0501659DB7D00488742 /* UIButton+AutoSize.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F04F1659DB7D00488742 /* UIButton+AutoSize.m */; };
 		F586F0541659FCC600488742 /* close-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F586F0531659FCC600488742 /* close-button@2x.png */; };
 		F586F05A165A048F00488742 /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F059165A048F00488742 /* Bookmark.m */; };
-		F586F060165A0C3400488742 /* BAStory.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F05F165A0C3400488742 /* BAStory.m */; };
 		F586F069165A191E00488742 /* BABookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = F586F068165A191E00488742 /* BABookmark.m */; };
 		F58FE1D31661EE4C001B98A3 /* History.m in Sources */ = {isa = PBXBuildFile; fileRef = F58FE1D21661EE4C001B98A3 /* History.m */; };
 		F5908BB1166368FC0043E3CF /* SpringboardLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = F5908BB0166368FC0043E3CF /* SpringboardLayout.m */; };
@@ -131,6 +132,12 @@
 		5575A09916633E0A004D1576 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		F515C9A81671AF05000078D2 /* PageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageView.h; sourceTree = "<group>"; };
 		F515C9A91671AF05000078D2 /* PageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageView.m; sourceTree = "<group>"; };
+		F515C9AB1671B1CE000078D2 /* BAProgressBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAProgressBarView.h; sourceTree = "<group>"; };
+		F515C9AC1671B1CE000078D2 /* BAProgressBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAProgressBarView.m; sourceTree = "<group>"; };
+		F515C9B11671D5B1000078D2 /* BAStory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAStory.h; sourceTree = "<group>"; };
+		F515C9B21671D5B1000078D2 /* BAStory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAStory.m; sourceTree = "<group>"; };
+		F515C9B41671D6AB000078D2 /* BABlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BABlock.h; sourceTree = "<group>"; };
+		F515C9B51671D6AB000078D2 /* BABlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BABlock.m; sourceTree = "<group>"; };
 		F52AAFB01653508B007B36C1 /* DiscoverVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverVC.h; sourceTree = "<group>"; };
 		F52AAFB11653508B007B36C1 /* DiscoverVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverVC.m; sourceTree = "<group>"; };
 		F52AAFB316535632007B36C1 /* StoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCell.h; sourceTree = "<group>"; };
@@ -159,8 +166,6 @@
 		F530E1FA16435AE6003A9EDF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		F530E1FC16435AEE003A9EDF /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		F530E1FE16435AF6003A9EDF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		F575269C165067FD005E2235 /* BABlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BABlock.h; sourceTree = "<group>"; };
-		F575269D165067FD005E2235 /* BABlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BABlock.m; sourceTree = "<group>"; };
 		F57526A2165083CC005E2235 /* Page.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Page.h; sourceTree = "<group>"; };
 		F57526A3165083CC005E2235 /* Page.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Page.m; sourceTree = "<group>"; };
 		F579D703166F562500313B07 /* BAPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAPage.h; sourceTree = "<group>"; };
@@ -183,8 +188,6 @@
 		F586F0531659FCC600488742 /* close-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close-button@2x.png"; sourceTree = "<group>"; };
 		F586F058165A048F00488742 /* Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bookmark.h; sourceTree = "<group>"; };
 		F586F059165A048F00488742 /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmark.m; sourceTree = "<group>"; };
-		F586F05E165A0C3400488742 /* BAStory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAStory.h; sourceTree = "<group>"; };
-		F586F05F165A0C3400488742 /* BAStory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAStory.m; sourceTree = "<group>"; };
 		F586F067165A191E00488742 /* BABookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BABookmark.h; sourceTree = "<group>"; };
 		F586F068165A191E00488742 /* BABookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BABookmark.m; sourceTree = "<group>"; };
 		F58FE1D11661EE4C001B98A3 /* History.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = History.h; sourceTree = "<group>"; };
@@ -357,6 +360,8 @@
 		F530E20216435C8D003A9EDF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F515C9AB1671B1CE000078D2 /* BAProgressBarView.h */,
+				F515C9AC1671B1CE000078D2 /* BAProgressBarView.m */,
 				F515C9A81671AF05000078D2 /* PageView.h */,
 				F515C9A91671AF05000078D2 /* PageView.m */,
 				F590B0A9166C1E8600271DBC /* PageCell.h */,
@@ -370,20 +375,20 @@
 		F530E20316435C96003A9EDF /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F515C9B41671D6AB000078D2 /* BABlock.h */,
+				F515C9B51671D6AB000078D2 /* BABlock.m */,
+				F515C9B11671D5B1000078D2 /* BAStory.h */,
+				F515C9B21671D5B1000078D2 /* BAStory.m */,
 				F579D703166F562500313B07 /* BAPage.h */,
 				F579D704166F562500313B07 /* BAPage.m */,
 				F58FE1D11661EE4C001B98A3 /* History.h */,
 				F58FE1D21661EE4C001B98A3 /* History.m */,
 				F586F067165A191E00488742 /* BABookmark.h */,
 				F586F068165A191E00488742 /* BABookmark.m */,
-				F586F05E165A0C3400488742 /* BAStory.h */,
-				F586F05F165A0C3400488742 /* BAStory.m */,
 				F586F058165A048F00488742 /* Bookmark.h */,
 				F586F059165A048F00488742 /* Bookmark.m */,
 				F57526A2165083CC005E2235 /* Page.h */,
 				F57526A3165083CC005E2235 /* Page.m */,
-				F575269C165067FD005E2235 /* BABlock.h */,
-				F575269D165067FD005E2235 /* BABlock.m */,
 				F59EED9B16438E1E001C42F2 /* BookApp-Entities.xcdatamodeld */,
 				F59EEDA51643AF8A001C42F2 /* BAUser.h */,
 				F59EEDA61643AF8A001C42F2 /* BAUser.m */,
@@ -601,7 +606,6 @@
 				F5FC6EE31648E6DD0087137F /* SlideViewCell.m in Sources */,
 				F5FC6EE61648FC550087137F /* SlideScrollView.m in Sources */,
 				F5E56593164EEA630044B956 /* NSString+FitInLabel.m in Sources */,
-				F575269E165067FD005E2235 /* BABlock.m in Sources */,
 				F57526A4165083CC005E2235 /* Page.m in Sources */,
 				F52AAFB21653508B007B36C1 /* DiscoverVC.m in Sources */,
 				F52AAFB516535632007B36C1 /* StoryCell.m in Sources */,
@@ -611,7 +615,6 @@
 				F586F04A1659C08900488742 /* CaptureView.m in Sources */,
 				F586F0501659DB7D00488742 /* UIButton+AutoSize.m in Sources */,
 				F586F05A165A048F00488742 /* Bookmark.m in Sources */,
-				F586F060165A0C3400488742 /* BAStory.m in Sources */,
 				F586F069165A191E00488742 /* BABookmark.m in Sources */,
 				55125FBA1662C8330006D538 /* LoginViewController.m in Sources */,
 				F58FE1D31661EE4C001B98A3 /* History.m in Sources */,
@@ -622,6 +625,9 @@
 				5575A0831662FE89004D1576 /* User.m in Sources */,
 				5575A09A16633E0B004D1576 /* ProfileViewController.m in Sources */,
 				F515C9AA1671AF05000078D2 /* PageView.m in Sources */,
+				F515C9AD1671B1CE000078D2 /* BAProgressBarView.m in Sources */,
+				F515C9B31671D5B1000078D2 /* BAStory.m in Sources */,
+				F515C9B61671D6AB000078D2 /* BABlock.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

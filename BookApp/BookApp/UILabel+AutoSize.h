@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    AutoSizeFixedWidth,
+    AutoSizeFixedHeight,
+    AutoSizeAll
+} LabelAutoSizeType;
+
 @interface UILabel (AutoSize)
 - (void) setText: (NSString *) text fixedWidth: (BOOL) fixedWidth;
 @end

@@ -2,13 +2,13 @@
 //  BAStory.m
 //  BookApp
 //
-//  Created by Nalin on 11/18/12.
+//  Created by Nalin on 12/6/12.
 //
 //
 
 #import "BAStory.h"
-#import "BABookmark.h"
-//#import "User.h"
+#import "Bookmark.h"
+#import "User.h"
 
 
 @implementation BAStory
@@ -18,7 +18,9 @@
 @dynamic title;
 @dynamic updated_at;
 @dynamic user_id;
-@dynamic user;
+@dynamic blocks_count;
+@dynamic total_length;
 @dynamic bookmarks;
+@dynamic user;
 
 @end

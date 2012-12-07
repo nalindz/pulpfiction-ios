@@ -25,6 +25,7 @@
      @"id",
      @"text",
      @"block_number",
+     @"total_start_index",
      @"story_id",
      @"first_block",
      @"last_block",
@@ -32,6 +33,10 @@
 
     mapping.primaryKeyAttribute = @"id";
     return mapping;
+}
+
++ (Block *) blockWithStoryId:(NSNumber *) storyId blockNumber:(NSNumber *)blockNumber {
+    return [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", blockNumber, storyId]];
 }
 
 

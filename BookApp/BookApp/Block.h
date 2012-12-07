@@ -11,5 +11,5 @@
 #import <RestKit/RestKit.h>
 
 @interface Block : BABlock <HasRKManagedObjectMapping>
-
++ (Block *) blockWithStoryId:(NSNumber *) storyId blockNumber:(NSNumber *)blockNumber;
 @end
