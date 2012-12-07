@@ -217,7 +217,7 @@
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 
-    self.scrollView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:flowLayout];
+    self.scrollView = [[PageView alloc] initWithFrame:self.view.bounds collectionViewLayout:flowLayout];
     
     self.scrollView.backgroundColor = [UIColor blackColor];
     self.scrollView.pagingEnabled = YES;
@@ -360,6 +360,7 @@
     [self scrollToPageNumber:pageToScrollTo];
     
     dispatch_async(dispatch_get_main_queue(), ^{self.loadingShot.hidden = YES;});
+    //self.loadingShot.hidden = YES;
     //[self.scrollView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.pageControl.currentPage inSection:0]]];
 }
 
@@ -497,27 +498,6 @@
 
 - (UIFont *) fontForSlideViewCell {
     return self.pageFont;
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    
-    CGFloat offset = scrollView.contentOffset.x;
-    
-    for (UIView *viewController in self.scrollView.subviews) {
-        CGFloat width = self.scrollView.frame.size.width;
-        int i = viewController.frame.origin.x / width;
-        CGFloat y = i * width;
-        CGFloat value = (offset-y)/width;
-        CGFloat scale = 1.f-fabs(value);
-        if (scale > 1.f) scale = 1.f;
-        if (scale < .8f) scale = .8f;
-        
-        viewController.transform = CGAffineTransformMakeScale(scale, scale);
-        
-        CALayer *layer = viewController.layer;
-        layer.shadowPath = [UIBezierPath bezierPathWithRect:viewController.bounds].CGPath;
-    }
 }
 
 #pragma mark collectionView delegate methods

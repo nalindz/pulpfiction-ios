@@ -2,6 +2,7 @@
 #import "SlideScrollView.h"
 #import "SlideViewCell.h"
 #import "Story.h"
+#import "PageView.h"
 
 @protocol ISColumnsControllerChild <NSObject>
 @optional
@@ -19,7 +20,7 @@ RKObjectLoaderDelegate
 >
 
 @property (retain, nonatomic) NSMutableArray       *viewControllers;
-@property (retain, nonatomic) UICollectionView  *scrollView;
+@property (retain, nonatomic) PageView  *scrollView;
 @property (retain, nonatomic) UILabel       *titleLabel;
 @property (retain, nonatomic) UIPageControl *pageControl;
 @property (retain, nonatomic)Story * story;
