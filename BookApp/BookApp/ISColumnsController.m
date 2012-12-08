@@ -35,6 +35,7 @@
 @property  (atomic) BOOL stopAddingJobs;
 
 @property (nonatomic, strong) UIFont *pageFont;
+@property  BOOL showControls;
 
 // bleh globals - should be in a closure
 @property (nonatomic, strong) NSNumber *viewingBlockNumber;
@@ -216,6 +217,7 @@
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 
+    self.showControls = YES;
     self.scrollView = [[PageView alloc] initWithFrame:self.view.bounds collectionViewLayout:flowLayout];
     
     self.scrollView.backgroundColor = [UIColor blackColor];
@@ -304,6 +306,20 @@
     [self showLoadingPage];
 }
 
+- (void) hideAllControls {
+    self.showControls = NO;
+    for (SlideViewCell *cell in self.scrollView.subviews) {
+        [cell hideControls];
+    }
+}
+
+- (void) showAllControls {
+    self.showControls = YES;
+    for (SlideViewCell *cell in self.scrollView.subviews) {
+        [cell showControls];
+    }
+}
+
 - (void) showLoadingPage {
     if (self.startingPageNumber != nil) {
         self.loadingShot = [[UIView alloc] initWithFrame:self.view.bounds];
@@ -359,10 +375,13 @@
    [self scrollToPageNumber:pageToScrollTo];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSLog(@"the loading shot: %d", self.loadingShot.hidden);
+        
         self.loadingShot.hidden = YES;
         [self.view bringSubviewToFront:self.scrollView];
-        NSLog(@"the loading shot: %d", self.loadingShot.hidden);
+        self.scrollView.alpha = 0.0;
+        [UIView animateWithDuration:0.2 animations:^{
+            self.scrollView.alpha = 1.0;
+        }];
     });
     //self.loadingShot.hidden = YES;
     //[self.scrollView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.pageControl.currentPage inSection:0]]];
@@ -527,7 +546,7 @@
     
     SlideViewCell *cell = [self.scrollView dequeueReusableCellWithReuseIdentifier:@"slideViewCell" forIndexPath:indexPath];
     
-    [cell renderWithPageNumber:@(indexPath.row) storyId:self.story.id font:self.pageFont margin:[self pageMargin]];
+    [cell renderWithPageNumber:@(indexPath.row) storyId:self.story.id font:self.pageFont margin:[self pageMargin] showControls:self.showControls];
     cell.delegate = self;
     //cell.tag = [self cellTagForIndexPath: indexPath];
     return cell;

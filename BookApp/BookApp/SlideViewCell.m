@@ -33,6 +33,9 @@
         self.textLabel.numberOfLines = 0;
         [self addSubview:self.textLabel];
         
+        UITapGestureRecognizer *textTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleControls)];
+        [self addGestureRecognizer:textTap];
+        
         self.titleBar = [[UIView alloc] init];
         self.titleBar.width = self.width;
         self.titleBar.height = 40;
@@ -72,6 +75,8 @@
 }
 
 
+
+
 - (void) clickedFontIncrease {
     //self.fontIncrease.enabled = NO;
     [self.delegate fontIncrease];
@@ -87,13 +92,18 @@
     self.transform = CGAffineTransformIdentity;
     self.textLabel.text = @"";
     self.delegate = nil;
+    [self.progressBar removeFromSuperview];
+    [self showControls];
 }
+
 
 
 - (void)renderWithPageNumber: (NSNumber *) pageNumber
                      storyId: (NSNumber *) storyId
                         font: (UIFont *) font
-                      margin: (CGFloat) margin {
+                      margin: (CGFloat) margin
+                showControls: (BOOL) showControls {
+    
     CGAffineTransform currentTransform = self.transform;
     self.transform = CGAffineTransformIdentity;
     self.storyId = storyId;
@@ -118,21 +128,48 @@
     self.progressBar = [[BAProgressBarView alloc] initWithFrame:CGRectMake(margin * 2 ,self.height - 80, self.width - margin * 4, 50)];
     [self.progressBar setPercentage:progress];
     [self addSubview:self.progressBar];
-    
+    if (!showControls) {
+        [self hideControls];
+    } else {
+        [self showControls];
+    }
 }
 
-- (void) showActions {
+- (void) toggleControls {
+    
+    NSLog(@"meoww");
+    if (self.progressBar.hidden) {
+        [self.delegate showAllControls];
+    } else {
+        [self.delegate hideAllControls];
+    }
+}
+
+- (void) showControls {
     self.progressBar.hidden = NO;
     self.fontDecrease.hidden = NO;
     self.fontIncrease.hidden = NO;
     self.backButton.hidden = NO;
+    [UIView animateWithDuration:0.15 animations:^{
+        self.progressBar.alpha = 1.0;
+        self.fontDecrease.alpha = 1.0;
+        self.fontIncrease.alpha = 1.0;
+        self.backButton.alpha = 1.0;
+    }];
 }
 
-- (void) hideActions {
-    self.progressBar.hidden = YES;
-    self.fontDecrease.hidden = YES;
-    self.fontIncrease.hidden = YES;
-    self.backButton.hidden = YES;
+- (void) hideControls {
+    [UIView animateWithDuration:0.15 animations:^{
+        self.progressBar.alpha = 0.0;
+        self.fontDecrease.alpha = 0.0;
+        self.fontIncrease.alpha = 0.0;
+        self.backButton.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        self.progressBar.hidden = YES;
+        self.fontDecrease.hidden = YES;
+        self.fontIncrease.hidden = YES;
+        self.backButton.hidden = YES;
+    }];
 }
 
 
