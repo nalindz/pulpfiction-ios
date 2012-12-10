@@ -15,15 +15,23 @@
 #import "SpringboardLayout.h"
 #import "SBLayout.h"
 #import "ProfileViewController.h"
+#import "StoryResultsGrid.h"
 
 @interface DiscoverVC ()
 
-@property (nonatomic, strong) UICollectionView *storiesResults;
+@property (nonatomic, strong) StoryResultsGrid *storyResultGrid;
 @property (nonatomic, strong) NSArray *stories;
 @property (nonatomic, strong) UITextField *searchBox;
 @property (nonatomic, strong) UIButton *historyButton;
 @property (nonatomic, strong) UIButton *homeButton;
 @property (nonatomic, strong) UIButton *profileButton;
+
+
+
+
+@property int pageNumberToScrollTo;
+@property NSString *originalDirection;
+
 @end
 
 @implementation DiscoverVC
@@ -84,21 +92,21 @@
     
     SBLayout *sbLayout = [[SBLayout alloc] init];
     
-    self.storiesResults = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:sbLayout];
-    self.storiesResults.backgroundColor = [UIColor whiteColor];
-    self.storiesResults.pagingEnabled = YES;
+    self.storyResultGrid = [[StoryResultsGrid alloc] initWithFrame:self.view.frame collectionViewLayout:sbLayout];
+    self.storyResultGrid.backgroundColor = [UIColor whiteColor];
+    //self.storyResultGrid.pagingEnabled = YES;
     
-    [self.storiesResults setY:200];
-    [self.storiesResults setHeight:(self.view.bounds.size.height - 200)];
-    self.storiesResults.dataSource = self;
-    self.storiesResults.delegate = self;
-    [self.view addSubview:self.storiesResults];
-    [self.storiesResults registerClass:[StoryCell class] forCellWithReuseIdentifier:@"storyCell"];
-    self.storiesResults.showsHorizontalScrollIndicator = NO;
+    [self.storyResultGrid setY:200];
+    [self.storyResultGrid setHeight:(self.view.bounds.size.height - 200)];
+    self.storyResultGrid.dataSource = self;
+    self.storyResultGrid.delegate = self;
+    [self.view addSubview:self.storyResultGrid];
+    [self.storyResultGrid registerClass:[StoryCell class] forCellWithReuseIdentifier:@"storyCell"];
+    self.storyResultGrid.showsHorizontalScrollIndicator = NO;
     
     self.stories = [[NSArray alloc] init];
     
-    NSLog(@"the width: %f", self.storiesResults.frame.size.width);
+    NSLog(@"the width: %f", self.storyResultGrid.frame.size.width);
     
     
     [self fetchStoriesWithQuery:nil];
@@ -135,7 +143,7 @@
     if ([objectLoader.resourcePath hasPrefix:@"stories"] || [objectLoader.resourcePath hasPrefix:@"history"]) {
         NSLog(@"The stories : %@", objects);
         self.stories = [NSArray arrayWithArray:objects];
-        [self.storiesResults reloadData];
+        [self.storyResultGrid reloadData];
     }
 }
 
@@ -172,7 +180,7 @@
     ISColumnsController *readViewController = [[ISColumnsController alloc] init];
     readViewController.story = storyToSwitchTo;
     
-    //StoryCell *selectedCell = (StoryCell *)[self.storiesResults viewWithTag:[self cellTagForIndexPath:indexPath]];
+    //StoryCell *selectedCell = (StoryCell *)[self.storyResultGrid viewWithTag:[self cellTagForIndexPath:indexPath]];
     
     
     Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", storyToSwitchTo.id, @(YES)]];
@@ -201,16 +209,114 @@
     
     Story *story = [self.stories objectAtIndex:indexPath.row];
     
-    StoryCell *cell = [self.storiesResults dequeueReusableCellWithReuseIdentifier:@"storyCell" forIndexPath:indexPath];
-    
+    StoryCell *cell = [self.storyResultGrid dequeueReusableCellWithReuseIdentifier:@"storyCell" forIndexPath:indexPath];
     
     [cell renderWithStory:story indexPath:indexPath];
-    cell.tag = [self cellTagForIndexPath: indexPath];
+    cell.tag = indexPath.row;
     return cell;
 }
 
 - (NSInteger)cellTagForIndexPath: (NSIndexPath *) indexPath {
     return 1000 + indexPath.row;
 }
+
+
+
+# pragma mark scroll view delegate methods
+
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    CGFloat currentPageNumberFloat = scrollView.contentOffset.x / scrollView.width;
+    NSLog(@"The veloctiy: %f", velocity.x);
+    NSLog(@"The veloctiy: %f", velocity.y);
+    int currentPageNumberInt = scrollView.contentOffset.x / scrollView.width;
+    if ( velocity.x > 0.0) {
+        currentPageNumberInt++;
+    } else if (velocity.x < 0 ) {
+        currentPageNumberInt = currentPageNumberInt;
+    } else if (currentPageNumberFloat - currentPageNumberInt > 0.2) {
+        currentPageNumberInt++;
+    }
+    
+    self.pageNumberToScrollTo = currentPageNumberInt;
+    if (targetContentOffset->x < scrollView.contentOffset.x) {
+        self.originalDirection = @"forward";
+    } else {
+        self.originalDirection = @"backward";
+    }
+    
+    
+    targetContentOffset->x = scrollView.contentOffset.x;
+    
+    
+}
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if (decelerate) return;
+    NSLog(@"meow");
+    NSLog(@"page to scroll to :%d", self.pageNumberToScrollTo);
+    int currentPageNumberInt = scrollView.contentOffset.x / scrollView.width;
+    CGFloat xToScrollTo = self.pageNumberToScrollTo * scrollView.width;
+    if (xToScrollTo > (scrollView.contentSize.width - scrollView.width)) {
+        xToScrollTo = (self.pageNumberToScrollTo  - 1 ) * scrollView.width;
+    }
+    
+    NSMutableArray *visibleViews = [[NSMutableArray alloc] init];
+    for (UIView *view in scrollView.subviews) {
+        CGRect targetVisibleFrame = CGRectMake(self.pageNumberToScrollTo * scrollView.width, 0, scrollView.width, scrollView.height);
+        if (CGRectIntersectsRect(view.frame, targetVisibleFrame)) {
+            [visibleViews addObject:view];
+        }
+    }
+    
+    NSString *adjustedDirection;
+    if (self.pageNumberToScrollTo - currentPageNumberInt > 0) {
+        NSLog(@"Scrolling forward");
+        adjustedDirection = @"forward";
+    } else {
+        NSLog(@"Scrolling backwards");
+        adjustedDirection = @"backward";
+    }
+    
+    
+    [scrollView scrollRectToVisible:CGRectMake(xToScrollTo, 0, scrollView.width, scrollView.height) animated:YES];
+    
+    
+    if ([self.originalDirection isEqualToString:@"backward"] && [adjustedDirection isEqualToString:@"backward"]) {
+        int i = 0;
+        CGFloat duration;
+        for (UIView *view in visibleViews) {
+            NSLog(@"row: %d", view.tag);
+            //NSLog(@"MOEW: %d", 5 % 3);
+            int xShakeAmount;
+            if (view.tag % 3 == 0) {
+                xShakeAmount = 20;
+                duration = 0.4;
+            } else if (view.tag % 3 == 1) {
+                xShakeAmount = 30;
+                duration = 0.2;
+            } else if (view.tag % 3 == 2) {
+                xShakeAmount = 50;
+                duration = 0.1;
+            }
+            
+            [UIView animateWithDuration:duration
+                             animations:^{
+                                 view.x -= xShakeAmount;
+                             } completion:^(BOOL finished) {
+                                 [UIView animateWithDuration:0.3 animations:^{
+                                     view.x += xShakeAmount;
+                                 }];
+                             }];
+            i++;
+        }
+    }
+    
+    
+}
+
+- (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    NSLog(@"woof");
+}
+
 
 @end

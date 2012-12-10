@@ -7,9 +7,11 @@
 //
 
 #import "NSString+FitInLabel.h"
+#import <CoreText/CoreText.h>
 
 @implementation NSString (FitInLabel)
 
+/*
 - (int)getSplitIndexWithSize:(CGSize) size andFont:(UIFont *)font
 {
     int length = 1;
@@ -34,6 +36,28 @@
     cutText = nil;
     if (length == self.length && textSize.height <= size.height) lastSpace = length;
     return lastSpace;
+}
+
+*/
+
+- (int)getSplitIndexWithSize:(CGSize) size andFont:(UIFont *)font
+{
+    UIFont *uiFont = font;
+    CTFontRef ctFont = CTFontCreateWithName((__bridge CFStringRef)uiFont.fontName, uiFont.pointSize, NULL);
+    NSDictionary *attr = [NSDictionary dictionaryWithObject:(__bridge id)ctFont forKey:(id)kCTFontAttributeName];
+    CFRelease(ctFont);
+    NSAttributedString *attrString  = [[NSAttributedString alloc] initWithString:self attributes:attr];
+    CTFramesetterRef frameSetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attrString);
+    CFRange fitRange;
+    CTFramesetterSuggestFrameSizeWithConstraints(
+                                                frameSetter,
+                                                CFRangeMake(0, 0),
+                                                NULL,
+                                                CGSizeMake(size.width - 10, size.height - 20),
+                                                &fitRange);
+    CFRelease(frameSetter);
+    CFIndex numberOfCharactersThatFit = fitRange.length;
+    return numberOfCharactersThatFit;
 }
 
 @end

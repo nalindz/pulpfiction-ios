@@ -12,7 +12,7 @@
 	<key>Debug</key>
 	<dict>
 		<key>apiURL</key>
-		<string>http://0.0.0.0:3000</string>
+		<string>http://192.168.1.128:3000</string>
 		<key>apiVersion</key>
 		<string>1</string>
 		<key>ObjectStoreFilename</key>
