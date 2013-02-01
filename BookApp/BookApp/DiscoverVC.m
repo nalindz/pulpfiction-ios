@@ -32,6 +32,12 @@
 @property int pageNumberToScrollTo;
 @property NSString *originalDirection;
 
+
+@property int lastPage;
+@property int storiesOnLastPage;
+
+@property int startScrollOffset;
+
 @end
 
 @implementation DiscoverVC
@@ -42,8 +48,7 @@
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     
-    
-   self.searchBox = [[UITextField alloc] initWithFrame:CGRectMake(40, 40, 100, 100)];
+    self.searchBox = [[UITextField alloc] initWithFrame:CGRectMake(40, 40, 100, 100)];
     
     self.searchBox.width = self.view.width * 0.6;
     self.searchBox.height = 50;
@@ -80,9 +85,6 @@
     [self.profileButton positionLeftOf:self.historyButton withMargin:30];
     [self.profileButton addTarget:self action:@selector(profilePressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.profileButton];
-    
-    
-    
     
     
     [self.searchBox addTarget:self
@@ -145,6 +147,13 @@
         self.stories = [NSArray arrayWithArray:objects];
         [self.storyResultGrid reloadData];
     }
+    
+    self.lastPage = self.stories.count / 9;
+    self.storiesOnLastPage = self.stories.count % 9;
+    if (self.storiesOnLastPage == 0) {
+        self.lastPage--;
+        self.storiesOnLastPage = 9;
+    }
 }
 
 - (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
@@ -183,15 +192,8 @@
     //StoryCell *selectedCell = (StoryCell *)[self.storyResultGrid viewWithTag:[self cellTagForIndexPath:indexPath]];
     
     
-    Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", storyToSwitchTo.id, @(YES)]];
-    if (bookmark.page != nil) {
-        readViewController.startingPageNumber = bookmark.page.page_number;
-    }
-    
-    
     [self addToHistory: storyToSwitchTo.id];
-    
-   [self.navigationController pushViewController: readViewController animated:YES];
+    [self.navigationController pushViewController: readViewController animated:YES];
     
     NSLog(@"index path: %d", indexPath.row);
     
@@ -205,7 +207,7 @@
     [[RKObjectManager sharedManager]  postObject:newHistory delegate:self];
 }
 
--(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     Story *story = [self.stories objectAtIndex:indexPath.row];
     
@@ -225,10 +227,12 @@
 # pragma mark scroll view delegate methods
 
 
+- (void) scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    self.startScrollOffset = scrollView.contentOffset.x;
+}
+
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     CGFloat currentPageNumberFloat = scrollView.contentOffset.x / scrollView.width;
-    NSLog(@"The veloctiy: %f", velocity.x);
-    NSLog(@"The veloctiy: %f", velocity.y);
     int currentPageNumberInt = scrollView.contentOffset.x / scrollView.width;
     if ( velocity.x > 0.0) {
         currentPageNumberInt++;
@@ -239,26 +243,84 @@
     }
     
     self.pageNumberToScrollTo = currentPageNumberInt;
-    if (targetContentOffset->x < scrollView.contentOffset.x) {
+    if (scrollView.contentOffset.x > self.startScrollOffset) {
         self.originalDirection = @"forward";
     } else {
         self.originalDirection = @"backward";
     }
     
-    
+    //NSLog(@"Original direction :%@", self.originalDirection);
     targetContentOffset->x = scrollView.contentOffset.x;
-    
-    
 }
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    
     if (decelerate) return;
-    NSLog(@"meow");
-    NSLog(@"page to scroll to :%d", self.pageNumberToScrollTo);
-    int currentPageNumberInt = scrollView.contentOffset.x / scrollView.width;
+    //NSLog(@"page to scroll to :%d", self.pageNumberToScrollTo);
+    int currentPageNumberInt = self.startScrollOffset / scrollView.width;
+    //NSLog(@"current Page number :%d", currentPageNumberInt);
     CGFloat xToScrollTo = self.pageNumberToScrollTo * scrollView.width;
     if (xToScrollTo > (scrollView.contentSize.width - scrollView.width)) {
         xToScrollTo = (self.pageNumberToScrollTo  - 1 ) * scrollView.width;
     }
+    
+    [scrollView scrollRectToVisible:CGRectMake(xToScrollTo, 0, scrollView.width, scrollView.height) animated:YES];
+    
+    [self performAnimationsForScrollView:scrollView scrollingFinished:NO];
+}
+
+- (void)performAnimationsForScrollView: (UIScrollView *) scrollView scrollingFinished: (BOOL) scrollingFinished {
+    NSMutableArray *visibleViews = [[NSMutableArray alloc] init];
+    for (UIView *view in scrollView.subviews) {
+        CGRect targetVisibleFrame = CGRectMake(self.pageNumberToScrollTo * scrollView.width, 0, scrollView.width, scrollView.height);
+        if (CGRectIntersectsRect(view.frame, targetVisibleFrame)) {
+            [visibleViews addObject:view];
+        }
+    }
+    
+    int currentPageNumberInt = self.startScrollOffset / scrollView.width;
+    NSString *adjustedDirection;
+    if (self.pageNumberToScrollTo == currentPageNumberInt) {
+        adjustedDirection = @"same";
+    } else if (self.pageNumberToScrollTo - currentPageNumberInt > 0) {
+        adjustedDirection = @"forward";
+    } else {
+        adjustedDirection = @"backward";
+    }
+    
+    //NSLog(@"adjusted direction %@", adjustedDirection);
+    
+    if (([self.originalDirection isEqualToString:@"backward"] && [adjustedDirection isEqualToString:@"same"])) {
+        if (!scrollingFinished)
+            [self animateBackward: visibleViews];
+    } else if (([self.originalDirection isEqualToString:@"forward"] && [adjustedDirection isEqualToString:@"same"])) {
+        if (!scrollingFinished)
+            [self animateBackward: visibleViews];
+    }
+    
+    /*
+    
+    if (([self.originalDirection isEqualToString:@"backward"] && [adjustedDirection isEqualToString:@"same"])
+     || ([self.originalDirection isEqualToString:@"backward"] && [adjustedDirection isEqualToString:@"forward"])) {
+        if (!scrollingFinished)
+            [self animateBackward: visibleViews];
+    } else if ([self.originalDirection isEqualToString:@"forward"] && [adjustedDirection isEqualToString:@"forward"]) {
+        if (scrollingFinished)
+           [self animateForward: visibleViews];
+     
+    } else if ([self.originalDirection isEqualToString:@"backward"] && [adjustedDirection isEqualToString:@"backward"]) {
+        if (scrollingFinished)
+            [self animateForward: visibleViews];
+    }
+     */
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    self.pageNumberToScrollTo = -1;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (self.pageNumberToScrollTo == -1) return;
     
     NSMutableArray *visibleViews = [[NSMutableArray alloc] init];
     for (UIView *view in scrollView.subviews) {
@@ -268,55 +330,70 @@
         }
     }
     
-    NSString *adjustedDirection;
-    if (self.pageNumberToScrollTo - currentPageNumberInt > 0) {
-        NSLog(@"Scrolling forward");
-        adjustedDirection = @"forward";
-    } else {
-        NSLog(@"Scrolling backwards");
-        adjustedDirection = @"backward";
+    if (visibleViews.count >= 9 || (self.pageNumberToScrollTo == self.lastPage && visibleViews.count >= self.storiesOnLastPage)) {
+        [self performAnimationsForScrollView:scrollView scrollingFinished:YES];
+        self.pageNumberToScrollTo = -1;
     }
-    
-    
-    [scrollView scrollRectToVisible:CGRectMake(xToScrollTo, 0, scrollView.width, scrollView.height) animated:YES];
-    
-    
-    if ([self.originalDirection isEqualToString:@"backward"] && [adjustedDirection isEqualToString:@"backward"]) {
-        int i = 0;
-        CGFloat duration;
-        for (UIView *view in visibleViews) {
-            NSLog(@"row: %d", view.tag);
-            //NSLog(@"MOEW: %d", 5 % 3);
-            int xShakeAmount;
-            if (view.tag % 3 == 0) {
-                xShakeAmount = 20;
-                duration = 0.4;
-            } else if (view.tag % 3 == 1) {
-                xShakeAmount = 30;
-                duration = 0.2;
-            } else if (view.tag % 3 == 2) {
-                xShakeAmount = 50;
-                duration = 0.1;
-            }
-            
-            [UIView animateWithDuration:duration
-                             animations:^{
-                                 view.x -= xShakeAmount;
-                             } completion:^(BOOL finished) {
-                                 [UIView animateWithDuration:0.3 animations:^{
-                                     view.x += xShakeAmount;
-                                 }];
-                             }];
-            i++;
+}
+
+- (void)animateForward: (NSArray *) visibleViews {
+    //NSLog(@"ANImate forward");
+    int i = 0;
+    CGFloat duration;
+    for (UIView *view in visibleViews) {
+        //NSLog(@"MOEW: %d", 5 % 3);
+        int xShakeAmount;
+        if (view.tag % 3 == 0) {
+            xShakeAmount = 10;
+            duration = 0.4;
+        } else if (view.tag % 3 == 1) {
+            xShakeAmount = 20;
+            duration = 0.2;
+        } else if (view.tag % 3 == 2) {
+            xShakeAmount = 30;
+            duration = 0.1;
         }
+        
+        [UIView animateWithDuration:duration
+                         animations:^{
+                             view.x -= xShakeAmount;
+                         } completion:^(BOOL finished) {
+                             [UIView animateWithDuration:0.3 animations:^{
+                                 view.x += xShakeAmount;
+                             }];
+                         }];
+        i++;
+    }
+}
+
+- (void)animateBackward: (NSArray *) visibleViews {
+    //NSLog(@"ANImate backward");
+    int i = 0;
+    CGFloat duration;
+    for (UIView *view in visibleViews) {
+        int xShakeAmount;
+        if (view.tag % 3 == 0) {
+            xShakeAmount = 30;
+            duration = 0.4;
+        } else if (view.tag % 3 == 1) {
+            xShakeAmount = 20;
+            duration = 0.2;
+        } else if (view.tag % 3 == 2) {
+            xShakeAmount = 10;
+            duration = 0.1;
+        }
+        
+        [UIView animateWithDuration:duration
+                         animations:^{
+                             view.x -= xShakeAmount;
+                         } completion:^(BOOL finished) {
+                             [UIView animateWithDuration:0.3 animations:^{
+                                 view.x += xShakeAmount;
+                             }];
+                         }];
+        i++;
     }
     
-    
 }
-
-- (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSLog(@"woof");
-}
-
 
 @end

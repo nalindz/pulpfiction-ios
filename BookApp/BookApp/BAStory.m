@@ -2,7 +2,7 @@
 //  BAStory.m
 //  BookApp
 //
-//  Created by Nalin on 12/6/12.
+//  Created by Nalin on 12/16/12.
 //
 //
 
@@ -13,13 +13,14 @@
 
 @implementation BAStory
 
+@dynamic blocks_count;
 @dynamic created_at;
 @dynamic id;
 @dynamic title;
+@dynamic total_length;
 @dynamic updated_at;
 @dynamic user_id;
-@dynamic blocks_count;
-@dynamic total_length;
+@dynamic cover_url;
 @dynamic bookmarks;
 @dynamic user;
 

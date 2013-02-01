@@ -18,4 +18,5 @@
     #import "UIView+FrameUtil.h"
     #import "UILabel+AutoSize.h"
     #import "UIButton+AutoSize.h"
+    #import <SDWebImage/UIImageView+WebCache.h>
 #endif

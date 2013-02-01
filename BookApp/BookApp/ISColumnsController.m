@@ -72,7 +72,6 @@
     return self;
 }
 
-
 - (void)loadTitleView
 {
     UIView *titleView = [[UIView alloc] init];
@@ -90,12 +89,6 @@
                forControlEvents:UIControlEventValueChanged];
     
 }
-
-- (void)loadView
-{
-    [super loadView];
-}
-
 
 - (void) createNumberOfPages:(int) numberOfPages
           startingPageNumber: (NSNumber *) pageNumber
@@ -298,7 +291,18 @@
     self.pageControl.currentPage = [startingPageNumber intValue];
 }
 
+
+- (void) loadBookmark {
+    Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", self.story.id, @(YES)]];
+    if (bookmark.page != nil) {
+        self.startingPageNumber = bookmark.page.page_number;
+        //self.pageControl.currentPage = [self.startingPageNumber intValue];
+        self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:[bookmark.font_size floatValue]];
+    }
+}
+
 - (void) viewWillAppear:(BOOL)animated {
+    [self loadBookmark];
     if ([self.startingPageNumber intValue] == 0) {
         self.startingPageNumber = nil;
     }
@@ -359,7 +363,7 @@
     int pageToScrollTo = 0;
     if (self.startingPageNumber != nil) {
         pageToScrollTo = [self.startingPageNumber intValue];
-        self.startingPageNumber = nil;
+        //self.startingPageNumber = nil;
     }
     else if (self.viewingBlockNumber == nil) {
         return;
@@ -461,17 +465,22 @@
     [self buildAllPages];
 }
 
-- (void)backClicked {
-    
+
+- (void)saveBookmark {
     Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", self.story.id, @(YES)]];
     if (bookmark == nil) {
         bookmark = [Bookmark object];
     }
     
+    bookmark.font_size = @(self.pageFont.pointSize);
     bookmark.page = [self currentPage];
     bookmark.story_id = self.story.id;
     bookmark.auto_bookmark = @(YES);
     [[bookmark managedObjectContext] save:nil];
+}
+
+- (void)backClicked {
+    [self saveBookmark];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

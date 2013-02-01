@@ -2,7 +2,7 @@
 //  BABookmark.h
 //  BookApp
 //
-//  Created by Nalin on 11/18/12.
+//  Created by Nalin on 1/31/13.
 //
 //
 
@@ -13,14 +13,15 @@
 
 @interface BABookmark : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * user_id;
+@property (nonatomic, retain) NSNumber * auto_bookmark;
 @property (nonatomic, retain) NSDate * created_at;
-@property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSNumber * page_id;
 @property (nonatomic, retain) NSNumber * story_id;
-@property (nonatomic, retain) NSNumber * auto_bookmark;
-@property (nonatomic, retain) User *user;
+@property (nonatomic, retain) NSDate * updated_at;
+@property (nonatomic, retain) NSNumber * user_id;
+@property (nonatomic, retain) NSNumber * font_size;
 @property (nonatomic, retain) Page *page;
 @property (nonatomic, retain) Story *story;
+@property (nonatomic, retain) User *user;
 
 @end

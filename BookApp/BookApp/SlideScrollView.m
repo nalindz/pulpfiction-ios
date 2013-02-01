@@ -61,8 +61,6 @@
 @end
 
 
-
-
 @interface SlideScrollView()
 
 @property (nonatomic, assign, readwrite) CGFloat colWidth;
@@ -253,8 +251,6 @@
 - (void)loadNewData {
     [self relayoutViews:NO];
 }
-
-
 
 
 @end

@@ -27,6 +27,7 @@
      @"total_length",
      @"created_at",
      @"updated_at",
+     @"cover_url",
      @"title",
      nil];
 
