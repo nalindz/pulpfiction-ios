@@ -25,8 +25,10 @@
         [self.centeredView putInCenterOf:self withMargin:20];
         self.centeredView.backgroundColor = [UIColor colorWithRed:0.24 green:0.25 blue:0.24 alpha:1.0];
         self.coverImageView = [[UIImageView alloc] initWithFrame:self.centeredView.frame];
+        self.coverImageView.contentMode = UIViewContentModeScaleAspectFill;
+        self.coverImageView.clipsToBounds = YES;
         self.blackOverlay = [[UIView alloc] initWithFrame:self.centeredView.frame];
-        self.blackOverlay.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.4];
+        self.blackOverlay.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.7];
         [self addSubview:self.coverImageView];
         [self addSubview:self.blackOverlay];
         
@@ -50,8 +52,6 @@
     [self.titleLabel setText:story.title fixedWidth:YES];
     [self.titleLabel stickToBottomOf:self.blackOverlay];
     NSLog(@"THe URL: %@", story.cover_url);
-    self.coverImageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.coverImageView.clipsToBounds = YES;
     [self.coverImageView setImageWithURL:[NSURL URLWithString:story.cover_url]];
 }
 

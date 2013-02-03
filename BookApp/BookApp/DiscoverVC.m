@@ -27,11 +27,8 @@
 @property (nonatomic, strong) UIButton *profileButton;
 
 
-
-
 @property int pageNumberToScrollTo;
 @property NSString *originalDirection;
-
 
 @property int lastPage;
 @property int storiesOnLastPage;
@@ -133,9 +130,9 @@
 
 
 - (void) fetchStoriesWithQuery: (NSString *) query {
-    NSString *resourcePath = @"stories";
+    NSString *resourcePath = @"stories?type=feed";
     if (query != nil) {
-        resourcePath = [NSString stringWithFormat:@"%@?query=%@", resourcePath, query];
+        resourcePath = [NSString stringWithFormat:@"%@&query=%@", resourcePath, query];
     }
     [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath delegate:self];
 }
@@ -162,6 +159,7 @@
 
 # pragma mark collectionView delegate/datasource methods
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    //TODO: why can't this shit be square?
     return CGSizeMake(256, 268);
 }
 

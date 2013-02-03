@@ -63,6 +63,8 @@
 		F5908BB416648D0F0043E3CF /* SBLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = F5908BB316648D0E0043E3CF /* SBLayout.m */; };
 		F590B0AB166C1E8600271DBC /* PageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F590B0AA166C1E8600271DBC /* PageCell.m */; };
 		F598FE1516BB91E600440D5B /* BABookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = F598FE1416BB91E600440D5B /* BABookmark.m */; };
+		F598FE1816BDEB0400440D5B /* ProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = F598FE1716BDEB0400440D5B /* ProfileView.m */; };
+		F598FE1B16BDFA0200440D5B /* ProfileStoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F598FE1A16BDFA0100440D5B /* ProfileStoryCell.m */; };
 		F59EED8F1643660A001C42F2 /* API.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED8E1643660A001C42F2 /* API.m */; };
 		F59EED9716438A8D001C42F2 /* Environments.plist in Resources */ = {isa = PBXBuildFile; fileRef = F59EED9616438A8D001C42F2 /* Environments.plist */; };
 		F59EED9A16438BED001C42F2 /* Environment.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED9916438BED001C42F2 /* Environment.m */; };
@@ -227,6 +229,10 @@
 		F590B0AA166C1E8600271DBC /* PageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageCell.m; sourceTree = "<group>"; };
 		F598FE1316BB91E600440D5B /* BABookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BABookmark.h; sourceTree = "<group>"; };
 		F598FE1416BB91E600440D5B /* BABookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BABookmark.m; sourceTree = "<group>"; };
+		F598FE1616BDEB0400440D5B /* ProfileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileView.h; sourceTree = "<group>"; };
+		F598FE1716BDEB0400440D5B /* ProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileView.m; sourceTree = "<group>"; };
+		F598FE1916BDFA0100440D5B /* ProfileStoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileStoryCell.h; sourceTree = "<group>"; };
+		F598FE1A16BDFA0100440D5B /* ProfileStoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileStoryCell.m; sourceTree = "<group>"; };
 		F59EED8D1643660A001C42F2 /* API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = API.h; sourceTree = "<group>"; };
 		F59EED8E1643660A001C42F2 /* API.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = API.m; sourceTree = "<group>"; };
 		F59EED9616438A8D001C42F2 /* Environments.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Environments.plist; sourceTree = "<group>"; };
@@ -391,6 +397,10 @@
 		F530E20216435C8D003A9EDF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F598FE1916BDFA0100440D5B /* ProfileStoryCell.h */,
+				F598FE1A16BDFA0100440D5B /* ProfileStoryCell.m */,
+				F598FE1616BDEB0400440D5B /* ProfileView.h */,
+				F598FE1716BDEB0400440D5B /* ProfileView.m */,
 				F515C9B91675B6F2000078D2 /* StoryResultsGrid.h */,
 				F515C9BA1675B6F2000078D2 /* StoryResultsGrid.m */,
 				F515C9AB1671B1CE000078D2 /* BAProgressBarView.h */,
@@ -689,6 +699,8 @@
 				F515C9BB1675B6F2000078D2 /* StoryResultsGrid.m in Sources */,
 				F54E0BEE167DC634002C1F3B /* BAStory.m in Sources */,
 				F598FE1516BB91E600440D5B /* BABookmark.m in Sources */,
+				F598FE1816BDEB0400440D5B /* ProfileView.m in Sources */,
+				F598FE1B16BDFA0200440D5B /* ProfileStoryCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,5 +15,6 @@ typedef enum {
 } LabelAutoSizeType;
 
 @interface UILabel (AutoSize)
-- (void) setText: (NSString *) text fixedWidth: (BOOL) fixedWidth;
+-(void) setText: (NSString *) text fixedWidth: (BOOL) fixedWidth;
+-(void) autoSizeWithText: (NSString *) text;
 @end

@@ -38,6 +38,23 @@
     frame.origin.x = anchorView.x - self.width - margin;
     frame.origin.y = anchorView.y;
     self.frame = frame;
+    [anchorView.superview addSubview:self];
+}
+
+- (void) putToRightOf: (UIView *) anchorView withMargin: (CGFloat) margin {
+    CGRect frame = self.frame;
+    frame.origin.x = anchorView.x + anchorView.width + margin;
+    frame.origin.y = anchorView.y;
+    self.frame = frame;
+    [anchorView.superview addSubview:self];
+}
+
+- (void) putBelow: (UIView *) anchorView withMargin: (CGFloat) margin {
+    CGRect frame = self.frame;
+    frame.origin.y = anchorView.y + anchorView.height + margin;
+    frame.origin.x = anchorView.x;
+    self.frame = frame;
+    [anchorView.superview addSubview:self];
 }
 
 @end

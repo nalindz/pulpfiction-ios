@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface ProfileViewController : UIViewController
+<UITableViewDataSource,
+UITableViewDelegate,
+RKObjectLoaderDelegate>
 
 @property (strong, nonatomic) UIButton *backBtn;
 @property (strong, nonatomic) UIButton *logoutBtn;
