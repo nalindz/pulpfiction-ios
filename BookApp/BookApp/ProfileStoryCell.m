@@ -11,7 +11,7 @@
 @interface ProfileStoryCell()
 @property (nonatomic, strong) UIImageView *coverPhotoImageView;
 @property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UITextField *tagsTextField;
+@property (nonatomic, strong) UITextView *tagsTextView;
 @end
 
 
@@ -23,15 +23,16 @@
 @implementation ProfileStoryCell
 
 
-- (UITextField *)tagsTextField {
-    if (_tagsTextField == nil) {
-        _tagsTextField = [[UITextField alloc] initWithFrame:CGRectZero];
-        _tagsTextField.width = 500;
-        _tagsTextField.height = 200;
-        _tagsTextField.font = [UIFont fontWithName:@"MetaBoldLF-Roman" size:26];
-        _tagsTextField.placeholder = @"enter #tags";
+- (UITextView *)tagsTextView {
+    if (_tagsTextView == nil) {
+        _tagsTextView = [[UITextView alloc] initWithFrame:CGRectZero];
+        _tagsTextView.width = 500;
+        _tagsTextView.height = 200;
+        _tagsTextView.font = [UIFont fontWithName:@"MetaBoldLF-Roman" size:26];
+        //_tagsTextView.placeholder = @"enter #tags";
+        _tagsTextView.delegate = self;
     }
-    return _tagsTextField;
+    return _tagsTextView;
     
 }
 
@@ -64,12 +65,13 @@
         self.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.coverPhotoImageView];
         [self.titleLabel putToRightOf:self.coverPhotoImageView withMargin:20];
-        [self.tagsTextField putBelow:self.titleLabel withMargin:50];
+        [self.tagsTextView putBelow:self.titleLabel withMargin:50];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         // Initialization code
     }
     return self;
 }
+
 
 + (CGFloat)cellHeight {
     return coverPhotoSize + topPadding + bottomPadding;
@@ -85,6 +87,57 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+
+#pragma mark UITextViewDelegate
+
+
+- (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    // allow backspace always
+    NSError *error = NULL;
+    if ([text isEqualToString:@""]) {
+        return YES;
+    }
+    
+    // only allow letters and hash to be inputed
+    NSRegularExpression *alphaRegex = [NSRegularExpression regularExpressionWithPattern:@"[a-zA-Z# ]" options:NSRegularExpressionCaseInsensitive error:&error];
+     if (![alphaRegex numberOfMatchesInString:text
+                                                    options:0
+                                       range:NSMakeRange(0, [text length])]) {
+         return NO;
+     }
+    
+    if ([[textView.text trim] hasSuffix:@"#"]) {
+        if ([text isEqualToString:@"#"] || [text isEqualToString:@" "])
+            return NO;
+        else
+            return YES;
+    } else if ([text isEqualToString:@"#"]) {
+        if (![textView.text hasSuffix:@" "] && textView.text.length != 0) {
+            textView.text = [NSString stringWithFormat:@"%@ ", textView.text];
+        }
+        return YES;
+    }
+    if ([text isEqualToString:@" "]
+        && (textView.text.length == 0 || [textView.text hasSuffix:@" "]))
+        return  NO;
+    
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"#" options:NSRegularExpressionCaseInsensitive error:&error];
+   
+    NSString *modifiedString = [regex stringByReplacingMatchesInString:textView.text options:0 range:NSMakeRange(0, textView.text.length) withTemplate:@""];
+    NSLog(@"modified string: %@", modifiedString);
+    
+    NSArray *tags = [modifiedString componentsSeparatedByString:@" "];
+    NSMutableArray *newTags = [NSMutableArray array];
+    for (NSString *tag in tags) {
+        [newTags addObject:[NSString stringWithFormat:@"#%@", tag]];
+    }
+    
+    NSString *newString = [newTags componentsJoinedByString:@" "];
+    
+    textView.text = newString;
+    return YES;
 }
 
 @end

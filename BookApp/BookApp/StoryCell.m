@@ -28,7 +28,7 @@
         self.coverImageView.contentMode = UIViewContentModeScaleAspectFill;
         self.coverImageView.clipsToBounds = YES;
         self.blackOverlay = [[UIView alloc] initWithFrame:self.centeredView.frame];
-        self.blackOverlay.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.7];
+        self.blackOverlay.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
         [self addSubview:self.coverImageView];
         [self addSubview:self.blackOverlay];
         

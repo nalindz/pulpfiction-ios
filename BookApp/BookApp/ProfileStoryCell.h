@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Story.h"
 
-@interface ProfileStoryCell : UITableViewCell
+@interface ProfileStoryCell : UITableViewCell <UITextViewDelegate>
 + (CGFloat)cellHeight;
 - (void)renderWithStory: (Story *) story;
 @end

@@ -65,6 +65,7 @@
 		F598FE1516BB91E600440D5B /* BABookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = F598FE1416BB91E600440D5B /* BABookmark.m */; };
 		F598FE1816BDEB0400440D5B /* ProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = F598FE1716BDEB0400440D5B /* ProfileView.m */; };
 		F598FE1B16BDFA0200440D5B /* ProfileStoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F598FE1A16BDFA0100440D5B /* ProfileStoryCell.m */; };
+		F598FE1E16BE314A00440D5B /* NSString+RemoveExtraWhiteSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = F598FE1D16BE314A00440D5B /* NSString+RemoveExtraWhiteSpace.m */; };
 		F59EED8F1643660A001C42F2 /* API.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED8E1643660A001C42F2 /* API.m */; };
 		F59EED9716438A8D001C42F2 /* Environments.plist in Resources */ = {isa = PBXBuildFile; fileRef = F59EED9616438A8D001C42F2 /* Environments.plist */; };
 		F59EED9A16438BED001C42F2 /* Environment.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EED9916438BED001C42F2 /* Environment.m */; };
@@ -233,6 +234,8 @@
 		F598FE1716BDEB0400440D5B /* ProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileView.m; sourceTree = "<group>"; };
 		F598FE1916BDFA0100440D5B /* ProfileStoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileStoryCell.h; sourceTree = "<group>"; };
 		F598FE1A16BDFA0100440D5B /* ProfileStoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileStoryCell.m; sourceTree = "<group>"; };
+		F598FE1C16BE314A00440D5B /* NSString+RemoveExtraWhiteSpace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RemoveExtraWhiteSpace.h"; sourceTree = "<group>"; };
+		F598FE1D16BE314A00440D5B /* NSString+RemoveExtraWhiteSpace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RemoveExtraWhiteSpace.m"; sourceTree = "<group>"; };
 		F59EED8D1643660A001C42F2 /* API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = API.h; sourceTree = "<group>"; };
 		F59EED8E1643660A001C42F2 /* API.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = API.m; sourceTree = "<group>"; };
 		F59EED9616438A8D001C42F2 /* Environments.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Environments.plist; sourceTree = "<group>"; };
@@ -486,6 +489,8 @@
 		F59EED90164386AE001C42F2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				F598FE1C16BE314A00440D5B /* NSString+RemoveExtraWhiteSpace.h */,
+				F598FE1D16BE314A00440D5B /* NSString+RemoveExtraWhiteSpace.m */,
 				F5908BAF166368FC0043E3CF /* SpringboardLayout.h */,
 				F5908BB0166368FC0043E3CF /* SpringboardLayout.m */,
 				F586F04E1659DB7D00488742 /* UIButton+AutoSize.h */,
@@ -701,6 +706,7 @@
 				F598FE1516BB91E600440D5B /* BABookmark.m in Sources */,
 				F598FE1816BDEB0400440D5B /* ProfileView.m in Sources */,
 				F598FE1B16BDFA0200440D5B /* ProfileStoryCell.m in Sources */,
+				F598FE1E16BE314A00440D5B /* NSString+RemoveExtraWhiteSpace.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
