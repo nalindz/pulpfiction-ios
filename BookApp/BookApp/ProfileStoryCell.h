@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "Story.h"
+#import "ProfileViewController.h"
+
 
 @interface ProfileStoryCell : UITableViewCell <UITextViewDelegate>
+@property (nonatomic, weak) ProfileViewController *delegate;
 + (CGFloat)cellHeight;
 - (void)renderWithStory: (Story *) story;
 @end

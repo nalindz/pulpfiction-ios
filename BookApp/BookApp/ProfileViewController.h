@@ -13,6 +13,8 @@
 UITableViewDelegate,
 RKObjectLoaderDelegate>
 
+@property (nonatomic, weak) id firstResponder;
+
 @property (strong, nonatomic) UIButton *backBtn;
 @property (strong, nonatomic) UIButton *logoutBtn;
 @property (strong, nonatomic) UILabel *baId;
@@ -20,5 +22,4 @@ RKObjectLoaderDelegate>
 @property (strong, nonatomic) UILabel *lastName;
 @property (strong, nonatomic) UILabel *email;
 @property (strong, nonatomic) UILabel *facebookId;
-
 @end

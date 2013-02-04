@@ -9,16 +9,28 @@
 #import "ProfileViewController.h"
 #import "AppDelegate.h"
 #import "User.h"
-#import "ProfileView.h"
+#import "ProfileHeaderView.h"
 #import "ProfileStoryCell.h"
 
 @interface ProfileViewController ()
-@property (nonatomic, strong) ProfileView *profileView;
+@property (nonatomic, strong) ProfileHeaderView *profileHeaderView;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *tableData;
 @end
 
 @implementation ProfileViewController
+
+- (void) setFirstResponder: (id) firstResponder {
+    _firstResponder = firstResponder;
+}
+
+- (ProfileHeaderView *) profileHeaderView {
+    if (_profileHeaderView == nil) {
+        _profileHeaderView = [[ProfileHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 100)];
+        _profileHeaderView.delegate = self;
+    }
+    return _profileHeaderView;
+}
 
 
 - (UITableView *) tableView {
@@ -35,11 +47,12 @@
 {
     self = [super init];
     if (self) {
-        self.profileView = [[ProfileView alloc] initWithFrame:self.view.bounds];
         //[self.view addSubview:self.profileView];
         self.tableData = [NSMutableArray array];
-        [self.view addSubview:self.tableView];
-        [self.profileView setUsername:@"nalin"];
+        [self.view addSubview:self.profileHeaderView];
+        [self.tableView putBelow:self.profileHeaderView withMargin:0];
+        self.tableView.height = self.view.height - self.tableView.y;
+        [self.profileHeaderView setUsername:@"nalin"];
     }
     return self;
 }
@@ -62,6 +75,7 @@
     if (cell == nil) {
         cell = [[ProfileStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
+    cell.delegate = self;
     [cell renderWithStory:story];
     
     return cell;
@@ -102,6 +116,19 @@
 
 - (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     NSLog(@"Error while trying to fetch profile stories: %@", error);
+}
+
+- (void)backClicked {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [[event allTouches] anyObject];
+    if ([self.firstResponder isFirstResponder] && [touch view] != self.firstResponder) {
+        [self.firstResponder resignFirstResponder];
+        self.firstResponder = nil;
+    }
+    [super touchesBegan:touches withEvent:event];
 }
 
 @end

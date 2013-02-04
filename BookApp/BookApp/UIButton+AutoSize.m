@@ -10,11 +10,13 @@
 
 @implementation UIButton (AutoSize)
 
-- (void)autoSizeWithImage: (NSString *) imageName {
++ (UIButton *) initWithImageNamed: (NSString *) imageName {
     UIImageView *tmpImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-    self.height = tmpImage.height;
-    self.width = tmpImage.height;
-    [self setImage:tmpImage.image forState:UIControlStateNormal];
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
+    button.height = tmpImage.height;
+    button.width = tmpImage.height;
+    [button setImage:tmpImage.image forState:UIControlStateNormal];
+    return button;
 }
 
 - (void) autoSizeWithText: (NSString *) text fixedWidth: (BOOL) fixedWidth {

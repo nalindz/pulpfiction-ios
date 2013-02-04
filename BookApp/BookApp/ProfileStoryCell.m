@@ -28,12 +28,22 @@
         _tagsTextView = [[UITextView alloc] initWithFrame:CGRectZero];
         _tagsTextView.width = 500;
         _tagsTextView.height = 200;
-        _tagsTextView.font = [UIFont fontWithName:@"MetaBoldLF-Roman" size:26];
+        _tagsTextView.font = [UIFont h2];
         //_tagsTextView.placeholder = @"enter #tags";
         _tagsTextView.delegate = self;
     }
     return _tagsTextView;
     
+}
+
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [[event allTouches] anyObject];
+    if ([self.delegate.firstResponder isFirstResponder] && [touch view] != self.delegate.firstResponder) {
+        [self.delegate.firstResponder resignFirstResponder];
+        self.delegate.firstResponder = nil;
+    }
+    [super touchesBegan:touches withEvent:event];
 }
 
 - (UILabel *)titleLabel {
@@ -91,6 +101,10 @@
 
 
 #pragma mark UITextViewDelegate
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    [self.delegate performSelector:@selector(setFirstResponder:) withObject:self.tagsTextView];
+}
 
 
 - (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {

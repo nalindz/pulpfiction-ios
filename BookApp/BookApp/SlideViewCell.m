@@ -40,8 +40,7 @@
         self.titleBar.width = self.width;
         self.titleBar.height = 40;
         
-        self.backButton = [[UIButton alloc] init];
-        [self.backButton autoSizeWithImage:@"close-button"];
+        self.backButton = [UIButton initWithImageNamed:@"close-button"];
         self.backButton.x = self.width - self.backButton.width - 20;
         [self.backButton addTarget:self.delegate action:@selector(backClicked) forControlEvents:UIControlEventTouchUpInside];
         

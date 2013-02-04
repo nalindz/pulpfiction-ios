@@ -10,6 +10,6 @@
 
 @interface UIButton (AutoSize)
 
-- (void)autoSizeWithImage: (NSString *) imageName;
++ (UIButton *) initWithImageNamed: (NSString *) imageName;
 - (void) autoSizeWithText: (NSString *) text fixedWidth: (BOOL) fixedWidth;
 @end

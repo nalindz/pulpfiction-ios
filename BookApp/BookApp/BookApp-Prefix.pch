@@ -9,15 +9,16 @@
 #endif
 
 #ifdef __OBJC__
-    #import <UIKit/UIKit.h>
-    #import <Foundation/Foundation.h>
-    #import <RestKit/RestKit.h>
-    #import "UIView+FrameUtil.h"
-    #import <QuartzCore/QuartzCore.h>
-    #import "UIView+LayoutUtil.h"
-    #import "UIView+FrameUtil.h"
-    #import "UILabel+AutoSize.h"
-    #import "UIButton+AutoSize.h"
-    #import <SDWebImage/UIImageView+WebCache.h>
-    #import "NSString+RemoveExtraWhiteSpace.h"
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <RestKit/RestKit.h>
+#import "UIView+FrameUtil.h"
+#import <QuartzCore/QuartzCore.h>
+#import "UIView+LayoutUtil.h"
+#import "UIView+FrameUtil.h"
+#import "UILabel+AutoSize.h"
+#import "UIButton+AutoSize.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "NSString+RemoveExtraWhiteSpace.h"
+#import "UIFont+BAFont.h"
 #endif
