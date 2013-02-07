@@ -2,40 +2,26 @@
 //  Story.m
 //  BookApp
 //
-//  Created by Nalin on 11/2/12.
+//  Created by Nalin on 2/6/13.
 //
 //
 
 #import "Story.h"
+#import "Bookmark.h"
+#import "User.h"
+
 
 @implementation Story
 
-+ (NSEntityDescription *)entity
-{
-    return [NSEntityDescription entityForName:@"BAStory" inManagedObjectContext:[NSManagedObjectContext contextForCurrentThread]];
-}
-
-+ (NSEntityDescription *)entityDescriptionInContext:(NSManagedObjectContext *)context {
-    return [NSEntityDescription entityForName:@"BAStory" inManagedObjectContext:context];
-}
-
-+ (RKManagedObjectMapping *)configureMapping:(RKManagedObjectMapping *)mapping {
-    RKObjectManager* manager = [RKObjectManager sharedManager];
-    [mapping mapAttributes:
-     @"id",
-     @"blocks_count",
-     @"total_length",
-     @"created_at",
-     @"updated_at",
-     @"cover_url",
-     @"title",
-     nil];
-
-    // Map the relationships.
-    [mapping mapRelationship:@"user" withMapping:[manager.mappingProvider mappingForKeyPath:@"user"]];
-    
-    mapping.primaryKeyAttribute = @"id";
-    return mapping;
-}
+@dynamic blocks_count;
+@dynamic cover_url;
+@dynamic created_at;
+@dynamic id;
+@dynamic title;
+@dynamic total_length;
+@dynamic updated_at;
+@dynamic user_id;
+@dynamic bookmarks;
+@dynamic user;
 
 @end

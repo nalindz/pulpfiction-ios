@@ -9,7 +9,7 @@
 #import "SlideViewCell.h"
 #import "BAProgressBarView.h"
 #import "Story.h"
-#import "Block.h"
+#import "Block+RestKit.h"
 
 @interface SlideViewCell()
 @property (nonatomic, strong) UIView *titleBar;

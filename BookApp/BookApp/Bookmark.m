@@ -2,21 +2,27 @@
 //  Bookmark.m
 //  BookApp
 //
-//  Created by Nalin on 11/18/12.
+//  Created by Nalin on 2/6/13.
 //
 //
 
 #import "Bookmark.h"
+#import "Page.h"
+#import "Story.h"
+#import "User.h"
+
 
 @implementation Bookmark
 
-+ (NSEntityDescription *)entity
-{
-    return [NSEntityDescription entityForName:@"BABookmark" inManagedObjectContext:[NSManagedObjectContext contextForCurrentThread]];
-}
-
-+ (NSEntityDescription *)entityDescriptionInContext:(NSManagedObjectContext *)context {
-    return [NSEntityDescription entityForName:@"BABookmark" inManagedObjectContext:context];
-}
+@dynamic auto_bookmark;
+@dynamic created_at;
+@dynamic font_size;
+@dynamic page_id;
+@dynamic story_id;
+@dynamic updated_at;
+@dynamic user_id;
+@dynamic page;
+@dynamic story;
+@dynamic user;
 
 @end

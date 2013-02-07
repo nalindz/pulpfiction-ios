@@ -2,14 +2,24 @@
 //  Block.h
 //  BookApp
 //
-//  Created by Nalin on 11/2/12.
+//  Created by Nalin on 2/6/13.
 //
 //
 
-#import "BABlock.h"
-#import "BAProtocols.h"
-#import <RestKit/RestKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@interface Block : BABlock <HasRKManagedObjectMapping>
-+ (Block *) blockWithStoryId:(NSNumber *) storyId blockNumber:(NSNumber *)blockNumber;
+
+@interface Block : NSManagedObject
+
+@property (nonatomic, retain) NSNumber * block_number;
+@property (nonatomic, retain) NSDate * created_at;
+@property (nonatomic, retain) NSNumber * first_block;
+@property (nonatomic, retain) NSNumber * id;
+@property (nonatomic, retain) NSNumber * last_block;
+@property (nonatomic, retain) NSNumber * story_id;
+@property (nonatomic, retain) NSString * text;
+@property (nonatomic, retain) NSNumber * total_start_index;
+@property (nonatomic, retain) NSDate * updated_at;
+
 @end

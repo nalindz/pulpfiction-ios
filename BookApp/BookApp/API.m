@@ -10,9 +10,12 @@
 #import "Environment.h"
 #import <RestKit/RKErrorMessage.h>
 #import "Story.h"
+#import "Story+RestKit.h"
 #import "Block.h"
+#import "Block+RestKit.h"
 #import "History.h"
 #import "User.h"
+#import "User+RestKit.h"
 
 
 static API* _sharedInstance = nil;
@@ -68,20 +71,20 @@ static API* _sharedInstance = nil;
     objectManager.client.requestQueue.showsNetworkActivityIndicatorWhenBusy = YES;
     [self createErrorMapping];
     
-    RKManagedObjectMapping* userMapping = [RKManagedObjectMapping mappingForEntityWithName:@"BAUser"
+    RKManagedObjectMapping* userMapping = [RKManagedObjectMapping mappingForEntityWithName:@"User"
                                                                        inManagedObjectStore:objectManager.objectStore];
     [User configureMapping:userMapping];
     [objectManager.mappingProvider registerMapping:userMapping
                                    withRootKeyPath:@"user"];
     
     
-    RKManagedObjectMapping* storyMapping = [RKManagedObjectMapping mappingForEntityWithName:@"BAStory"
+    RKManagedObjectMapping* storyMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Story"
                                                                        inManagedObjectStore:objectManager.objectStore];
     [Story configureMapping:storyMapping];
     [objectManager.mappingProvider registerMapping:storyMapping
                                    withRootKeyPath:@"story"];
     
-    RKManagedObjectMapping* blockMapping = [RKManagedObjectMapping mappingForEntityWithName:@"BABlock"
+    RKManagedObjectMapping* blockMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Block"
                                                                        inManagedObjectStore:objectManager.objectStore];
     [Block configureMapping:blockMapping];
     [objectManager.mappingProvider registerMapping:blockMapping

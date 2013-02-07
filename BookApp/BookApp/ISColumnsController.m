@@ -3,7 +3,7 @@
 #import "ViewController.h"
 #import "SlideViewCell.h"
 #import "Block.h"
-#import "Page.h"
+#import "Page+RestKit.h"
 #import "NSString+FitInLabel.h"
 #import "API.h"
 #import "Bookmark.h"
