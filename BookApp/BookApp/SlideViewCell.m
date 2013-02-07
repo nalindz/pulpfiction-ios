@@ -8,7 +8,7 @@
 
 #import "SlideViewCell.h"
 #import "BAProgressBarView.h"
-#import "Story.h"
+#import "Story+RestKit.h"
 #import "Block+RestKit.h"
 
 @interface SlideViewCell()

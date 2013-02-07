@@ -11,10 +11,8 @@
 #import <RestKit/RKErrorMessage.h>
 #import "Story.h"
 #import "Story+RestKit.h"
-#import "Block.h"
 #import "Block+RestKit.h"
 #import "History.h"
-#import "User.h"
 #import "User+RestKit.h"
 
 
