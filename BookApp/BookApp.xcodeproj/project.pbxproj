@@ -19,8 +19,6 @@
 		F515C9AD1671B1CE000078D2 /* BAProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = F515C9AC1671B1CE000078D2 /* BAProgressBarView.m */; };
 		F515C9B816743F8C000078D2 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F515C9B716743F8C000078D2 /* CoreText.framework */; };
 		F515C9BB1675B6F2000078D2 /* StoryResultsGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = F515C9BA1675B6F2000078D2 /* StoryResultsGrid.m */; };
-		F518695B16C39AD100D547F9 /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = F518695A16C39AD100D547F9 /* Tag.m */; };
-		F518696A16C4E40300D547F9 /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = F518696916C4E40300D547F9 /* Story.m */; };
 		F52AAFB21653508B007B36C1 /* DiscoverVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F52AAFB11653508B007B36C1 /* DiscoverVC.m */; };
 		F52AAFB516535632007B36C1 /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F52AAFB416535632007B36C1 /* StoryCell.m */; };
 		F530E1B616434F30003A9EDF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1B516434F30003A9EDF /* UIKit.framework */; };
@@ -44,6 +42,7 @@
 		F530E20016435B07003A9EDF /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1E716435A3C003A9EDF /* libRestKit.a */; };
 		F54E0BE7167DC5A6002C1F3B /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F54E0BE4167DC592002C1F3B /* libSDWebImage.a */; };
 		F54E0BEB167DC5F5002C1F3B /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54E0BEA167DC5F5002C1F3B /* ImageIO.framework */; };
+		F552792716C4E92800323095 /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = F552792616C4E92800323095 /* Story.m */; };
 		F57526A4165083CC005E2235 /* Page+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F57526A3165083CC005E2235 /* Page+RestKit.m */; };
 		F586EFC316538AFB00488742 /* UIView+FrameUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F586EFC216538AFB00488742 /* UIView+FrameUtil.m */; };
 		F586F03C1654A8A000488742 /* MtNoLFRo.TTF in Resources */ = {isa = PBXBuildFile; fileRef = F586F0001654A8A000488742 /* MtNoLFRo.TTF */; };
@@ -72,9 +71,6 @@
 		F5A04B5F16C371C800229B5D /* Block.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A04B5E16C371C800229B5D /* Block.m */; };
 		F5A04B6516C371C800229B5D /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A04B6416C371C800229B5D /* Page.m */; };
 		F5A04B6816C371C800229B5D /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A04B6716C371C800229B5D /* Bookmark.m */; };
-		F5A04B6B16C384EC00229B5D /* TagList.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A04B6A16C384EC00229B5D /* TagList.m */; };
-		F5A04B6E16C385E800229B5D /* TagList+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A04B6D16C385E700229B5D /* TagList+RestKit.m */; };
-		F5A04B7816C3876900229B5D /* Tag+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A04B7716C3876900229B5D /* Tag+RestKit.m */; };
 		F5E56593164EEA630044B956 /* NSString+FitInLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E56592164EEA630044B956 /* NSString+FitInLabel.m */; };
 		F5F1433C16BF3E0100C8B268 /* UIFont+BAFont.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F1433B16BF3E0100C8B268 /* UIFont+BAFont.m */; };
 		F5FC6DEC1645F7110087137F /* Block+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6DEB1645F7110087137F /* Block+RestKit.m */; };
@@ -168,10 +164,6 @@
 		F515C9B716743F8C000078D2 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		F515C9B91675B6F2000078D2 /* StoryResultsGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryResultsGrid.h; sourceTree = "<group>"; };
 		F515C9BA1675B6F2000078D2 /* StoryResultsGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryResultsGrid.m; sourceTree = "<group>"; };
-		F518695916C39AD100D547F9 /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tag.h; sourceTree = "<group>"; };
-		F518695A16C39AD100D547F9 /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tag.m; sourceTree = "<group>"; };
-		F518696816C4E40300D547F9 /* Story.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Story.h; sourceTree = "<group>"; };
-		F518696916C4E40300D547F9 /* Story.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Story.m; sourceTree = "<group>"; };
 		F52AAFB01653508B007B36C1 /* DiscoverVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverVC.h; sourceTree = "<group>"; };
 		F52AAFB11653508B007B36C1 /* DiscoverVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverVC.m; sourceTree = "<group>"; };
 		F52AAFB316535632007B36C1 /* StoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCell.h; sourceTree = "<group>"; };
@@ -202,6 +194,8 @@
 		F530E1FE16435AF6003A9EDF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F54E0BDA167DC592002C1F3B /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = ../Frameworks/SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
 		F54E0BEA167DC5F5002C1F3B /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		F552792516C4E92800323095 /* Story.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Story.h; sourceTree = "<group>"; };
+		F552792616C4E92800323095 /* Story.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Story.m; sourceTree = "<group>"; };
 		F57526A2165083CC005E2235 /* Page+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Page+RestKit.h"; sourceTree = "<group>"; };
 		F57526A3165083CC005E2235 /* Page+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Page+RestKit.m"; sourceTree = "<group>"; };
 		F586EFC116538AFB00488742 /* UIView+FrameUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FrameUtil.h"; sourceTree = "<group>"; };
@@ -251,12 +245,6 @@
 		F5A04B6416C371C800229B5D /* Page.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Page.m; sourceTree = "<group>"; };
 		F5A04B6616C371C800229B5D /* Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bookmark.h; sourceTree = "<group>"; };
 		F5A04B6716C371C800229B5D /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmark.m; sourceTree = "<group>"; };
-		F5A04B6916C384EC00229B5D /* TagList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagList.h; sourceTree = "<group>"; };
-		F5A04B6A16C384EC00229B5D /* TagList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagList.m; sourceTree = "<group>"; };
-		F5A04B6C16C385E700229B5D /* TagList+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TagList+RestKit.h"; sourceTree = "<group>"; };
-		F5A04B6D16C385E700229B5D /* TagList+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TagList+RestKit.m"; sourceTree = "<group>"; };
-		F5A04B7616C3876900229B5D /* Tag+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tag+RestKit.h"; sourceTree = "<group>"; };
-		F5A04B7716C3876900229B5D /* Tag+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tag+RestKit.m"; sourceTree = "<group>"; };
 		F5E56591164EEA630044B956 /* NSString+FitInLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FitInLabel.h"; sourceTree = "<group>"; };
 		F5E56592164EEA630044B956 /* NSString+FitInLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FitInLabel.m"; sourceTree = "<group>"; };
 		F5F1433A16BF3E0100C8B268 /* UIFont+BAFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+BAFont.h"; sourceTree = "<group>"; };
@@ -433,8 +421,8 @@
 		F530E20316435C96003A9EDF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F518696816C4E40300D547F9 /* Story.h */,
-				F518696916C4E40300D547F9 /* Story.m */,
+				F552792516C4E92800323095 /* Story.h */,
+				F552792616C4E92800323095 /* Story.m */,
 				F58FE1D11661EE4C001B98A3 /* History.h */,
 				F5A04B6316C371C800229B5D /* Page.h */,
 				F5A04B6416C371C800229B5D /* Page.m */,
@@ -444,16 +432,8 @@
 				F5A04B5B16C371C800229B5D /* User.m */,
 				F58FE1D21661EE4C001B98A3 /* History.m */,
 				F57526A2165083CC005E2235 /* Page+RestKit.h */,
-				F5A04B6916C384EC00229B5D /* TagList.h */,
-				F5A04B6A16C384EC00229B5D /* TagList.m */,
-				F5A04B6C16C385E700229B5D /* TagList+RestKit.h */,
-				F5A04B6D16C385E700229B5D /* TagList+RestKit.m */,
 				F57526A3165083CC005E2235 /* Page+RestKit.m */,
-				F518695916C39AD100D547F9 /* Tag.h */,
-				F518695A16C39AD100D547F9 /* Tag.m */,
 				F59EED9B16438E1E001C42F2 /* BookApp-Entities.xcdatamodeld */,
-				F5A04B7616C3876900229B5D /* Tag+RestKit.h */,
-				F5A04B7716C3876900229B5D /* Tag+RestKit.m */,
 				F5A04B6616C371C800229B5D /* Bookmark.h */,
 				F5A04B6716C371C800229B5D /* Bookmark.m */,
 				F59EEDA81643B039001C42F2 /* Story+RestKit.h */,
@@ -726,11 +706,7 @@
 				F5A04B5F16C371C800229B5D /* Block.m in Sources */,
 				F5A04B6516C371C800229B5D /* Page.m in Sources */,
 				F5A04B6816C371C800229B5D /* Bookmark.m in Sources */,
-				F5A04B6B16C384EC00229B5D /* TagList.m in Sources */,
-				F5A04B6E16C385E800229B5D /* TagList+RestKit.m in Sources */,
-				F5A04B7816C3876900229B5D /* Tag+RestKit.m in Sources */,
-				F518695B16C39AD100D547F9 /* Tag.m in Sources */,
-				F518696A16C4E40300D547F9 /* Story.m in Sources */,
+				F552792716C4E92800323095 /* Story.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

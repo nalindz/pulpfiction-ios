@@ -13,9 +13,6 @@
 #import "Block+RestKit.h"
 #import "User+RestKit.h"
 #import "History.h"
-#import "TagList+RestKit.h"
-#import "Tag+RestKit.h"
-
 
 static API* _sharedInstance = nil;
 
@@ -76,14 +73,6 @@ static API* _sharedInstance = nil;
     [objectManager.mappingProvider registerMapping:userMapping
                                    withRootKeyPath:@"user"];
     
-    RKManagedObjectMapping* tagMapping =
-    [RKManagedObjectMapping mappingForEntityWithName:@"Tag"
-                                inManagedObjectStore:objectManager.objectStore];
-    [Tag configureMapping:tagMapping];
-    [objectManager.mappingProvider registerMapping:tagMapping
-                                   withRootKeyPath:@"tag"];
-    
-    
     
     RKManagedObjectMapping* storyMapping =
     [RKManagedObjectMapping mappingForEntityWithName:@"Story"
@@ -91,6 +80,7 @@ static API* _sharedInstance = nil;
     [Story configureMapping:storyMapping];
     [objectManager.mappingProvider registerMapping:storyMapping
                                    withRootKeyPath:@"story"];
+    [objectManager.router routeClass:Story.class toResourcePath:@"/stories/:id" forMethod:RKRequestMethodPUT];
     
     
     RKManagedObjectMapping* blockMapping =
@@ -107,16 +97,6 @@ static API* _sharedInstance = nil;
     [objectManager.mappingProvider addObjectMapping:historyMapping];
     [objectManager.mappingProvider setSerializationMapping:historyMapping.inverseMapping forClass:History.class];
     [objectManager.router routeClass:History.class toResourcePath:@"/history" forMethod:RKRequestMethodPOST];
-    
-    
-    RKObjectMapping* tagListMapping = [RKObjectMapping mappingForClass:TagList.class];
-    [TagList configureMapping:tagListMapping];
-    [objectManager.mappingProvider addObjectMapping:tagListMapping];
-    [objectManager.mappingProvider setSerializationMapping:tagListMapping.inverseMapping forClass:TagList.class];
-    [objectManager.router routeClass:TagList.class toResourcePath:@"/stories/:story_id/tags" forMethod:RKRequestMethodPOST];
-    
-    
-    
 }
 
 

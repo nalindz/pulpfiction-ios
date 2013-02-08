@@ -2,14 +2,14 @@
 //  Story.h
 //  BookApp
 //
-//  Created by Nalin on 2/7/13.
+//  Created by Nalin on 2/8/13.
 //
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Bookmark, Tag, User;
+@class Bookmark, User;
 
 @interface Story : NSManagedObject
 
@@ -21,9 +21,9 @@
 @property (nonatomic, retain) NSNumber * total_length;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSNumber * user_id;
+@property (nonatomic, retain) NSString * tags;
 @property (nonatomic, retain) NSSet *bookmarks;
 @property (nonatomic, retain) User *user;
-@property (nonatomic, retain) NSSet *tags;
 @end
 
 @interface Story (CoreDataGeneratedAccessors)
@@ -32,10 +32,5 @@
 - (void)removeBookmarksObject:(Bookmark *)value;
 - (void)addBookmarks:(NSSet *)values;
 - (void)removeBookmarks:(NSSet *)values;
-
-- (void)addTagsObject:(Tag *)value;
-- (void)removeTagsObject:(Tag *)value;
-- (void)addTags:(NSSet *)values;
-- (void)removeTags:(NSSet *)values;
 
 @end

@@ -7,8 +7,6 @@
 //
 
 #import "ProfileStoryCell.h"
-#import "TagList.h"
-#import "Tag.h"
 
 @interface ProfileStoryCell()
 @property (nonatomic, strong) UIImageView *coverPhotoImageView;
@@ -93,19 +91,8 @@
     self.story = story;
     [self.titleLabel autoSizeWithText:story.title];
     [self.coverPhotoImageView setImageWithURL:[NSURL URLWithString:story.cover_url]];
-    self.tagsTextView.text = [self tagsStringFromTags:[self tagsTextArrayFromStory:story]];
+    self.tagsTextView.text = story.tags;
 }
-
-
-- (NSArray *) tagsTextArrayFromStory: (Story *) story {
-    NSLog(@"The story tags:%@", story.tags);
-    NSMutableArray *tags = [NSMutableArray array];
-    for (Tag *tag in story.tags) {
-        [tags addObject:tag.text];
-    }
-    return tags;
-}
-
 
 - (NSArray *) tagsFromText: (NSString *) text {
     NSError *error = NULL;
@@ -117,16 +104,8 @@
 }
 
 - (void) postTags:(NSString *)tagsString {
-    NSArray *tags = [self tagsFromText:[tagsString trim]];
-    TagList *tagList = [[TagList alloc] init];
-    tagList.story_id = self.story.id;
-    for (NSString *tagText in tags) {
-        Tag *tag = [Tag object];
-        tag.text = tagText;
-        [tagList.tags addObject:tag];
-    }
-    
-    [[RKObjectManager sharedManager]  postObject:tagList usingBlock:^(RKObjectLoader *loader) {
+    self.story.tags = tagsString;
+    [[RKObjectManager sharedManager]  putObject:self.story usingBlock:^(RKObjectLoader *loader) {
         loader.onDidLoadObject = ^(id object){
             NSLog(@"Tags Posted : %@", object);
         };

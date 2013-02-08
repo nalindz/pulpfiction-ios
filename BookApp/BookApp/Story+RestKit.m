@@ -19,11 +19,11 @@
      @"updated_at",
      @"cover_url",
      @"title",
+     @"tags",
      nil];
 
     // Map the relationships.
     [mapping mapRelationship:@"user" withMapping:[manager.mappingProvider mappingForKeyPath:@"user"]];
-    [mapping mapRelationship:@"tags" withMapping:[manager.mappingProvider mappingForKeyPath:@"tag"]];
     
     mapping.primaryKeyAttribute = @"id";
     return mapping;
