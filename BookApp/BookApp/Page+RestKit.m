@@ -6,8 +6,8 @@
 //
 //
 
+#import "Page+RestKit.h"
 #import "Block.h"
-#import "Page.h"
 
 @implementation Page(RestKit)
 

@@ -1,24 +1,24 @@
 //
-//  User.m
+//  Tag+RestKit.m
 //  BookApp
 //
-//  Created by Haochen Li on 2012-11-25.
+//  Created by Nalin on 2/6/13.
 //
 //
 
-#import "User+RestKit.h"
+#import "Tag+RestKit.h"
 
-@implementation User(RestKit)
+@implementation Tag (RestKit)
 
 + (RKManagedObjectMapping *)configureMapping:(RKManagedObjectMapping *)mapping {
     [mapping mapAttributes:
      @"id",
-     @"first_name",
-     @"last_name",
-     @"email",
-     @"facebook_id",
+     @"text",
+     @"story_id",
+     @"created_at",
+     @"updated_at",
      nil];
-    
+
     mapping.primaryKeyAttribute = @"id";
     return mapping;
 }

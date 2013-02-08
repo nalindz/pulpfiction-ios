@@ -10,7 +10,7 @@
 
 @implementation History
 
-+ (RKManagedObjectMapping *)configureMapping:(RKManagedObjectMapping *)mapping {
++ (RKObjectMapping *)configureMapping:(RKObjectMapping *)mapping {
     [mapping mapAttributes:
      @"story_id",
      nil];

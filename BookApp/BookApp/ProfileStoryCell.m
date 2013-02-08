@@ -7,6 +7,8 @@
 //
 
 #import "ProfileStoryCell.h"
+#import "TagList.h"
+#import "Tag.h"
 
 @interface ProfileStoryCell()
 @property (nonatomic, strong) UIImageView *coverPhotoImageView;
@@ -88,19 +90,68 @@
 }
 
 - (void)renderWithStory: (Story *) story {
+    self.story = story;
     [self.titleLabel autoSizeWithText:story.title];
     [self.coverPhotoImageView setImageWithURL:[NSURL URLWithString:story.cover_url]];
+    self.tagsTextView.text = [self tagsStringFromTags:[self tagsTextArrayFromStory:story]];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
+- (NSArray *) tagsTextArrayFromStory: (Story *) story {
+    NSLog(@"The story tags:%@", story.tags);
+    NSMutableArray *tags = [NSMutableArray array];
+    for (Tag *tag in story.tags) {
+        [tags addObject:tag.text];
+    }
+    return tags;
+}
+
+
+- (NSArray *) tagsFromText: (NSString *) text {
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"#" options:NSRegularExpressionCaseInsensitive error:&error];
+    NSString *modifiedString = [regex stringByReplacingMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@""];
+    NSLog(@"modified string: %@", modifiedString);
+    
+    return [modifiedString componentsSeparatedByString:@" "];
+}
+
+- (void) postTags:(NSString *)tagsString {
+    NSArray *tags = [self tagsFromText:[tagsString trim]];
+    TagList *tagList = [[TagList alloc] init];
+    tagList.story_id = self.story.id;
+    for (NSString *tagText in tags) {
+        Tag *tag = [Tag object];
+        tag.text = tagText;
+        [tagList.tags addObject:tag];
+    }
+    
+    [[RKObjectManager sharedManager]  postObject:tagList usingBlock:^(RKObjectLoader *loader) {
+        loader.onDidLoadObject = ^(id object){
+            NSLog(@"Tags Posted : %@", object);
+        };
+        
+        loader.onDidFailLoadWithError = ^(NSError *error) {
+            NSLog(@"Error updating tags: %@", error);
+        };
+    }];
+}
+
+
+- (NSString *)tagsStringFromTags:(NSArray *)tags {
+    NSMutableArray *newTags = [NSMutableArray array];
+    for (NSString *tag in tags) {
+        [newTags addObject:[NSString stringWithFormat:@"#%@", tag]];
+    }
+   return [newTags componentsJoinedByString:@" "];
 }
 
 
 #pragma mark UITextViewDelegate
+
+- (void) textViewDidEndEditing:(UITextView *)textView {
+    [self postTags:textView.text];
+}
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     [self.delegate performSelector:@selector(setFirstResponder:) withObject:self.tagsTextView];
@@ -137,20 +188,8 @@
         && (textView.text.length == 0 || [textView.text hasSuffix:@" "]))
         return  NO;
     
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"#" options:NSRegularExpressionCaseInsensitive error:&error];
-   
-    NSString *modifiedString = [regex stringByReplacingMatchesInString:textView.text options:0 range:NSMakeRange(0, textView.text.length) withTemplate:@""];
-    NSLog(@"modified string: %@", modifiedString);
-    
-    NSArray *tags = [modifiedString componentsSeparatedByString:@" "];
-    NSMutableArray *newTags = [NSMutableArray array];
-    for (NSString *tag in tags) {
-        [newTags addObject:[NSString stringWithFormat:@"#%@", tag]];
-    }
-    
-    NSString *newString = [newTags componentsJoinedByString:@" "];
-    
-    textView.text = newString;
+    NSArray *tags = [self tagsFromText:textView.text];
+    textView.text = [self tagsStringFromTags:tags];
     return YES;
 }
 

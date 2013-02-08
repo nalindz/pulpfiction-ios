@@ -7,7 +7,7 @@
 //
 //
 
-#import "Block.h"
+#import "Block+RestKit.h"
 
 @implementation Block(RestKit)
 

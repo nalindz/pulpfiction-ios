@@ -9,6 +9,6 @@
 #import "BAProtocols.h"
 #import "Story.h"
 
-@interface Story(RestKit) <HasRKManagedObjectMapping>
+@interface Story (RestKit) <HasRKManagedObjectMapping>
 
 @end

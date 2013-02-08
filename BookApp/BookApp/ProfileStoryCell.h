@@ -11,8 +11,11 @@
 #import "ProfileViewController.h"
 
 
-@interface ProfileStoryCell : UITableViewCell <UITextViewDelegate>
+@interface ProfileStoryCell : UITableViewCell
+<UITextViewDelegate,
+RKObjectLoaderDelegate>
 @property (nonatomic, weak) ProfileViewController *delegate;
+@property (nonatomic, strong) Story *story;
 + (CGFloat)cellHeight;
 - (void)renderWithStory: (Story *) story;
 @end
