@@ -2,45 +2,214 @@
 //  MainViewController.m
 //  BookApp
 //
-//  Created by Nalin on 11/5/12.
+//  Created by Nalin on 2/9/13.
 //
 //
 
 #import "MainViewController.h"
-#import "ISColumnsController.h"
-#import "ViewController.h"
+#import "UIButton+ResizeWithAspectRatio.h"
+#import "HomeViewController.h"
+#import "ProfileViewController.h"
+#import "UIView+BounceAnimate.h"
 
 @interface MainViewController ()
 
+@property (nonatomic, strong) HomeViewController* homeViewController;
+@property (nonatomic, strong) ProfileViewController* profileViewController;
+@property (nonatomic, weak) UIViewController* activeViewController;
+
+@property (nonatomic, strong) UITextField *searchBox;
+@property (nonatomic, strong) UIButton *bookmarksButton;
+@property (nonatomic, strong) UIButton *homeButton;
+@property (nonatomic, strong) UILabel *homeLabel;
+@property (nonatomic, strong) UILabel *bookmarksLabel;
+@property (nonatomic, strong) UILabel *profileLabel;
+@property (nonatomic, strong) UIButton *profileButton;
+
+
+// state
+@property (nonatomic, weak) UILabel *visibleButtonLabel;
+//
+
 @end
 
+#define headerHeight 150
+
+@interface tabLabel : UILabel
+@end
+@implementation tabLabel
+- (id)init {
+    self = [self initWithFrame:CGRectZero];
+    if (self) {
+        self.font = [UIFont h5];
+        self.textColor = [UIColor darkGrayColor];
+        self.hidden = YES;
+        self.backgroundColor = [UIColor clearColor];
+    }
+    return self;
+}
+@end
+
+
 @implementation MainViewController
+- (UILabel*) homeLabel {
+    if (_homeLabel == nil) {
+        _homeLabel = [[tabLabel alloc] init];
+        [_homeLabel autoSizeWithText:@"home"];
+    }
+    return _homeLabel;
+}
+
+- (UILabel*) profileLabel {
+    if (_profileLabel == nil) {
+        _profileLabel = [[tabLabel alloc] init];
+        [_profileLabel autoSizeWithText:@"profile"];
+    }
+    return _profileLabel;
+}
+
+- (UILabel*) bookmarksLabel {
+    if (_bookmarksLabel == nil) {
+        _bookmarksLabel = [[tabLabel alloc] init];
+        [_bookmarksLabel autoSizeWithText:@"bookmarks"];
+    }
+    return _bookmarksLabel;
+}
+
+- (UITextField*) searchBox {
+    if (_searchBox == nil) {
+        _searchBox = [[UITextField alloc] initWithFrame:CGRectMake(40, 40, 100, 100)];
+        _searchBox.width = self.view.width * 0.6;
+        _searchBox.height = 50;
+        _searchBox.font = [UIFont h2];
+        _searchBox.returnKeyType = UIReturnKeySearch;
+        _searchBox.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        _searchBox.layer.borderWidth = 1.0;
+    }
+    return _searchBox;
+}
+
+- (UIButton*) homeButton {
+    if (_homeButton == nil) {
+        _homeButton = [UIButton initWithImageNamed:@"home-button"];
+        [_homeButton resizeHeight:self.searchBox.height];
+        [_homeButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [_homeButton addTarget:self action:@selector(homePressed) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _homeButton;
+}
+
+- (UIButton*) bookmarksButton {
+    if (_bookmarksButton == nil) {
+        _bookmarksButton = [UIButton initWithImageNamed:@"bookmark-button"];
+        [_bookmarksButton resizeHeight:self.searchBox.height];
+        [_bookmarksButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [_bookmarksButton addTarget:self action:@selector(bookmarksPressed) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _bookmarksButton;
+}
+
+- (UIButton*) profileButton {
+    if (_profileButton == nil) {
+        _profileButton = [UIButton initWithImageNamed:@"profile-button"];
+        [_profileButton resizeHeight:self.searchBox.height];
+        [_profileButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [_profileButton addTarget:self action:@selector(profilePressed) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _profileButton;
+}
+
+
+- (void)setActiveViewController:(UIViewController *)activeViewController {
+    if (activeViewController == _activeViewController) return;
+    [_activeViewController.view removeFromSuperview];
+    [self.view addSubview:activeViewController.view];
+    _activeViewController = activeViewController;
+}
+
+- (HomeViewController*) homeViewController {
+    if (_homeViewController == nil) {
+        _homeViewController = [[HomeViewController alloc] init];
+        _homeViewController.view.frame = CGRectMake(0, headerHeight, self.view.width, self.view.height);
+        [self addChildViewController:_homeViewController];
+    }
+    return _homeViewController;
+}
+
+- (ProfileViewController*) profileViewController {
+    if (_profileViewController == nil) {
+        _profileViewController = [[ProfileViewController alloc] init];
+        _profileViewController.view.frame = CGRectMake(0, headerHeight, self.view.width, self.view.height);
+        [self addChildViewController:_profileViewController];
+    }
+    return _profileViewController;
+}
+
+- (void) showLabelForButton: (UIButton *)button {
+    UILabel *animatingLabel;
+    
+    if (button == self.bookmarksButton) {
+        animatingLabel = self.bookmarksLabel;
+    } else if (button == self.homeButton) {
+        animatingLabel = self.homeLabel;
+    } else if (button == self.profileButton) {
+        animatingLabel = self.profileLabel;
+    }
+    
+    if (animatingLabel == self.visibleButtonLabel) return;
+    
+    [self.visibleButtonLabel hideAnimateWithDuration:0.1 offset:20];
+    [animatingLabel bounceAnimateWithDuration:0.1 offset:10 bounces:1];
+    self.visibleButtonLabel = animatingLabel;
+    
+}
+
+- (void)homePressed {
+    [self showLabelForButton:self.homeButton];
+    self.activeViewController = self.homeViewController;
+    [self.activeViewController performSelector:@selector(homePressed)];
+}
+
+- (void)bookmarksPressed {
+    [self showLabelForButton:self.bookmarksButton];
+    self.activeViewController = self.homeViewController;
+    [self.activeViewController performSelector:@selector(bookmarksPressed)];
+}
+
+- (void)profilePressed {
+    [self showLabelForButton:self.profileButton];
+    self.activeViewController = self.profileViewController;
+    //[self.activeViewController performSelector:@selector(bookmarksPressed)];
+    
+}
+
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationController.navigationBarHidden = YES;
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.searchBox putInRightEdgeOf:self.view withMargin:20];
+    [self.homeButton positionLeftOf:self.searchBox withMargin:50];
+    [self.homeLabel putBelow:self.homeButton withMargin:7];
+    self.homeLabel.center = CGPointMake(self.homeButton.center.x, self.homeLabel.center.y);
+    self.homeLabel.x = self.homeLabel.x + 2;
     
-    ISColumnsController *pageController = [[ISColumnsController alloc] init];
+    [self.bookmarksLabel putBelow:self.bookmarksButton withMargin:5];
+    [self.bookmarksButton positionLeftOf:self.homeButton withMargin:50];
     
-    ViewController *vc = [[ViewController alloc] init];
-    vc.pageNumber = 0;
+    [self.bookmarksLabel putBelow:self.bookmarksButton withMargin:5];
+    self.bookmarksLabel.center = CGPointMake(self.bookmarksButton.center.x, self.bookmarksLabel.center.y);
+    self.bookmarksLabel.x = self.bookmarksLabel.x + 2;
     
-    ViewController *vc2 = [[ViewController alloc] init];
-    vc2.pageNumber = 1;
     
-    ViewController *vc3 = [[ViewController alloc] init];
-    vc2.pageNumber = 2;
-    pageController.viewControllers = [NSMutableArray arrayWithObjects: vc, vc2, vc3, nil];
+    [self.profileButton positionLeftOf:self.bookmarksButton withMargin:50];
+    [self.profileLabel putBelow:self.profileButton withMargin:5];
+    self.profileLabel.center = CGPointMake(self.profileButton.center.x, self.profileLabel.center.y);
     
-    [pageController reloadChildViewControllers];
-    [self.view addSubview:pageController];
-	// Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    self.activeViewController = self.homeViewController;
+    
 }
 
 @end

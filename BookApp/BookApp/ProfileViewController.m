@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSMutableArray *tableData;
 @end
 
+#define profileHeaderHeight 50
 @implementation ProfileViewController
 
 - (void) setFirstResponder: (id) firstResponder {
@@ -26,7 +27,7 @@
 
 - (ProfileHeaderView *) profileHeaderView {
     if (_profileHeaderView == nil) {
-        _profileHeaderView = [[ProfileHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 100)];
+        _profileHeaderView = [[ProfileHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, profileHeaderHeight)];
         _profileHeaderView.delegate = self;
     }
     return _profileHeaderView;
@@ -87,11 +88,6 @@
     [self fetchStories];
 }
 
-- (void)backPressed
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (void)fetchStories {
     [RKObjectManager.sharedManager loadObjectsAtResourcePath:@"stories?type=profile" delegate:self];
 }
@@ -116,10 +112,6 @@
 
 - (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     NSLog(@"Error while trying to fetch profile stories: %@", error);
-}
-
-- (void)backClicked {
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
