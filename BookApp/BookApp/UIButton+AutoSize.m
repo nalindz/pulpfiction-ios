@@ -14,7 +14,7 @@
     UIImageView *tmpImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
     button.height = tmpImage.height;
-    button.width = tmpImage.height;
+    button.width = tmpImage.width;
     [button setImage:tmpImage.image forState:UIControlStateNormal];
     return button;
 }

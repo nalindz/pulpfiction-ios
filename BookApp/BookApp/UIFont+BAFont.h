@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UIFont (BAFont)
++ (UIFont *) h5;
 + (UIFont *) h3;
 + (UIFont *) h2;
 + (UIFont *) h1;

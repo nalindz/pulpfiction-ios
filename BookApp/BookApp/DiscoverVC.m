@@ -16,15 +16,22 @@
 #import "SBLayout.h"
 #import "ProfileViewController.h"
 #import "StoryResultsGrid.h"
+#import "UIButton+ResizeWithAspectRatio.h"
+#import "UIView+BounceAnimate.h"
 
 @interface DiscoverVC ()
 
 @property (nonatomic, strong) StoryResultsGrid *storyResultGrid;
 @property (nonatomic, strong) NSArray *stories;
 @property (nonatomic, strong) UITextField *searchBox;
-@property (nonatomic, strong) UIButton *historyButton;
+@property (nonatomic, strong) UIButton *bookmarksButton;
 @property (nonatomic, strong) UIButton *homeButton;
+@property (nonatomic, strong) UILabel *homeLabel;
+@property (nonatomic, strong) UILabel *bookmarksLabel;
+@property (nonatomic, strong) UILabel *profileLabel;
 @property (nonatomic, strong) UIButton *profileButton;
+
+@property (nonatomic, weak) UILabel *visibleButtonLabel;
 
 
 @property int pageNumberToScrollTo;
@@ -37,7 +44,44 @@
 
 @end
 
+
 @implementation DiscoverVC
+
+- (UILabel*) homeLabel {
+    if (_homeLabel == nil) {
+        _homeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _homeLabel.font = [UIFont h5];
+        _homeLabel.textColor = [UIColor darkGrayColor];
+        _homeLabel.hidden = YES;
+        _homeLabel.backgroundColor = [UIColor clearColor];
+        [_homeLabel autoSizeWithText:@"home"];
+    }
+    return _homeLabel;
+}
+
+- (UILabel*) profileLabel {
+    if (_profileLabel == nil) {
+        _profileLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _profileLabel.font = [UIFont h5];
+        _profileLabel.textColor = [UIColor darkGrayColor];
+        _profileLabel.hidden = YES;
+        _profileButton.backgroundColor = [UIColor clearColor];
+        [_profileLabel autoSizeWithText:@"profile"];
+    }
+    return _profileLabel;
+}
+
+- (UILabel*) bookmarksLabel {
+    if (_bookmarksLabel == nil) {
+        _bookmarksLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _bookmarksLabel.font = [UIFont h5];
+        _bookmarksLabel.textColor = [UIColor darkGrayColor];
+        _bookmarksLabel.hidden = YES;
+        _bookmarksLabel.backgroundColor = [UIColor clearColor];
+        [_bookmarksLabel autoSizeWithText:@"bookmarks"];
+    }
+    return _bookmarksLabel;
+}
 
 - (void)viewDidLoad
 {
@@ -50,38 +94,42 @@
     self.searchBox.width = self.view.width * 0.6;
     self.searchBox.height = 50;
     self.searchBox.font = [UIFont fontWithName:@"MetaBoldLF-Roman" size:30];
-    [self.searchBox putInRightEdgeOf:self.view withMargin:40];
+    [self.searchBox putInRightEdgeOf:self.view withMargin:20];
     self.searchBox.returnKeyType = UIReturnKeySearch;
     self.searchBox.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.searchBox.layer.borderWidth = 1.0;
     
-    
-    self.homeButton = [[UIButton alloc] initWithFrame:CGRectZero];
+    self.homeButton = [UIButton initWithImageNamed:@"home-button"];
+    [self.homeButton resizeHeight:self.searchBox.height];
     [self.homeButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    self.homeButton.titleLabel.font = [UIFont fontWithName:@"MetaBoldLF-Roman" size:20];
-    [self.homeButton autoSizeWithText:@"home" fixedWidth:NO];
-    self.homeButton.height = self.searchBox.height;
-    [self.homeButton positionLeftOf:self.searchBox withMargin:30];
+    [self.homeButton positionLeftOf:self.searchBox withMargin:50];
     [self.homeButton addTarget:self action:@selector(homePressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.homeButton];
     
-    self.historyButton = [[UIButton alloc] initWithFrame:CGRectZero];
-    [self.historyButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    self.historyButton.titleLabel.font = [UIFont fontWithName:@"MetaBoldLF-Roman" size:20];
-    [self.historyButton autoSizeWithText:@"history" fixedWidth:NO];
-    self.historyButton.height = self.searchBox.height;
-    [self.historyButton positionLeftOf:self.homeButton withMargin:30];
-    [self.historyButton addTarget:self action:@selector(historyPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.historyButton];
+    [self.homeLabel putBelow:self.homeButton withMargin:7];
+    self.homeLabel.center = CGPointMake(self.homeButton.center.x, self.homeLabel.center.y);
+    self.homeLabel.x = self.homeLabel.x + 2;
     
-    self.profileButton = [[UIButton alloc] initWithFrame:CGRectZero];
+    self.bookmarksButton = [UIButton initWithImageNamed:@"bookmark-button"];
+    [self.bookmarksButton resizeHeight:(self.searchBox.height + 6)];
+    [self.bookmarksButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    [self.bookmarksButton positionLeftOf:self.homeButton withMargin:50];
+    [self.bookmarksButton addTarget:self action:@selector(historyPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.bookmarksButton];
+    
+    [self.bookmarksLabel putBelow:self.bookmarksButton withMargin:5];
+    self.bookmarksLabel.center = CGPointMake(self.bookmarksButton.center.x, self.bookmarksLabel.center.y);
+    self.bookmarksLabel.x = self.bookmarksLabel.x + 2;
+    
+    self.profileButton = [UIButton initWithImageNamed:@"profile-button"];
+    [self.profileButton resizeHeight:50];
     [self.profileButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    self.profileButton.titleLabel.font = [UIFont fontWithName:@"MetaBoldLF-Roman" size:20];
-    [self.profileButton autoSizeWithText:@"profile" fixedWidth:NO];
-    self.profileButton.height = self.searchBox.height;
-    [self.profileButton positionLeftOf:self.historyButton withMargin:30];
+    [self.profileButton positionLeftOf:self.bookmarksButton withMargin:50];
     [self.profileButton addTarget:self action:@selector(profilePressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.profileButton];
+    
+    [self.profileLabel putBelow:self.profileButton withMargin:5];
+    self.profileLabel.center = CGPointMake(self.profileButton.center.x, self.profileLabel.center.y);
     
     
     [self.searchBox addTarget:self
@@ -105,9 +153,6 @@
     
     self.stories = [[NSArray alloc] init];
     
-    NSLog(@"the width: %f", self.storyResultGrid.frame.size.width);
-    
-    
     [self fetchStoriesWithQuery:nil];
 }
 
@@ -117,11 +162,35 @@
 
 - (void) historyPressed {
     [RKObjectManager.sharedManager loadObjectsAtResourcePath:@"history" delegate:self];
+    [self showLabelForButton:self.bookmarksButton];
 }
 
 - (void) homePressed {
     [self fetchStoriesWithQuery:nil];
+    [self showLabelForButton:self.homeButton];
+    
 }
+
+- (void) showLabelForButton: (UIButton *)button {
+    UILabel *animatingLabel;
+    
+    if (button == self.bookmarksButton) {
+        animatingLabel = self.bookmarksLabel;
+    } else if (button == self.homeButton) {
+        animatingLabel = self.homeLabel;
+    } else if (button == self.profileButton) {
+        animatingLabel = self.profileLabel;
+    }
+    
+    if (animatingLabel == self.visibleButtonLabel) return;
+    
+    [self.visibleButtonLabel hideAnimateWithDuration:0.1 offset:20];
+    [animatingLabel bounceAnimateWithDuration:0.1 offset:10 bounces:1];
+    self.visibleButtonLabel = animatingLabel;
+    
+}
+
+
 
 - (void) profilePressed {
     ProfileViewController *profileVC = [[ProfileViewController alloc] init];

@@ -15,6 +15,17 @@
 		5575A0801662D766004D1576 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5575A07F1662D766004D1576 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5575A0831662FE89004D1576 /* User+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5575A0821662FE89004D1576 /* User+RestKit.m */; };
 		5575A09A16633E0B004D1576 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5575A09916633E0A004D1576 /* ProfileViewController.m */; };
+		F507443C16C6EFEA008C8CAE /* home_03.png in Resources */ = {isa = PBXBuildFile; fileRef = F507443B16C6EFEA008C8CAE /* home_03.png */; };
+		F507444616C6F1C1008C8CAE /* profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507444316C6F1C1008C8CAE /* profile@2x.png */; };
+		F507444716C6F1C1008C8CAE /* read@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507444416C6F1C1008C8CAE /* read@2x.png */; };
+		F507444816C6F1C1008C8CAE /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507444516C6F1C1008C8CAE /* search@2x.png */; };
+		F507444A16C6F249008C8CAE /* bookmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507444916C6F249008C8CAE /* bookmark@2x.png */; };
+		F507444D16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.m in Sources */ = {isa = PBXBuildFile; fileRef = F507444C16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.m */; };
+		F507445116C73595008C8CAE /* bookmark-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507444E16C73595008C8CAE /* bookmark-button@2x.png */; };
+		F507445216C73595008C8CAE /* home-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507444F16C73595008C8CAE /* home-button@2x.png */; };
+		F507445316C73595008C8CAE /* profile-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507445016C73595008C8CAE /* profile-button@2x.png */; };
+		F507445516C7362D008C8CAE /* bookmark-button2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507445416C7362C008C8CAE /* bookmark-button2@2x.png */; };
+		F507445B16C74AE5008C8CAE /* UIView+BounceAnimate.m in Sources */ = {isa = PBXBuildFile; fileRef = F507445A16C74AE5008C8CAE /* UIView+BounceAnimate.m */; };
 		F515C9AA1671AF05000078D2 /* PageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F515C9A91671AF05000078D2 /* PageView.m */; };
 		F515C9AD1671B1CE000078D2 /* BAProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = F515C9AC1671B1CE000078D2 /* BAProgressBarView.m */; };
 		F515C9B816743F8C000078D2 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F515C9B716743F8C000078D2 /* CoreText.framework */; };
@@ -43,6 +54,8 @@
 		F54E0BE7167DC5A6002C1F3B /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F54E0BE4167DC592002C1F3B /* libSDWebImage.a */; };
 		F54E0BEB167DC5F5002C1F3B /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54E0BEA167DC5F5002C1F3B /* ImageIO.framework */; };
 		F552792716C4E92800323095 /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = F552792616C4E92800323095 /* Story.m */; };
+		F552792B16C6366F00323095 /* Home@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F552792A16C6366F00323095 /* Home@2x.png */; };
+		F552792D16C637A700323095 /* Clock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F552792C16C637A700323095 /* Clock@2x.png */; };
 		F57526A4165083CC005E2235 /* Page+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F57526A3165083CC005E2235 /* Page+RestKit.m */; };
 		F586EFC316538AFB00488742 /* UIView+FrameUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F586EFC216538AFB00488742 /* UIView+FrameUtil.m */; };
 		F586F03C1654A8A000488742 /* MtNoLFRo.TTF in Resources */ = {isa = PBXBuildFile; fileRef = F586F0001654A8A000488742 /* MtNoLFRo.TTF */; };
@@ -157,6 +170,19 @@
 		5575A0821662FE89004D1576 /* User+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "User+RestKit.m"; sourceTree = "<group>"; };
 		5575A09816633E0A004D1576 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		5575A09916633E0A004D1576 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		F507443B16C6EFEA008C8CAE /* home_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_03.png; sourceTree = "<group>"; };
+		F507444316C6F1C1008C8CAE /* profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile@2x.png"; sourceTree = "<group>"; };
+		F507444416C6F1C1008C8CAE /* read@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "read@2x.png"; sourceTree = "<group>"; };
+		F507444516C6F1C1008C8CAE /* search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search@2x.png"; sourceTree = "<group>"; };
+		F507444916C6F249008C8CAE /* bookmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bookmark@2x.png"; sourceTree = "<group>"; };
+		F507444B16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+ResizeWithAspectRatio.h"; sourceTree = "<group>"; };
+		F507444C16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+ResizeWithAspectRatio.m"; sourceTree = "<group>"; };
+		F507444E16C73595008C8CAE /* bookmark-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bookmark-button@2x.png"; sourceTree = "<group>"; };
+		F507444F16C73595008C8CAE /* home-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home-button@2x.png"; sourceTree = "<group>"; };
+		F507445016C73595008C8CAE /* profile-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile-button@2x.png"; sourceTree = "<group>"; };
+		F507445416C7362C008C8CAE /* bookmark-button2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bookmark-button2@2x.png"; sourceTree = "<group>"; };
+		F507445916C74AE5008C8CAE /* UIView+BounceAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BounceAnimate.h"; sourceTree = "<group>"; };
+		F507445A16C74AE5008C8CAE /* UIView+BounceAnimate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+BounceAnimate.m"; sourceTree = "<group>"; };
 		F515C9A81671AF05000078D2 /* PageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageView.h; sourceTree = "<group>"; };
 		F515C9A91671AF05000078D2 /* PageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageView.m; sourceTree = "<group>"; };
 		F515C9AB1671B1CE000078D2 /* BAProgressBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAProgressBarView.h; sourceTree = "<group>"; };
@@ -196,6 +222,8 @@
 		F54E0BEA167DC5F5002C1F3B /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		F552792516C4E92800323095 /* Story.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Story.h; sourceTree = "<group>"; };
 		F552792616C4E92800323095 /* Story.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Story.m; sourceTree = "<group>"; };
+		F552792A16C6366F00323095 /* Home@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Home@2x.png"; sourceTree = "<group>"; };
+		F552792C16C637A700323095 /* Clock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Clock@2x.png"; sourceTree = "<group>"; };
 		F57526A2165083CC005E2235 /* Page+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Page+RestKit.h"; sourceTree = "<group>"; };
 		F57526A3165083CC005E2235 /* Page+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Page+RestKit.m"; sourceTree = "<group>"; };
 		F586EFC116538AFB00488742 /* UIView+FrameUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FrameUtil.h"; sourceTree = "<group>"; };
@@ -478,6 +506,17 @@
 		F586F04B1659D9CE00488742 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F507444E16C73595008C8CAE /* bookmark-button@2x.png */,
+				F507444F16C73595008C8CAE /* home-button@2x.png */,
+				F507445016C73595008C8CAE /* profile-button@2x.png */,
+				F507445416C7362C008C8CAE /* bookmark-button2@2x.png */,
+				F507444316C6F1C1008C8CAE /* profile@2x.png */,
+				F507444416C6F1C1008C8CAE /* read@2x.png */,
+				F507444516C6F1C1008C8CAE /* search@2x.png */,
+				F552792C16C637A700323095 /* Clock@2x.png */,
+				F507444916C6F249008C8CAE /* bookmark@2x.png */,
+				F507443B16C6EFEA008C8CAE /* home_03.png */,
+				F552792A16C6366F00323095 /* Home@2x.png */,
 				F586F04C1659D9E200488742 /* back@2x.png */,
 				F586F0531659FCC600488742 /* close-button@2x.png */,
 			);
@@ -487,6 +526,10 @@
 		F59EED90164386AE001C42F2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				F507445916C74AE5008C8CAE /* UIView+BounceAnimate.h */,
+				F507445A16C74AE5008C8CAE /* UIView+BounceAnimate.m */,
+				F507444B16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.h */,
+				F507444C16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.m */,
 				F5F1433A16BF3E0100C8B268 /* UIFont+BAFont.h */,
 				F5F1433B16BF3E0100C8B268 /* UIFont+BAFont.m */,
 				F598FE1C16BE314A00440D5B /* NSString+RemoveExtraWhiteSpace.h */,
@@ -658,6 +701,17 @@
 				F586F04D1659D9E200488742 /* back@2x.png in Resources */,
 				F586F0541659FCC600488742 /* close-button@2x.png in Resources */,
 				5575A07A1662D6E3004D1576 /* FacebookSDKResources.bundle in Resources */,
+				F552792B16C6366F00323095 /* Home@2x.png in Resources */,
+				F552792D16C637A700323095 /* Clock@2x.png in Resources */,
+				F507443C16C6EFEA008C8CAE /* home_03.png in Resources */,
+				F507444616C6F1C1008C8CAE /* profile@2x.png in Resources */,
+				F507444716C6F1C1008C8CAE /* read@2x.png in Resources */,
+				F507444816C6F1C1008C8CAE /* search@2x.png in Resources */,
+				F507444A16C6F249008C8CAE /* bookmark@2x.png in Resources */,
+				F507445116C73595008C8CAE /* bookmark-button@2x.png in Resources */,
+				F507445216C73595008C8CAE /* home-button@2x.png in Resources */,
+				F507445316C73595008C8CAE /* profile-button@2x.png in Resources */,
+				F507445516C7362D008C8CAE /* bookmark-button2@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -707,6 +761,8 @@
 				F5A04B6516C371C800229B5D /* Page.m in Sources */,
 				F5A04B6816C371C800229B5D /* Bookmark.m in Sources */,
 				F552792716C4E92800323095 /* Story.m in Sources */,
+				F507444D16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.m in Sources */,
+				F507445B16C74AE5008C8CAE /* UIView+BounceAnimate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

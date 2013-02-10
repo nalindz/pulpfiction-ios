@@ -10,6 +10,10 @@
 
 @implementation UIFont (BAFont)
 
++ (UIFont *) h5 {
+    return [UIFont fontWithName:@"MetaBoldLF-Roman" size:16];
+}
+
 + (UIFont *) h3 {
     return [UIFont fontWithName:@"MetaBoldLF-Roman" size:26];
 }

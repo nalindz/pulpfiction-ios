@@ -27,7 +27,7 @@
     if (_tagsTextView == nil) {
         _tagsTextView = [[UITextView alloc] initWithFrame:CGRectZero];
         _tagsTextView.width = 500;
-        _tagsTextView.height = 200;
+        _tagsTextView.height = 150;
         _tagsTextView.font = [UIFont h2];
         //_tagsTextView.placeholder = @"enter #tags";
         _tagsTextView.delegate = self;
