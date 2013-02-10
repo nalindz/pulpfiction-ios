@@ -30,6 +30,8 @@
 @property (atomic) int firstPageNumber;
 @property (atomic) int lastPageNumber;
 
+@property (atomic) int currentPageNumber;
+
 
 @property (atomic, strong) UIView *loadingShot;
 @property  (atomic) BOOL stopAddingJobs;
@@ -77,17 +79,6 @@
     UIView *titleView = [[UIView alloc] init];
     titleView.frame = CGRectMake(0, 0, 150, 44);
     titleView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    
-    self.pageControl = [[UIPageControl alloc] init];
-    self.pageControl.numberOfPages = 200;
-    self.pageControl.frame = CGRectMake(0, 27, 150, 14);
-    self.pageControl.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|
-                                         UIViewAutoresizingFlexibleBottomMargin|
-                                         UIViewAutoresizingFlexibleHeight);
-    [self.pageControl addTarget:self
-                         action:@selector(didTapPageControl)
-               forControlEvents:UIControlEventValueChanged];
-    
 }
 
 - (void) createNumberOfPages:(int) numberOfPages
@@ -288,7 +279,6 @@
     self.firstPageNumber = [startingPageNumber intValue];
     self.lastPageNumber = [startingPageNumber intValue];
     _startingPageNumber = startingPageNumber;
-    self.pageControl.currentPage = [startingPageNumber intValue];
 }
 
 
@@ -296,7 +286,7 @@
     Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", self.story.id, @(YES)]];
     if (bookmark.page != nil) {
         self.startingPageNumber = bookmark.page.page_number;
-        //self.pageControl.currentPage = [self.startingPageNumber intValue];
+        self.currentPageNumber = [bookmark.page.page_number intValue];
         self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:[bookmark.font_size floatValue]];
     }
 }
@@ -363,7 +353,7 @@
     int pageToScrollTo = 0;
     if (self.startingPageNumber != nil) {
         pageToScrollTo = [self.startingPageNumber intValue];
-        //self.startingPageNumber = nil;
+        self.startingPageNumber = nil;
     }
     else if (self.viewingBlockNumber == nil) {
         return;
@@ -489,7 +479,7 @@
 }
 
 - (Page *) currentPage {
-    Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", self.pageControl.currentPage, self.story.id]];
+    Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", self.currentPageNumber, self.story.id]];
     return page;
 }
 
@@ -499,15 +489,15 @@
     CGFloat offset = self.scrollView.contentOffset.x;
     CGFloat width = self.scrollView.frame.size.width;
     int newCurrentPage = ((offset+(width/2))/width);
-    if (newCurrentPage != self.pageControl.currentPage) {
+    if (newCurrentPage != self.currentPageNumber) {
         if (newCurrentPage > (self.lastPageNumber - pagesToBuffer + 1)) {
             //[self getMorePages];
         } else {
             //self.stopLoadingPages = YES;
         }
     }
-    [self.pageControl setCurrentPage:((offset+(width/2))/width)];
-    NSLog(@"current page %d", self.pageControl.currentPage);
+    self.currentPageNumber = ((offset+(width/2))/width);
+    NSLog(@"current page %d", self.currentPageNumber);
 }
 
 /*
