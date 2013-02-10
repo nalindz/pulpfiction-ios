@@ -102,9 +102,8 @@
     self.homeButton = [UIButton initWithImageNamed:@"home-button"];
     [self.homeButton resizeHeight:self.searchBox.height];
     [self.homeButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    [self.homeButton positionLeftOf:self.searchBox withMargin:50];
     [self.homeButton addTarget:self action:@selector(homePressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.homeButton];
+    [self.homeButton positionLeftOf:self.searchBox withMargin:50];
     
     [self.homeLabel putBelow:self.homeButton withMargin:7];
     self.homeLabel.center = CGPointMake(self.homeButton.center.x, self.homeLabel.center.y);

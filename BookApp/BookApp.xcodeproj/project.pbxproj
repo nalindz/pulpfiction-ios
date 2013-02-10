@@ -26,6 +26,7 @@
 		F507445316C73595008C8CAE /* profile-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507445016C73595008C8CAE /* profile-button@2x.png */; };
 		F507445516C7362D008C8CAE /* bookmark-button2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507445416C7362C008C8CAE /* bookmark-button2@2x.png */; };
 		F507445B16C74AE5008C8CAE /* UIView+BounceAnimate.m in Sources */ = {isa = PBXBuildFile; fileRef = F507445A16C74AE5008C8CAE /* UIView+BounceAnimate.m */; };
+		F507446416C78702008C8CAE /* MainVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F507446316C78702008C8CAE /* MainVC.m */; };
 		F515C9AA1671AF05000078D2 /* PageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F515C9A91671AF05000078D2 /* PageView.m */; };
 		F515C9AD1671B1CE000078D2 /* BAProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = F515C9AC1671B1CE000078D2 /* BAProgressBarView.m */; };
 		F515C9B816743F8C000078D2 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F515C9B716743F8C000078D2 /* CoreText.framework */; };
@@ -183,6 +184,8 @@
 		F507445416C7362C008C8CAE /* bookmark-button2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bookmark-button2@2x.png"; sourceTree = "<group>"; };
 		F507445916C74AE5008C8CAE /* UIView+BounceAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BounceAnimate.h"; sourceTree = "<group>"; };
 		F507445A16C74AE5008C8CAE /* UIView+BounceAnimate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+BounceAnimate.m"; sourceTree = "<group>"; };
+		F507446216C78702008C8CAE /* MainVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainVC.h; sourceTree = "<group>"; };
+		F507446316C78702008C8CAE /* MainVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainVC.m; sourceTree = "<group>"; };
 		F515C9A81671AF05000078D2 /* PageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageView.h; sourceTree = "<group>"; };
 		F515C9A91671AF05000078D2 /* PageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageView.m; sourceTree = "<group>"; };
 		F515C9AB1671B1CE000078D2 /* BAProgressBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAProgressBarView.h; sourceTree = "<group>"; };
@@ -408,6 +411,8 @@
 		F530E20116435C4D003A9EDF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				F507446216C78702008C8CAE /* MainVC.h */,
+				F507446316C78702008C8CAE /* MainVC.m */,
 				F52AAFB01653508B007B36C1 /* DiscoverVC.h */,
 				F52AAFB11653508B007B36C1 /* DiscoverVC.m */,
 				F5FC6EE41648FC550087137F /* SlideScrollView.h */,
@@ -763,6 +768,7 @@
 				F552792716C4E92800323095 /* Story.m in Sources */,
 				F507444D16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.m in Sources */,
 				F507445B16C74AE5008C8CAE /* UIView+BounceAnimate.m in Sources */,
+				F507446416C78702008C8CAE /* MainVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

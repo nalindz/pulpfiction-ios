@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "User.h"
 #import "AppDelegate.h"
+#import "MainVC.h"
 
 @interface LoginViewController ()
 
@@ -80,8 +81,9 @@
 - (void)loginSuccess: (User*) user {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     appDelegate.currentUser = user;
-    DiscoverVC *discoverVC = [[DiscoverVC alloc] init];
-    [self.navigationController pushViewController:discoverVC animated:YES];
+    MainVC *mainVC = [[MainVC alloc] init];
+    //DiscoverVC *discoverVC = [[DiscoverVC alloc] init];
+    [self.navigationController pushViewController:mainVC animated:YES];
 }
 
 - (void)fbLoginFailed {
