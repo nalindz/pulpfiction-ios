@@ -82,9 +82,7 @@
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     appDelegate.currentUser = user;
     MainViewController *mainViewController = [[MainViewController alloc] init];
-    HomeViewController *discoverVC = [[HomeViewController alloc] init];
     [self.navigationController pushViewController:mainViewController animated:YES];
-    //[self.navigationController pushViewController:discoverVC animated:YES];
 }
 
 - (void)fbLoginFailed {

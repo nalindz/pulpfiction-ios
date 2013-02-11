@@ -73,9 +73,8 @@
     [self fetchStoriesWithQuery:nil];
 }
 
-
-- (void) textFieldFinished: (id) sender {
-    [self fetchStoriesWithQuery:self.searchBox.text];
+- (void) search:(NSString *)searchText {
+    [self fetchStoriesWithQuery:searchText];
 }
 
 - (void) bookmarksPressed {
@@ -108,7 +107,6 @@
 }
 
 
-
 - (void) profilePressed {
     ProfileViewController *profileVC = [[ProfileViewController alloc] init];
     [self.navigationController pushViewController:profileVC animated: YES];
@@ -117,9 +115,8 @@
 
 - (void) fetchStoriesWithQuery: (NSString *) query {
     NSString *resourcePath = @"stories?type=feed";
-    if (query != nil) {
+    if (query)
         resourcePath = [NSString stringWithFormat:@"%@&query=%@", resourcePath, query];
-    }
     [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath delegate:self];
 }
 

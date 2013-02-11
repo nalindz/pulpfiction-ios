@@ -11,12 +11,13 @@
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
 #import "UIView+BounceAnimate.h"
+#import "Searchable.h"
 
 @interface MainViewController ()
 
 @property (nonatomic, strong) HomeViewController* homeViewController;
 @property (nonatomic, strong) ProfileViewController* profileViewController;
-@property (nonatomic, weak) UIViewController* activeViewController;
+@property (nonatomic, weak)  UIViewController <Searchable> *activeViewController;
 
 @property (nonatomic, strong) UITextField *searchBox;
 @property (nonatomic, strong) UIButton *bookmarksButton;
@@ -120,7 +121,7 @@
 }
 
 
-- (void)setActiveViewController:(UIViewController *)activeViewController {
+- (void)setActiveViewController:(UIViewController <Searchable>*)activeViewController {
     if (activeViewController == _activeViewController) return;
     [_activeViewController.view removeFromSuperview];
     [self.view addSubview:activeViewController.view];
@@ -143,6 +144,10 @@
         [self addChildViewController:_profileViewController];
     }
     return _profileViewController;
+}
+
+- (void) textFieldFinished: (UITextField *) textField {
+    [self.activeViewController search:textField.text];
 }
 
 - (void) showLabelForButton: (UIButton *)button {
@@ -191,6 +196,16 @@
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     [self.searchBox putInRightEdgeOf:self.view withMargin:20];
+    
+    [self setupTabLabels];
+    [self homePressed];
+    
+    [self.searchBox addTarget:self
+                  action:@selector(textFieldFinished:)
+                  forControlEvents:UIControlEventEditingDidEndOnExit];
+}
+
+- (void) setupTabLabels {
     [self.homeButton positionLeftOf:self.searchBox withMargin:50];
     [self.homeLabel putBelow:self.homeButton withMargin:7];
     self.homeLabel.center = CGPointMake(self.homeButton.center.x, self.homeLabel.center.y);
@@ -207,8 +222,6 @@
     [self.profileButton positionLeftOf:self.bookmarksButton withMargin:50];
     [self.profileLabel putBelow:self.profileButton withMargin:5];
     self.profileLabel.center = CGPointMake(self.profileButton.center.x, self.profileLabel.center.y);
-    
-    self.activeViewController = self.homeViewController;
     
 }
 

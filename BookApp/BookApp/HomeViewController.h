@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Searchable.h"
 
 @interface HomeViewController : UIViewController
 <UICollectionViewDataSource,
 RKObjectLoaderDelegate,
-UICollectionViewDelegate>
+UICollectionViewDelegate,
+Searchable>
 
 @end

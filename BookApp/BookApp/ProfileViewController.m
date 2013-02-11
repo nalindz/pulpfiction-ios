@@ -85,11 +85,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self fetchStories];
+    [self fetchStoriesWithQuery:nil];
 }
 
-- (void)fetchStories {
-    [RKObjectManager.sharedManager loadObjectsAtResourcePath:@"stories?type=profile" delegate:self];
+- (void)search:(NSString *)searchText {
+    [self fetchStoriesWithQuery:searchText];
+}
+
+- (void)fetchStoriesWithQuery: (NSString *) query {
+    NSString *resourcePath = @"stories?type=profile";
+    if (query)
+        resourcePath = [NSString stringWithFormat:@"%@&query=%@", resourcePath, query];
+    [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath delegate:self];
 }
 
 - (void)logoutPressed
@@ -106,6 +113,7 @@
 
 - (void) objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
     NSLog(@"Received stories: %@", objects);
+    [self.tableData removeAllObjects];
     [self.tableData addObjectsFromArray:objects];
     [self.tableView reloadData];
 }

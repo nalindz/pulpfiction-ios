@@ -276,6 +276,7 @@
 		F5A04B6716C371C800229B5D /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmark.m; sourceTree = "<group>"; };
 		F5C3B1F616C85B9000769E77 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		F5C3B1F716C85B9000769E77 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		F5C3B20716C8AC4000769E77 /* Searchable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Searchable.h; sourceTree = "<group>"; };
 		F5E56591164EEA630044B956 /* NSString+FitInLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FitInLabel.h"; sourceTree = "<group>"; };
 		F5E56592164EEA630044B956 /* NSString+FitInLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FitInLabel.m"; sourceTree = "<group>"; };
 		F5F1433A16BF3E0100C8B268 /* UIFont+BAFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+BAFont.h"; sourceTree = "<group>"; };
@@ -531,6 +532,7 @@
 		F59EED90164386AE001C42F2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				F5C3B20716C8AC4000769E77 /* Searchable.h */,
 				F507445916C74AE5008C8CAE /* UIView+BounceAnimate.h */,
 				F507445A16C74AE5008C8CAE /* UIView+BounceAnimate.m */,
 				F507444B16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.h */,

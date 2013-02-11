@@ -330,8 +330,8 @@
 
 - (void)scrollToPageNumber: (int) pageNumber {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(pageNumber) inSection:0];
-    //dispatch_async(dispatch_get_main_queue(), ^{[self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];});
-    [self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{[self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];});
+    //[self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];
     //[self.scrollView reloadItemsAtIndexPaths:@[indexPath]];
 }
 
