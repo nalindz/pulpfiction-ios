@@ -171,6 +171,7 @@
         if ([newPage isLastPage]) {
             numberOfPages = 0;
             [self scrollToCorrectPage];
+            [self reloadFirstCell];
         } else {
             numberOfPages--;
         }
@@ -268,6 +269,13 @@
     }
 }
 
+- (void) reloadFirstCell {
+    // sets the correct progress bar for the first load
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.scrollView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
+    });
+}
+
 
 - (void) setStartingPageNumber: (NSNumber *) startingPageNumber {
     self.firstPageNumber = [startingPageNumber intValue];
@@ -329,6 +337,7 @@
 
 
 - (void)scrollToPageNumber: (int) pageNumber {
+    //if (pageNumber == self.currentPageNumber) return;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(pageNumber) inSection:0];
     dispatch_async(dispatch_get_main_queue(), ^{[self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];});
     //[self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];
@@ -358,12 +367,6 @@
         self.startingPageNumber = nil;
     }
     else if (self.viewingBlockNumber == nil) {
-        if (pageToScrollTo == 0) {
-            // sets the correct progress bar for the first page
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.scrollView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
-            });
-        }
         return;
     } else {
         Page *page;

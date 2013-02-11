@@ -84,6 +84,7 @@
     self.transform = CGAffineTransformIdentity;
     self.textLabel.text = @"";
     self.delegate = nil;
+    self.tag = -1;
     [self.progressBar removeFromSuperview];
     [self showControls];
 }
