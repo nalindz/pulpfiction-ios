@@ -11,12 +11,10 @@
 #include <math.h>
 #include "PageCell.h"
 
-
 #define pagesToBuffer 10000
 
 #define FONT_MAX_SIZE 50.0
 #define FONT_MIN_SIZE 10.0
-
 
 @interface ISColumnsController ()
 
@@ -29,6 +27,7 @@
 
 @property (atomic) int firstPageNumber;
 @property (atomic) int lastPageNumber;
+@property (atomic) int totalPages;
 
 @property (atomic) int currentPageNumber;
 
@@ -87,6 +86,7 @@
                        index:(NSInteger) startBlockIndex
                   pageBuffer: (NSString *) pageBuffer {
     
+    self.totalPages = 0;
     NSLog(@"requesting page number: %@", pageNumber);
     Block *currentBlock;
     int currentBlockNumber = [startBlockNumber intValue];
@@ -160,6 +160,7 @@
         newPage.last_block_number = currentBlock.block_number;
         newPage.last_block_index = [NSNumber numberWithInt:lastBlockIndex];
         newPage.font_size = @(self.pageFont.pointSize);
+        self.totalPages++;
         
         
         NSError *error;
@@ -194,7 +195,7 @@
 }
 
 - (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    
+    NSLog(@"Error occured when fetching a block: %@", error);
 }
 
 - (void) setupScrollView {
@@ -265,13 +266,6 @@
         }
         [self.scrollView insertItemsAtIndexPaths:indexPathsToInsert];
     }
-
-    
-    /*
-    if (self.lastPageNumber > [self.startingPageNumber intValue] + 1 && self.startingPageNumber != nil) {
-        [self scrollToCorrectPage];
-    }
-     */
 }
 
 
@@ -326,10 +320,18 @@
     }
 }
 
+- (void) scrollToPercentage:(CGFloat)percentage {
+    int pageNumber = percentage * self.totalPages;
+    [self scrollToPageNumber:pageNumber];
+    SlideViewCell *pageCell = (SlideViewCell *)[self.scrollView viewWithTag:[self tagForIndex:pageNumber]];
+    [pageCell setPercentage:percentage];
+}
+
 
 - (void)scrollToPageNumber: (int) pageNumber {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(pageNumber) inSection:0];
-    dispatch_async(dispatch_get_main_queue(), ^{[self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];});
+    //dispatch_async(dispatch_get_main_queue(), ^{[self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];});
+    [self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];
     //[self.scrollView reloadItemsAtIndexPaths:@[indexPath]];
 }
 
@@ -545,18 +547,25 @@
     
     SlideViewCell *cell = [self.scrollView dequeueReusableCellWithReuseIdentifier:@"slideViewCell" forIndexPath:indexPath];
     
-    [cell renderWithPageNumber:@(indexPath.row) storyId:self.story.id font:self.pageFont margin:[self pageMargin] showControls:self.showControls];
+    [cell renderWithPageNumber:@(indexPath.row)
+                       storyId:self.story.id
+                          font:self.pageFont margin:[self pageMargin]
+                      progress:((indexPath.row + 1) / (CGFloat)self.totalPages)
+                  showControls:self.showControls];
     cell.delegate = self;
-    //cell.tag = [self cellTagForIndexPath: indexPath];
+    cell.tag = [self tagForIndex:indexPath.row];
     return cell;
 }
+
+- (int) tagForIndex: (int) index {
+    return 1000 + index;
+}
+
+
 
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(self.scrollView.width , self.scrollView.height);
 }
-
-
-
 
 @end

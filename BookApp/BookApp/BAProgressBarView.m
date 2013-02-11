@@ -24,9 +24,14 @@
         nonActiveDot.font = [UIFont fontWithName:@"Meta Serif OT" size:50];
         [nonActiveDot setText:@"." fixedWidth:NO];
         self.dotArray = [[NSMutableArray alloc] init];
+        int numTotalDots = self.width / nonActiveDot.width;
         
-        for (int i = 0; i < self.width /  nonActiveDot.width; i++ ) {
+        for (int i = 0; i < numTotalDots; i++ ) {
             UILabel *dotToAdd = [[UILabel alloc] init];
+            dotToAdd.userInteractionEnabled = YES;
+            dotToAdd.tag = (i * 100) / numTotalDots;
+            UIGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dotTap:)];
+            [dotToAdd addGestureRecognizer:recognizer];
             dotToAdd.backgroundColor = [UIColor clearColor];
             dotToAdd.height = 50;
             dotToAdd.textColor = [UIColor lightGrayColor];
@@ -40,6 +45,10 @@
         // Initialization code
     }
     return self;
+}
+
+- (void) dotTap: (UITapGestureRecognizer *) recognizer {
+    [self.delegate scrollToPercentage:(recognizer.view.tag / 100.0)];
 }
 
 

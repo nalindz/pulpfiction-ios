@@ -7,7 +7,6 @@
 //
 
 #import "SlideViewCell.h"
-#import "BAProgressBarView.h"
 #import "Story+RestKit.h"
 #import "Block+RestKit.h"
 
@@ -24,17 +23,17 @@
 
 @implementation SlideViewCell
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
         self.textLabel = [[UILabel alloc] initWithFrame:self.bounds];
         self.textLabel.numberOfLines = 0;
+        self.textLabel.userInteractionEnabled = YES;
         [self addSubview:self.textLabel];
         
         UITapGestureRecognizer *textTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleControls)];
-        [self addGestureRecognizer:textTap];
+        [self.textLabel addGestureRecognizer:textTap];
         
         self.titleBar = [[UIView alloc] init];
         self.titleBar.width = self.width;
@@ -66,15 +65,9 @@
         [self.fontDecrease addTarget:self action:@selector(clickedFontDecrease) forControlEvents:UIControlEventTouchUpInside];
         self.fontDecrease.height = self.backButton.height;
         [self addSubview:self.fontDecrease];
-        
-        
-        
     }
     return self;
 }
-
-
-
 
 - (void) clickedFontIncrease {
     //self.fontIncrease.enabled = NO;
@@ -101,6 +94,7 @@
                      storyId: (NSNumber *) storyId
                         font: (UIFont *) font
                       margin: (CGFloat) margin
+                      progress: (CGFloat) progress
                 showControls: (BOOL) showControls {
     
     CGAffineTransform currentTransform = self.transform;
@@ -111,20 +105,12 @@
     self.textLabel.font = font;
     [self.textLabel positionCenterOf:self withMargin:margin];
     self.textLabel.text = page.text;
-    //self.backButton.x = [self.delegate pageMargin];
     self.transform = currentTransform;
     Story *story = [Story findFirstByAttribute:@"id" withValue:storyId];
-    Block *firstBlock = [Block blockWithStoryId:storyId blockNumber:page.first_block_number];
-    Block *lastBlock = [Block blockWithStoryId:storyId blockNumber:page.last_block_number];
     
-    CGFloat progress = ([lastBlock.total_start_index floatValue] + [page.last_block_index floatValue]) / [story.total_length floatValue];
-    
-    
-    NSLog(@"progress :%f", progress);
-    NSLog(@"firstBlock total start index :%f", [firstBlock.total_start_index floatValue]);
-    NSLog(@"page first block index :%f", [page.first_block_index floatValue]);
     
     self.progressBar = [[BAProgressBarView alloc] initWithFrame:CGRectMake(margin * 2 ,self.height - 80, self.width - margin * 4, 50)];
+    self.progressBar.delegate = self;
     [self.progressBar setPercentage:progress];
     [self addSubview:self.progressBar];
     if (!showControls) {
@@ -134,9 +120,15 @@
     }
 }
 
+- (void) setPercentage: (CGFloat) percentage {
+    [self.progressBar setPercentage:percentage];
+}
+
+- (void) scrollToPercentage:(CGFloat)percentage {
+    [self.delegate scrollToPercentage:percentage];
+}
+
 - (void) toggleControls {
-    
-    NSLog(@"meoww");
     if (self.progressBar.hidden) {
         [self.delegate showAllControls];
     } else {
@@ -171,11 +163,9 @@
     }];
 }
 
-
 - (void)enableFontButtons {
     self.fontDecrease.enabled = YES;
     self.fontIncrease.enabled = YES;
 }
-
 
 @end

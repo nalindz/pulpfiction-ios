@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Page.h"
+#import "BAProgressBarView.h"
 
 @protocol SlideViewCellDelegate
 - (UIFont *) fontForSlideViewCell;
@@ -16,12 +17,14 @@
 - (void) fontDecrease;
 - (void) hideAllControls;
 - (void) showAllControls;
+- (void) scrollToPercentage: (CGFloat) percentage;
 @end
 
-@interface SlideViewCell : UICollectionViewCell
+@interface SlideViewCell : UICollectionViewCell <BAProgressBarViewDelegate>
 @property (nonatomic, strong) UILabel *textLabel;
 @property (nonatomic, assign) id<SlideViewCellDelegate> delegate;
 
+- (void) setPercentage: (CGFloat) percentage;
 - (void) hideControls;
 - (void) showControls;
     - (void)prepareForReuse;
@@ -29,7 +32,9 @@
                      storyId: (NSNumber *) storyId
                         font: (UIFont *) font
                       margin: (CGFloat) margin
+                      progress: (CGFloat) progress
                 showControls: (BOOL) showControls;
+    
 @end
 
 
