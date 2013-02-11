@@ -106,9 +106,6 @@
     [self.textLabel positionCenterOf:self withMargin:margin];
     self.textLabel.text = page.text;
     self.transform = currentTransform;
-    Story *story = [Story findFirstByAttribute:@"id" withValue:storyId];
-    
-    
     self.progressBar = [[BAProgressBarView alloc] initWithFrame:CGRectMake(margin * 2 ,self.height - 80, self.width - margin * 4, 50)];
     self.progressBar.delegate = self;
     [self.progressBar setPercentage:progress];

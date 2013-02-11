@@ -22,7 +22,7 @@
 
 @interface SlideViewCell : UICollectionViewCell <BAProgressBarViewDelegate>
 @property (nonatomic, strong) UILabel *textLabel;
-@property (nonatomic, assign) id<SlideViewCellDelegate> delegate;
+@property (nonatomic, weak) id<SlideViewCellDelegate> delegate;
 
 - (void) setPercentage: (CGFloat) percentage;
 - (void) hideControls;
