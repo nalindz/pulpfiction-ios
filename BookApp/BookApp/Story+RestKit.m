@@ -24,6 +24,7 @@
 
     // Map the relationships.
     [mapping mapRelationship:@"user" withMapping:[manager.mappingProvider mappingForKeyPath:@"user"]];
+    [mapping mapRelationship:@"bookmark" withMapping:[manager.mappingProvider mappingForKeyPath:@"bookmark"]];
     
     mapping.primaryKeyAttribute = @"id";
     return mapping;

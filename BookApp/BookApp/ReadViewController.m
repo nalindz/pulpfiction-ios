@@ -187,7 +187,7 @@
 
 
 - (int)pageMargin {
-    return 60;
+    return 80;
 }
 
 - (CGSize) pageSize {
@@ -288,12 +288,11 @@
 }
 
 
-- (void) loadBookmark {
-    Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@", self.story.id]];
-    if (bookmark.page != nil) {
-        self.startingPageNumber = bookmark.page_number;
-        self.currentPageNumber = [bookmark.page_number intValue];
-        self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:[bookmark.font_size floatValue]];
+- (void)loadBookmark {
+    if (self.story.bookmark) {
+        self.startingPageNumber = self.story.bookmark.page_number;
+        self.currentPageNumber = [self.story.bookmark.page_number intValue];
+        self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:[self.story.bookmark.font_size floatValue]];
     }
 }
 
@@ -335,15 +334,17 @@
 - (void) scrollToPercentage:(CGFloat)percentage {
     int pageNumber = percentage * self.totalPages;
     [self scrollToPageNumber:pageNumber];
-    SlideViewCell *pageCell = (SlideViewCell *)[self.scrollView viewWithTag:[self tagForIndex:pageNumber]];
+    
+    SlideViewCell *pageCell = (SlideViewCell *)[self.scrollView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:pageNumber inSection:0]];
     [pageCell setPercentage:percentage];
 }
 
 - (void)scrollToPageNumber: (int) pageNumber {
     //if (pageNumber == self.currentPageNumber) return;
+    self.currentPageNumber = pageNumber;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(pageNumber) inSection:0];
-    dispatch_async(dispatch_get_main_queue(), ^{[self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];});
-    //[self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];
+    //dispatch_async(dispatch_get_main_queue(), ^{[self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];});
+    [self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];
     //[self.scrollView reloadItemsAtIndexPaths:@[indexPath]];
 }
 
@@ -471,27 +472,22 @@
 
 
 - (void)saveBookmark {
-    Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@", self.story.id]];
-    if (bookmark == nil) {
-        bookmark = [Bookmark object];
+    if (self.story.bookmark) {
+        self.story.bookmark.font_size = @(self.pageFont.pointSize);
+        //bookmark.page = [self currentPage];
+        self.story.bookmark.page_number = @(self.currentPageNumber);
+        self.story.bookmark.story_id = self.story.id;
+        
+        // post bookmark to backend
+        [[RKObjectManager sharedManager] postObject:self.story.bookmark usingBlock:^(RKObjectLoader *loader) {
+            loader.onDidFailWithError = ^(NSError *error) {
+                NSLog(@"Error posting bookmark: %@", error);
+            };
+            loader.onDidLoadObject = ^(Bookmark *bookmark) {
+                NSLog(@"Loaded object: %@", bookmark);
+            };
+        }];
     }
-    
-    bookmark.font_size = @(self.pageFont.pointSize);
-    bookmark.page = [self currentPage];
-    bookmark.page_number = @(self.currentPageNumber);
-    bookmark.story_id = self.story.id;
-    [[bookmark managedObjectContext] save:nil];
-    
-    
-    // post bookmark to backend
-    [[RKObjectManager sharedManager] postObject:bookmark usingBlock:^(RKObjectLoader *loader) {
-        loader.onDidFailWithError = ^(NSError *error) {
-            NSLog(@"Error posting bookmark: %@", error);
-        };
-        loader.onDidLoadObject = ^(Bookmark *bookmark) {
-            NSLog(@"Loaded object: %@", bookmark);
-        };
-    }];
 }
 
 - (void)backClicked {
@@ -567,6 +563,7 @@
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"dis caled");
     
     SlideViewCell *cell = [self.scrollView dequeueReusableCellWithReuseIdentifier:@"slideViewCell" forIndexPath:indexPath];
     
@@ -576,13 +573,9 @@
                       progress:((indexPath.row + 1) / (CGFloat)self.totalPages)
                   showControls:self.showControls];
     cell.delegate = self;
-    cell.tag = [self tagForIndex:indexPath.row];
     return cell;
 }
 
-- (int) tagForIndex: (int) index {
-    return 1000 + index;
-}
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(self.scrollView.width , self.scrollView.height);

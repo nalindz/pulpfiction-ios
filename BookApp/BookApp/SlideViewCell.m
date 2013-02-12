@@ -9,12 +9,14 @@
 #import "SlideViewCell.h"
 #import "Story+RestKit.h"
 #import "Block+RestKit.h"
+#import "Bookmark+RestKit.h"
 
 @interface SlideViewCell()
 @property (nonatomic, strong) UIView *titleBar;
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) UIButton *fontIncrease;
 @property (nonatomic, strong) UIButton *fontDecrease;
+@property (nonatomic, strong) UIButton *bookmarkButton;
 @property (nonatomic, strong) NSNumber *pageNumber;
 @property (nonatomic, strong) NSNumber *storyId;
 @property (nonatomic, strong) BAProgressBarView *progressBar;
@@ -22,6 +24,58 @@
 @end
 
 @implementation SlideViewCell
+
+- (UIButton*) bookmarkButton {
+    if (_bookmarkButton == nil) {
+        _bookmarkButton = [UIButton initWithImageNamed:@"bookmark-button-light"];
+        [_bookmarkButton addTarget:self action:@selector(bookmarkClicked) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _bookmarkButton;
+}
+
+- (void)bookmarkClicked {
+    if (self.story.bookmark) {
+        // remove bookmark
+        NSLog(@"deleting bookmark :%@", self.story.bookmark);
+        [[RKObjectManager sharedManager] deleteObject:self.story.bookmark usingBlock:^(RKObjectLoader *loader) {
+            loader.onDidLoadObject = ^(Bookmark *bookmark) {
+                NSLog(@"Deleted bookmark :%@", bookmark);
+            };
+            
+            loader.onDidFailWithError = ^(NSError *error) {
+                NSLog(@"Error deleting bookmark: %@", error);
+            };
+        }];
+        self.story.bookmark = nil;
+        [self setPageUnbookmarked];
+    } else {
+        Bookmark *newBookmark = [Bookmark object];
+        newBookmark.page_number = self.pageNumber;
+        newBookmark.story_id = self.story.id;
+        newBookmark.font_size = @(self.textLabel.font.pointSize);
+        self.story.bookmark = newBookmark;
+        
+        // post bookmark
+        [[RKObjectManager sharedManager] postObject:newBookmark usingBlock:^(RKObjectLoader *loader) {
+            loader.onDidLoadObject = ^(Bookmark *bookmark) {
+                NSLog(@"Saved bookmark :%@", bookmark);
+            };
+            
+            loader.onDidFailWithError = ^(NSError *error) {
+                NSLog(@"Error saving bookmark: %@", error);
+            };
+        }];
+        [self setPageBookmarked];
+    }
+}
+
+- (void) setPageBookmarked {
+    [self.bookmarkButton setImage:[UIImage imageNamed:@"bookmark-button-dark"] forState:UIControlStateNormal];
+}
+
+- (void) setPageUnbookmarked {
+    [self.bookmarkButton setImage:[UIImage imageNamed:@"bookmark-button-light"] forState:UIControlStateNormal];
+}
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -31,6 +85,9 @@
         self.textLabel.numberOfLines = 0;
         self.textLabel.userInteractionEnabled = YES;
         [self addSubview:self.textLabel];
+        
+        
+        [self.bookmarkButton putInLeftEdgeOf:self withMargin:20];
         
         UITapGestureRecognizer *textTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleControls)];
         [self.textLabel addGestureRecognizer:textTap];
@@ -49,22 +106,21 @@
         self.fontIncrease = [[UIButton alloc] init];
         self.fontIncrease.titleLabel.font =[UIFont fontWithName:@"MetaBoldLF-Roman" size:30];
         [self.fontIncrease setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        [self.fontIncrease autoSizeWithText:@"+" fixedWidth:NO];
-        [self.fontIncrease positionLeftOf:self.backButton withMargin:20];
+        [self.fontIncrease autoSizeWithText:@"A" fixedWidth:NO];
+        
+        
         [self.fontIncrease addTarget:self action:@selector(clickedFontIncrease) forControlEvents:UIControlEventTouchUpInside];
         self.fontIncrease.height = self.backButton.height;
-        [self addSubview:self.fontIncrease];
-        
         
         self.fontDecrease = [[UIButton alloc] init];
         self.fontDecrease.titleLabel.font =[UIFont fontWithName:@"MetaBoldLF-Roman" size:30];
         [self.fontDecrease setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        [self.fontDecrease autoSizeWithText:@"-" fixedWidth:NO];
+        [self.fontDecrease autoSizeWithText:@"a" fixedWidth:NO];
         self.fontDecrease.width = self.fontDecrease.width + 15;
-        [self.fontDecrease positionLeftOf:self.fontIncrease withMargin:20];
+        
+        
         [self.fontDecrease addTarget:self action:@selector(clickedFontDecrease) forControlEvents:UIControlEventTouchUpInside];
         self.fontDecrease.height = self.backButton.height;
-        [self addSubview:self.fontDecrease];
     }
     return self;
 }
@@ -89,7 +145,9 @@
     [self showControls];
 }
 
-
+- (Story *) story {
+    return [Story findFirstByAttribute:@"id" withValue:self.storyId];
+}
 
 - (void)renderWithPageNumber: (NSNumber *) pageNumber
                      storyId: (NSNumber *) storyId
@@ -110,7 +168,20 @@
     self.progressBar = [[BAProgressBarView alloc] initWithFrame:CGRectMake(margin * 2 ,self.height - 80, self.width - margin * 4, 50)];
     self.progressBar.delegate = self;
     [self.progressBar setPercentage:progress];
+    
+    
     [self addSubview:self.progressBar];
+    
+    [self.fontDecrease positionLeftOf:self.progressBar withMargin:20];
+    self.fontDecrease.centerY = self.progressBar.centerY + 15;
+    [self.fontIncrease putToRightOf:self.progressBar withMargin:20];
+    self.fontIncrease.centerY = self.progressBar.centerY + 15;
+    
+    
+    if (self.story.bookmark) {
+        [self setPageBookmarked];
+    }
+    
     if (!showControls) {
         [self hideControls];
     } else {
@@ -139,11 +210,13 @@
     self.fontDecrease.hidden = NO;
     self.fontIncrease.hidden = NO;
     self.backButton.hidden = NO;
+    self.bookmarkButton.hidden = NO;
     [UIView animateWithDuration:0.15 animations:^{
         self.progressBar.alpha = 1.0;
         self.fontDecrease.alpha = 1.0;
         self.fontIncrease.alpha = 1.0;
         self.backButton.alpha = 1.0;
+        self.bookmarkButton.alpha = 1.0;
     }];
 }
 
@@ -153,11 +226,13 @@
         self.fontDecrease.alpha = 0.0;
         self.fontIncrease.alpha = 0.0;
         self.backButton.alpha = 0.0;
+        self.bookmarkButton.alpha = 0.0;
     } completion:^(BOOL finished) {
         self.progressBar.hidden = YES;
         self.fontDecrease.hidden = YES;
         self.fontIncrease.hidden = YES;
         self.backButton.hidden = YES;
+        self.bookmarkButton.hidden = YES;
     }];
 }
 

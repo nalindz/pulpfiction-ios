@@ -15,6 +15,7 @@
      @"id",
      @"page_number",
      @"font_size",
+     @"user_id",
      @"created_at",
      @"updated_at",
      @"story_id",

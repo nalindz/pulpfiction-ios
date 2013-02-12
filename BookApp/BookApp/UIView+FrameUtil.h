@@ -10,14 +10,11 @@
 
 @interface UIView (FrameUtil)
 
-@property int height;
-@property int width;
-@property int x;
-@property int y;
+@property CGFloat height;
+@property CGFloat width;
+@property CGFloat x;
+@property CGFloat y;
+@property CGFloat centerX;
+@property CGFloat centerY;
 
-- (void) setHeight: (int) height;
-- (void) setWidth: (int) width;
-- (void) setX: (int) x;
-- (void) setY: (int) y;
-    
 @end

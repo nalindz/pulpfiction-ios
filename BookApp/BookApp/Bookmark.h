@@ -2,7 +2,7 @@
 //  Bookmark.h
 //  BookApp
 //
-//  Created by Nalin on 2/11/13.
+//  Created by Nalin on 2/12/13.
 //
 //
 
@@ -15,13 +15,13 @@
 
 @property (nonatomic, retain) NSDate * created_at;
 @property (nonatomic, retain) NSNumber * font_size;
+@property (nonatomic, retain) NSNumber * id;
+@property (nonatomic, retain) NSNumber * page_number;
 @property (nonatomic, retain) NSNumber * story_id;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSNumber * user_id;
-@property (nonatomic, retain) NSNumber * id;
-@property (nonatomic, retain) NSNumber * page_number;
-@property (nonatomic, retain) Page *page;
-@property (nonatomic, retain) Story *story;
 @property (nonatomic, retain) User *user;
+@property (nonatomic, retain) Story *story;
+@property (nonatomic, retain) Page *page;
 
 @end
