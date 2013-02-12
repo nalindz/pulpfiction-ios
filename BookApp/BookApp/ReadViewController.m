@@ -1,4 +1,4 @@
-#import "ISColumnsController.h"
+#import "ReadViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "ViewController.h"
 #import "SlideViewCell.h"
@@ -16,7 +16,7 @@
 #define FONT_MAX_SIZE 50.0
 #define FONT_MIN_SIZE 10.0
 
-@interface ISColumnsController ()
+@interface ReadViewController ()
 
 - (void) setupScrollView;
 
@@ -30,7 +30,6 @@
 @property (atomic) int totalPages;
 
 @property (atomic) int currentPageNumber;
-
 
 @property (atomic, strong) UIView *loadingShot;
 @property  (atomic) BOOL stopAddingJobs;
@@ -48,7 +47,7 @@
     
 @end
 
-@implementation ISColumnsController
+@implementation ReadViewController
 
 
 #pragma mark - life cycle
@@ -171,7 +170,7 @@
         if ([newPage isLastPage]) {
             numberOfPages = 0;
             [self scrollToCorrectPage];
-            [self reloadFirstCell];
+            //[self reloadFirstCell];
         } else {
             numberOfPages--;
         }
@@ -234,6 +233,7 @@
 - (void)receiveManagedObjectUpdate: (NSNotification *) notification {
     if (self.stopAddingJobs) return;
     NSLog(@"updated meow here: %@", notification);
+    NSLog(@"updated meow object: %@", [notification.object class]);
     NSArray *insertedData = [notification.userInfo objectForKey:@"inserted"];
     NSArray *updatedData = [notification.userInfo objectForKey:@"updated"];
     NSMutableArray *insertedAndUpdatedData = [[NSMutableArray alloc] init];
@@ -266,6 +266,10 @@
             NSLog(@"the index path: %@", path);
         }
         [self.scrollView insertItemsAtIndexPaths:indexPathsToInsert];
+        
+        if (self.startingPageNumber == 0) {
+            [self reloadFirstCell];
+        }
     }
 }
 
@@ -285,10 +289,10 @@
 
 
 - (void) loadBookmark {
-    Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", self.story.id, @(YES)]];
+    Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@", self.story.id]];
     if (bookmark.page != nil) {
-        self.startingPageNumber = bookmark.page.page_number;
-        self.currentPageNumber = [bookmark.page.page_number intValue];
+        self.startingPageNumber = bookmark.page_number;
+        self.currentPageNumber = [bookmark.page_number intValue];
         self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:[bookmark.font_size floatValue]];
     }
 }
@@ -334,7 +338,6 @@
     SlideViewCell *pageCell = (SlideViewCell *)[self.scrollView viewWithTag:[self tagForIndex:pageNumber]];
     [pageCell setPercentage:percentage];
 }
-
 
 - (void)scrollToPageNumber: (int) pageNumber {
     //if (pageNumber == self.currentPageNumber) return;
@@ -468,16 +471,27 @@
 
 
 - (void)saveBookmark {
-    Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@ AND auto_bookmark == %@", self.story.id, @(YES)]];
+    Bookmark *bookmark = [Bookmark findFirstWithPredicate:[NSPredicate predicateWithFormat:@"story_id == %@", self.story.id]];
     if (bookmark == nil) {
         bookmark = [Bookmark object];
     }
     
     bookmark.font_size = @(self.pageFont.pointSize);
     bookmark.page = [self currentPage];
+    bookmark.page_number = @(self.currentPageNumber);
     bookmark.story_id = self.story.id;
-    bookmark.auto_bookmark = @(YES);
     [[bookmark managedObjectContext] save:nil];
+    
+    
+    // post bookmark to backend
+    [[RKObjectManager sharedManager] postObject:bookmark usingBlock:^(RKObjectLoader *loader) {
+        loader.onDidFailWithError = ^(NSError *error) {
+            NSLog(@"Error posting bookmark: %@", error);
+        };
+        loader.onDidLoadObject = ^(Bookmark *bookmark) {
+            NSLog(@"Loaded object: %@", bookmark);
+        };
+    }];
 }
 
 - (void)backClicked {

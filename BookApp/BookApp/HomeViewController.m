@@ -7,7 +7,7 @@
 //
 
 #import "HomeViewController.h"
-#import "ISColumnsController.h"
+#import "ReadViewController.h"
 #import "StoryCell.h"
 #import "CaptureView.h"
 #import "Bookmark.h"
@@ -78,7 +78,7 @@
 }
 
 - (void) bookmarksPressed {
-    [RKObjectManager.sharedManager loadObjectsAtResourcePath:@"history" delegate:self];
+    [RKObjectManager.sharedManager loadObjectsAtResourcePath:@"stories?type=bookmarks" delegate:self];
     [self showLabelForButton:self.bookmarksButton];
 }
 
@@ -122,7 +122,7 @@
 
 
 - (void) objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    if ([objectLoader.resourcePath hasPrefix:@"stories"] || [objectLoader.resourcePath hasPrefix:@"history"]) {
+    if ([objectLoader.resourcePath hasPrefix:@"stories"]) {
         NSLog(@"The stories : %@", objects);
         self.stories = [NSArray arrayWithArray:objects];
         [self.storyResultGrid reloadData];
@@ -167,25 +167,15 @@
     Story *storyToSwitchTo = [self.stories objectAtIndex:indexPath.row];
     
     
-    ISColumnsController *readViewController = [[ISColumnsController alloc] init];
+    ReadViewController *readViewController = [[ReadViewController alloc] init];
     readViewController.story = storyToSwitchTo;
     
     //StoryCell *selectedCell = (StoryCell *)[self.storyResultGrid viewWithTag:[self cellTagForIndexPath:indexPath]];
     
-    
-    [self addToHistory: storyToSwitchTo.id];
     [self.navigationController pushViewController: readViewController animated:YES];
     
     NSLog(@"index path: %d", indexPath.row);
     
-}
-
-
-- (void)addToHistory: (NSNumber *) story_id {
-    History *newHistory = [[History alloc] init];
-    newHistory.story_id = story_id;
-    
-    [[RKObjectManager sharedManager]  postObject:newHistory delegate:self];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {

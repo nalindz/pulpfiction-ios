@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ISColumnsController.h"
+#import "ReadViewController.h"
 
 @class User;
 
@@ -15,6 +15,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (retain, nonatomic) UINavigationController *navigationController;
-@property (retain, nonatomic) ISColumnsController *columnsController;
+@property (retain, nonatomic) ReadViewController *columnsController;
 @property (retain, nonatomic) User *currentUser;
 @end

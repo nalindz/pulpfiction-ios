@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ISColumnsController.h"
+#import "ReadViewController.h"
 
 @interface ViewController : UIViewController <RKObjectLoaderDelegate>
 @property int pageNumber;
-@property (retain, nonatomic) ISColumnsController *columnsController;
+@property (retain, nonatomic) ReadViewController *columnsController;
 @property (nonatomic, strong) UILabel *text;
 
 @end

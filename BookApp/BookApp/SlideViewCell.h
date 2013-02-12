@@ -17,6 +17,7 @@
 - (void) fontDecrease;
 - (void) hideAllControls;
 - (void) showAllControls;
+- (void) bookmarkCurrentPage;
 - (void) scrollToPercentage: (CGFloat) percentage;
 @end
 

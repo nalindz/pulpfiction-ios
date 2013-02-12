@@ -12,6 +12,7 @@
 #import "Story+RestKit.h"
 #import "Block+RestKit.h"
 #import "User+RestKit.h"
+#import "Bookmark+RestKit.h"
 #import "History.h"
 
 static API* _sharedInstance = nil;
@@ -89,6 +90,17 @@ static API* _sharedInstance = nil;
     [Block configureMapping:blockMapping];
     [objectManager.mappingProvider registerMapping:blockMapping
                                    withRootKeyPath:@"block"];
+    
+    
+    
+    RKManagedObjectMapping* bookmarkMapping =
+    [RKManagedObjectMapping mappingForEntityWithName:@"Bookmark"
+                                inManagedObjectStore:objectManager.objectStore];
+    [Bookmark configureMapping:bookmarkMapping];
+    [objectManager.mappingProvider registerMapping:bookmarkMapping
+                                   withRootKeyPath:@"bookmark"];
+    
+    [objectManager.router routeClass:Bookmark.class toResourcePath:@"/bookmarks" forMethod:RKRequestMethodPOST];
     
     
     

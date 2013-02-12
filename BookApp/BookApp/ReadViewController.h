@@ -10,7 +10,7 @@
 - (void)didResignActive;
 @end
 
-@interface ISColumnsController : UIViewController
+@interface ReadViewController : UIViewController
 <UIScrollViewDelegate,
 SlideScrollDataSource,
 SlideViewCellDelegate,
