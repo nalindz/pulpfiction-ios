@@ -88,6 +88,10 @@
     [self fetchStoriesWithQuery:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    self.tableView.height = self.parentViewController.view.height - self.tableView.y - self.view.y;
+}
+
 - (void)search:(NSString *)searchText {
     [self fetchStoriesWithQuery:searchText];
 }

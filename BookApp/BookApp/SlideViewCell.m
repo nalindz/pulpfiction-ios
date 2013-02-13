@@ -69,11 +69,11 @@
     }
 }
 
-- (void) setPageBookmarked {
+- (void)setPageBookmarked {
     [self.bookmarkButton setImage:[UIImage imageNamed:@"bookmark-button-dark"] forState:UIControlStateNormal];
 }
 
-- (void) setPageUnbookmarked {
+- (void)setPageUnbookmarked {
     [self.bookmarkButton setImage:[UIImage imageNamed:@"bookmark-button-light"] forState:UIControlStateNormal];
 }
 
@@ -125,7 +125,7 @@
     return self;
 }
 
-- (void) clickedFontIncrease {
+- (void)clickedFontIncrease {
     //self.fontIncrease.enabled = NO;
     [self.delegate fontIncrease];
 }
@@ -143,6 +143,7 @@
     self.tag = -1;
     [self.progressBar removeFromSuperview];
     [self showControls];
+    [self setPageUnbookmarked];
 }
 
 - (Story *) story {
@@ -189,15 +190,15 @@
     }
 }
 
-- (void) setPercentage: (CGFloat) percentage {
+- (void)setPercentage: (CGFloat) percentage {
     [self.progressBar setPercentage:percentage];
 }
 
-- (void) scrollToPercentage:(CGFloat)percentage {
+- (void)scrollToPercentage:(CGFloat)percentage {
     [self.delegate scrollToPercentage:percentage];
 }
 
-- (void) toggleControls {
+- (void)toggleControls {
     if (self.progressBar.hidden) {
         [self.delegate showAllControls];
     } else {
@@ -205,7 +206,7 @@
     }
 }
 
-- (void) showControls {
+- (void)showControls {
     self.progressBar.hidden = NO;
     self.fontDecrease.hidden = NO;
     self.fontIncrease.hidden = NO;
@@ -220,7 +221,7 @@
     }];
 }
 
-- (void) hideControls {
+- (void)hideControls {
     [UIView animateWithDuration:0.15 animations:^{
         self.progressBar.alpha = 0.0;
         self.fontDecrease.alpha = 0.0;
