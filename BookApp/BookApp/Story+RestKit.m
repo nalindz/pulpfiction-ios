@@ -18,6 +18,7 @@
      @"created_at",
      @"updated_at",
      @"cover_url",
+     @"views_count",
      @"title",
      @"tags",
      nil];

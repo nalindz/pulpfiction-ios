@@ -10,6 +10,7 @@
 #import <dispatch/dispatch.h>
 #include <math.h>
 #include "PageCell.h"
+#import "StoryView.h"
 
 #define pagesToBuffer 10000
 
@@ -296,23 +297,38 @@
     }
 }
 
-- (void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [self loadBookmark];
     if ([self.startingPageNumber intValue] == 0) {
         self.startingPageNumber = nil;
     }
     [self buildAllPages];
     [self showLoadingPage];
+    [self postStoryView];
+    
 }
 
-- (void) hideAllControls {
+- (void)postStoryView {
+    StoryView *storyView = [[StoryView alloc] init];
+    storyView.story_id = self.story.id;
+    [[RKObjectManager sharedManager] postObject:storyView usingBlock:^(RKObjectLoader *loader) {
+        loader.onDidFailWithError = ^(NSError *error) {
+            NSLog(@"Error posting story view: %@", error);
+        };
+        loader.onDidLoadObject = ^(StoryView *object) {
+            NSLog(@"Posted story view object: %@", object);
+        };
+    }];
+}
+
+- (void)hideAllControls {
     self.showControls = NO;
     for (SlideViewCell *cell in self.scrollView.subviews) {
         [cell hideControls];
     }
 }
 
-- (void) showAllControls {
+- (void)showAllControls {
     self.showControls = YES;
     for (SlideViewCell *cell in self.scrollView.subviews) {
         [cell showControls];

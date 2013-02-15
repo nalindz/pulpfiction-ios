@@ -13,7 +13,7 @@
 #import "Block+RestKit.h"
 #import "User+RestKit.h"
 #import "Bookmark+RestKit.h"
-#import "History.h"
+#import "StoryView+RestKit.h"
 
 static API* _sharedInstance = nil;
 
@@ -107,11 +107,11 @@ static API* _sharedInstance = nil;
     
     
     
-    RKObjectMapping* historyMapping = [RKObjectMapping mappingForClass:[History class]];
-    [History configureMapping:historyMapping];
-    [objectManager.mappingProvider addObjectMapping:historyMapping];
-    [objectManager.mappingProvider setSerializationMapping:historyMapping.inverseMapping forClass:History.class];
-    [objectManager.router routeClass:History.class toResourcePath:@"/history" forMethod:RKRequestMethodPOST];
+    RKObjectMapping* storyViewMapping = [RKObjectMapping mappingForClass:StoryView.class];
+    [StoryView configureMapping:storyViewMapping];
+    [objectManager.mappingProvider addObjectMapping:storyViewMapping];
+    [objectManager.mappingProvider setSerializationMapping:storyViewMapping.inverseMapping forClass:StoryView.class];
+    [objectManager.router routeClass:StoryView.class toResourcePath:@"/stories/:story_id/view" forMethod:RKRequestMethodPOST];
 }
 
 
