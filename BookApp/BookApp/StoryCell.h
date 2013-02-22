@@ -10,6 +10,5 @@
 #import "Story.h"
 
 @interface StoryCell : UICollectionViewCell
-@property (nonatomic, strong) UILabel *titleLabel;
 - (void)renderWithStory: (Story *)story indexPath: (NSIndexPath *) indexPath;
 @end

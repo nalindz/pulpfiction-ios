@@ -13,6 +13,7 @@
 + (RKManagedObjectMapping *)configureMapping:(RKManagedObjectMapping *)mapping {
     [mapping mapAttributes:
      @"id",
+     @"username",
      @"first_name",
      @"last_name",
      @"email",

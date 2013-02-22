@@ -14,5 +14,5 @@
 RKObjectLoaderDelegate,
 UICollectionViewDelegate,
 Searchable>
-
+- (id)initWithFrame: (CGRect) frame;
 @end

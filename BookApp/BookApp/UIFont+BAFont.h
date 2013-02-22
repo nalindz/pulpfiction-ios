@@ -10,6 +10,7 @@
 
 @interface UIFont (BAFont)
 + (UIFont *) h5;
++ (UIFont *) h4;
 + (UIFont *) h3;
 + (UIFont *) h2;
 + (UIFont *) h1;

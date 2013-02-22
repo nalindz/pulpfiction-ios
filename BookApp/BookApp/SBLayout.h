@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface SBLayout : UICollectionViewLayout
-
+- (id)initWithBounds:(CGRect) bounds;
 @end

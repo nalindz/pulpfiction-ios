@@ -82,7 +82,7 @@ static API* _sharedInstance = nil;
     [objectManager.mappingProvider registerMapping:bookmarkMapping
                                    withRootKeyPath:@"bookmark"];
     
-    [objectManager.router routeClass:Bookmark.class toResourcePath:@"/bookmarks" forMethod:RKRequestMethodPOST];
+    [objectManager.router routeClass:Bookmark.class toResourcePath:@"/stories/:story_id/bookmarks" forMethod:RKRequestMethodPOST];
     [objectManager.router routeClass:Bookmark.class toResourcePath:@"/stories/:story_id/bookmarks" forMethod:RKRequestMethodDELETE];
     
     
@@ -101,10 +101,6 @@ static API* _sharedInstance = nil;
     [Block configureMapping:blockMapping];
     [objectManager.mappingProvider registerMapping:blockMapping
                                    withRootKeyPath:@"block"];
-    
-    
-    
-    
     
     
     RKObjectMapping* storyViewMapping = [RKObjectMapping mappingForClass:StoryView.class];

@@ -55,6 +55,7 @@
         <attribute name="first_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="last_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Bookmark" inverseName="user" inverseEntity="Bookmark" syncable="YES"/>
         <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Story" inverseName="user" inverseEntity="Story" syncable="YES"/>
     </entity>
@@ -63,6 +64,6 @@
         <element name="Bookmark" positionX="160" positionY="192" width="128" height="195"/>
         <element name="Page" positionX="160" positionY="192" width="128" height="195"/>
         <element name="Story" positionX="160" positionY="192" width="128" height="225"/>
-        <element name="User" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="User" positionX="160" positionY="192" width="128" height="165"/>
     </elements>
 </model>

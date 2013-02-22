@@ -15,13 +15,12 @@
 #import "SpringboardLayout.h"
 #import "SBLayout.h"
 #import "ProfileViewController.h"
-#import "StoryResultsGrid.h"
 #import "UIButton+ResizeWithAspectRatio.h"
 #import "UIView+BounceAnimate.h"
 
 @interface HomeViewController ()
 
-@property (nonatomic, strong) StoryResultsGrid *storyResultGrid;
+@property (nonatomic, strong) UICollectionView *storyResultGrid;
 @property (nonatomic, strong) NSArray *stories;
 @property (nonatomic, strong) UITextField *searchBox;
 @property (nonatomic, strong) UIButton *bookmarksButton;
@@ -47,29 +46,41 @@
 
 @implementation HomeViewController
 
+- (id)initWithFrame: (CGRect) frame {
+    self = [super init];
+    if (self) {
+        self.view.frame = frame;
+    }
+    return self;
+}
 
-- (void)viewDidLoad
-{
+
+- (UICollectionView*) storyResultGrid {
+    if (_storyResultGrid == nil) {
+        SBLayout *sbLayout = [[SBLayout alloc] initWithBounds:self.view.bounds];
+        _storyResultGrid = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:sbLayout];
+        _storyResultGrid.y = 0;
+        _storyResultGrid.backgroundColor = [UIColor whiteColor];
+        //_storyResultGrid.pagingEnabled = YES;
+        _storyResultGrid.height = self.view.height;
+        _storyResultGrid.dataSource = self;
+        _storyResultGrid.delegate = self;
+        
+        [_storyResultGrid registerClass:[StoryCell class] forCellWithReuseIdentifier:@"storyCell"];
+        _storyResultGrid.showsHorizontalScrollIndicator = NO;
+    }
+    return _storyResultGrid;
+}
+
+- (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    SBLayout *sbLayout = [[SBLayout alloc] init];
-    
-    self.storyResultGrid = [[StoryResultsGrid alloc] initWithFrame:self.view.bounds collectionViewLayout:sbLayout];
-    self.storyResultGrid.y = 50;
-    self.storyResultGrid.backgroundColor = [UIColor whiteColor];
-    //self.storyResultGrid.pagingEnabled = YES;
-    
-    self.storyResultGrid.height = self.view.height;
-    self.storyResultGrid.dataSource = self;
-    self.storyResultGrid.delegate = self;
+    self.stories = [NSArray array];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
     [self.view addSubview:self.storyResultGrid];
-    [self.storyResultGrid registerClass:[StoryCell class] forCellWithReuseIdentifier:@"storyCell"];
-    self.storyResultGrid.showsHorizontalScrollIndicator = NO;
-    
-    self.stories = [[NSArray alloc] init];
-    
     [self fetchStoriesWithQuery:nil];
 }
 
@@ -137,14 +148,9 @@
 }
 
 - (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    
+    NSLog(@"Error with request: %@", error);
 }
 
-# pragma mark collectionView delegate/datasource methods
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    //TODO: why can't this shit be square?
-    return CGSizeMake(256, 268);
-}
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
     return 0;

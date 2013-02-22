@@ -7,6 +7,7 @@
 //
 
 #import "UIView+LayoutUtil.h"
+#import "UIView+FrameUtil.h"
 
 @implementation UIView (LayoutUtil)
 
@@ -14,6 +15,16 @@
     CGRect frame = self.frame;
     frame.origin.y = superView.frame.size.height - frame.size.height;
     self.frame = frame;
+    [superView addSubview:self];
+}
+
+- (void)putInTopOf: (UIView *) superView withMargin: (CGFloat) margin{
+    self.y = margin;
+    [superView addSubview:self];
+}
+
+- (void)putInBottomOf: (UIView *) superView withMargin: (CGFloat) margin{
+    self.y = superView.height - self.height - margin;
     [superView addSubview:self];
 }
 
@@ -44,6 +55,10 @@
     frame.origin.y = anchorView.y;
     self.frame = frame;
     [anchorView.superview addSubview:self];
+}
+
+- (void)positionAbove: (UIView *) anchorView withMargin: (CGFloat) margin {
+    self.y = anchorView.y - self.height - margin;
 }
 
 - (void) putToRightOf: (UIView *) anchorView withMargin: (CGFloat) margin {

@@ -34,7 +34,7 @@
 
 @end
 
-#define headerHeight 150
+#define headerHeight 140
 
 @interface tabLabel : UILabel
 @end
@@ -130,8 +130,7 @@
 
 - (HomeViewController*) homeViewController {
     if (_homeViewController == nil) {
-        _homeViewController = [[HomeViewController alloc] init];
-        _homeViewController.view.frame = CGRectMake(0, headerHeight, self.view.width, self.view.height);
+        _homeViewController = [[HomeViewController alloc] initWithFrame:CGRectMake(0, headerHeight, self.view.width, self.view.height - headerHeight)];
         [self addChildViewController:_homeViewController];
     }
     return _homeViewController;

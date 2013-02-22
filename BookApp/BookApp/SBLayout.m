@@ -11,17 +11,24 @@
 
 @interface SBLayout()
 @property NSInteger cellCount;
+@property CGFloat cellWidth;
+@property CGFloat cellHeight;
 @end
 
-#define cellWidth 256
-#define cellHeight 268
 
 #define pageSize 9.0f
 
 
 @implementation SBLayout
 
-
+- (id)initWithBounds:(CGRect) bounds {
+    self = [super init];
+    if (self) {
+        self.cellHeight = bounds.size.height / 3;
+        self.cellWidth = bounds.size.width / 3;
+    }
+    return self;
+}
 
 - (CGSize)collectionViewContentSize {
     int numberOfPages = ceil([[self collectionView] numberOfItemsInSection:0] / pageSize);
@@ -49,10 +56,10 @@
     int column = indexPath.row % 3;
     
     CGRect frame = CGRectZero;
-    frame.origin.x = column * cellWidth + page * self.collectionView.frame.size.width;
-    frame.origin.y = row * cellHeight;
-    frame.size.width = cellWidth;
-    frame.size.height = cellHeight;
+    frame.origin.x = column * self.cellWidth + page * self.collectionView.frame.size.width;
+    frame.origin.y = row * self.cellHeight;
+    frame.size.width = self.cellWidth;
+    frame.size.height = self.cellHeight;
     attributes.frame = frame;
     
     
