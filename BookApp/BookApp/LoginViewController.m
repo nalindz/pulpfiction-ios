@@ -14,65 +14,66 @@
 #import "MainViewController.h"
 
 @interface LoginViewController ()
-
+@property (strong, nonatomic) UIButton *facebookLoginButton;
 @end
 
 @implementation LoginViewController
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        //initialize
+- (UIButton*) facebookLoginButton {
+    if (_facebookLoginButton == nil) {
+        _facebookLoginButton = [UIButton initWithImageNamed:@"fb_login_button"];
+        _facebookLoginButton.centerX = self.view.center.x;
+        _facebookLoginButton.y = self.view.height  * 2/3;
+        [_facebookLoginButton addTarget:self action:@selector(clickedFacebookLogin) forControlEvents:UIControlEventTouchUpInside];
     }
-    return self;
+    return _facebookLoginButton;
 }
 
-- (void)viewDidLoad
-{
+
+- (void)viewDidLoad {
     [super viewDidLoad];
-	//create fb login button
-    self.fbLoginBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [self.fbLoginBtn addTarget:self
-               action:@selector(performFbLogin)
-     forControlEvents:UIControlEventTouchDown];
-    [self.fbLoginBtn setTitle:@"Facebook Login" forState:UIControlStateNormal];
-    self.fbLoginBtn.frame = CGRectMake(80.0, 210.0, 160.0, 40.0);
-    [self.view addSubview:self.fbLoginBtn];
+    self.navigationController.navigationBarHidden = YES;
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.facebookLoginButton];
     
-    //create fake login button
-    self.fakeLoginBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [self.fakeLoginBtn addTarget:self action:@selector(performFakeLogin) forControlEvents:UIControlEventTouchDown];
-    [self.fakeLoginBtn setTitle:@"Fake Login" forState:UIControlStateNormal];
-    self.fakeLoginBtn.frame = CGRectMake(80.0, 400.0, 160.0, 40.0);
-    [self.view addSubview:self.fakeLoginBtn];
+            //[API sharedInstance].loggedInUser = user;
+    MainViewController *mainViewController = [[MainViewController alloc] init];
+    [self.navigationController pushViewController:mainViewController animated:YES];
 }
 
-- (void)performFbLogin
-{
+- (void)loginWithUser:(User *)user {
+    [RKObjectManager.sharedManager postObject:user usingBlock:^(RKObjectLoader *loader) {
+        loader.onDidFailWithError = ^(NSError * error) {
+            NSLog(@"Error logging in: %@", error);
+            
+        };
+        
+        loader.onDidLoadObject = ^(User * user) {
+            [API sharedInstance].loggedInUser = user;
+            MainViewController *mainViewController = [[MainViewController alloc] init];
+            [self.navigationController pushViewController:mainViewController animated:YES];
+        };
+    }];
+}
+
+- (void)clickedFacebookLogin {
     NSLog(@"try facebook login");
     [self clearCurrentUser];
     [self openSessionWithAllowLoginUI:YES];
-}
-
-- (void)performFakeLogin
-{
-    NSLog(@"try fake login");
-    [self clearCurrentUser];
-    [self fetchUserWithUserId:@"1"];
 }
 
 - (void)fbLoginSuccess {
     NSLog(@"login success");
     if (FBSession.activeSession.isOpen) {
         [[FBRequest requestForMe] startWithCompletionHandler:
-         ^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
+         ^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *fb_user, NSError *error) {
              if (!error) {
-                 NSString *firstName = [user objectForKey:@"first_name"];
-                 NSString *lastName = [user objectForKey:@"last_name"];
-                 NSString *facebookId = [user objectForKey:@"id"];
-                 NSString *email = [user objectForKey:@"email"];
-                 [self fetchUserWithFacebookId:facebookId andFirstName:firstName andLastName:lastName andEmail: email];
+                 User *user = [User object];
+                 user.first_name = [fb_user objectForKey:@"first_name"];
+                 user.last_name= [fb_user objectForKey:@"last_name"];
+                 user.facebook_id = [fb_user objectForKey:@"id"];
+                 user.email = [fb_user objectForKey:@"email"];
+                 [self loginWithUser:user];
              }
          }];
     }
@@ -81,8 +82,6 @@
 - (void)loginSuccess: (User*) user {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     appDelegate.currentUser = user;
-    MainViewController *mainViewController = [[MainViewController alloc] init];
-    [self.navigationController pushViewController:mainViewController animated:YES];
 }
 
 - (void)fbLoginFailed {

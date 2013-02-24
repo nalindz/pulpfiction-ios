@@ -14,10 +14,13 @@
 #import "User+RestKit.h"
 #import "Bookmark+RestKit.h"
 #import "StoryView+RestKit.h"
+#import <RestKit/RKErrorMessage.h>
+
 
 static API* _sharedInstance = nil;
 
 @interface API ()
+@property (nonatomic, strong) NSNumber *loggedInUserId;
 @property (strong, atomic) RKManagedObjectStore * objectStore;
 - (void)createErrorMapping;
 - (void)setupObjectMapping;
@@ -35,6 +38,15 @@ static API* _sharedInstance = nil;
     return _sharedInstance;
 }
 
+
+- (User *)loggedInUser {
+    return [User findFirstByAttribute:@"id" withValue:self.loggedInUserId];
+}
+
+- (void)setLoggedInUser:(User *)loggedInUser {
+    self.loggedInUserId = loggedInUser.id;
+}
+
 - (API*)init {
     self = [super init];
     [self initRestKit];
@@ -42,7 +54,6 @@ static API* _sharedInstance = nil;
 }
 
 - (void)initRestKit {
-    
     Environment* tierConfig = [Environment sharedInstance];
     NSString* baseUrl = [tierConfig getConfigOption:@"apiURL"];
     NSString* objectStoreFilename = [tierConfig getConfigOption:@"ObjectStoreFilename"];
@@ -68,11 +79,15 @@ static API* _sharedInstance = nil;
     objectManager.client.requestQueue.showsNetworkActivityIndicatorWhenBusy = YES;
     [self createErrorMapping];
     
-    RKManagedObjectMapping* userMapping = [RKManagedObjectMapping mappingForEntityWithName:@"User"
-                                                                       inManagedObjectStore:objectManager.objectStore];
+    
+    RKManagedObjectMapping* userMapping =
+    [RKManagedObjectMapping mappingForEntityWithName:@"User"
+                                inManagedObjectStore:objectManager.objectStore];
     [User configureMapping:userMapping];
     [objectManager.mappingProvider registerMapping:userMapping
                                    withRootKeyPath:@"user"];
+    
+    [objectManager.router routeClass:User.class toResourcePath:@"/login" forMethod:RKRequestMethodPOST];
     
     
     RKManagedObjectMapping* bookmarkMapping =
@@ -110,7 +125,6 @@ static API* _sharedInstance = nil;
     [objectManager.router routeClass:StoryView.class toResourcePath:@"/stories/:story_id/view" forMethod:RKRequestMethodPOST];
 }
 
-
 - (void)setupObjectMapping {
 }
 
@@ -118,7 +132,7 @@ static API* _sharedInstance = nil;
 - (void)createErrorMapping {
     RKObjectMapping *errorMapping = [RKObjectMapping mappingForClass:[RKErrorMessage class]];
     [errorMapping mapKeyPath:@"description" toAttribute:@"errorMessage"];
-
+    
     [RKObjectManager.sharedManager.mappingProvider setErrorMapping:errorMapping];
 }
 

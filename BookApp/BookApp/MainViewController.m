@@ -42,7 +42,7 @@
 - (id)init {
     self = [self initWithFrame:CGRectZero];
     if (self) {
-        self.font = [UIFont h5];
+        self.font = [UIFont h6];
         self.textColor = [UIColor darkGrayColor];
         self.hidden = YES;
         self.backgroundColor = [UIColor clearColor];
@@ -187,21 +187,22 @@
     
 }
 
-
-
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     [self.searchBox putInRightEdgeOf:self.view withMargin:20];
     
+    
     [self setupTabLabels];
-    [self homePressed];
     
     [self.searchBox addTarget:self
                   action:@selector(textFieldFinished:)
                   forControlEvents:UIControlEventEditingDidEndOnExit];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self homePressed];
 }
 
 - (void) setupTabLabels {

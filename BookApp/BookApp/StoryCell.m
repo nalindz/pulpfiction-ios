@@ -16,9 +16,32 @@
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *tagsLabel;
 @property (nonatomic, strong) UILabel *usernameLabel;
+@property (nonatomic, strong) UIImageView *viewCountImageView;
+@property (nonatomic, strong) UILabel *viewCountLabel;
+@property (nonatomic, strong) UIImageView *bookmarkCountImageView;
+@property (nonatomic, strong) UILabel *bookmarkCountLabel;
 @end
 
 @implementation StoryCell
+
+- (UILabel*) viewCountLabel {
+    if (_viewCountLabel == nil) {
+        _viewCountLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _viewCountLabel.numberOfLines = 0;
+        _viewCountLabel.backgroundColor = [UIColor clearColor];
+        _viewCountLabel.font = [UIFont h5];
+        _viewCountLabel.textColor = [UIColor whiteColor];
+    }
+    return _viewCountLabel;
+}
+
+- (UIImageView*) viewCountImageView {
+    if (_viewCountImageView == nil) {
+        _viewCountImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"view_count"]];
+        _viewCountImageView.x = 10;
+    }
+    return _viewCountImageView;
+}
 
 - (UILabel*) titleLabel {
     if (_titleLabel == nil) {
@@ -40,7 +63,7 @@
         _tagsLabel.width = self.centeredView.width - 15;
         _tagsLabel.backgroundColor = [UIColor clearColor];
         _tagsLabel.textColor = [UIColor whiteColor];
-        _tagsLabel.font = [UIFont h5];
+        _tagsLabel.font = [UIFont h6];
         _tagsLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         _tagsLabel.numberOfLines = 0;
         _tagsLabel.x = 10;
@@ -62,10 +85,7 @@
     return _usernameLabel;
 }
 
-
-
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
@@ -94,6 +114,11 @@
     
     [self.usernameLabel setText:[NSString stringWithFormat:@"@%@", story.user.username] fixedWidth:YES];
     [self.usernameLabel positionAbove:self.tagsLabel withMargin:1];
+    [self.blackOverlay addSubview:self.viewCountImageView];
+    [self.viewCountImageView putBelow:self.titleLabel withMargin:3];
+    [self.viewCountLabel autoSizeWithText:[NSString stringWithFormat:@"%@", story.views_count]];
+    [self.viewCountLabel putToRightOf:self.viewCountImageView withMargin:3];
+    self.viewCountLabel.y = self.viewCountLabel.y - 2;
 }
 
 /*

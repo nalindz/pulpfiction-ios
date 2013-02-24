@@ -9,9 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
 
+
 @interface LoginViewController : UIViewController <RKObjectLoaderDelegate>
 
-@property (strong, nonatomic) UIButton *fbLoginBtn;
-@property (strong, nonatomic) UIButton *fakeLoginBtn;
 
 @end

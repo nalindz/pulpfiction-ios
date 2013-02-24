@@ -82,6 +82,8 @@
 		F5C3B1F816C85C4700769E77 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C3B1F716C85B9000769E77 /* MainViewController.m */; };
 		F5C3B20D16C9F84000769E77 /* Bookmark+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C3B20C16C9F84000769E77 /* Bookmark+RestKit.m */; };
 		F5E56593164EEA630044B956 /* NSString+FitInLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E56592164EEA630044B956 /* NSString+FitInLabel.m */; };
+		F5E942DC16D9CC220097E10A /* fb_login_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E942DB16D9CC220097E10A /* fb_login_button@2x.png */; };
+		F5E942EA16D9D5140097E10A /* view_count@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E942E916D9D5140097E10A /* view_count@2x.png */; };
 		F5F1433C16BF3E0100C8B268 /* UIFont+BAFont.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F1433B16BF3E0100C8B268 /* UIFont+BAFont.m */; };
 		F5F4E4C316CA3CDA00A3F395 /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F4E4C216CA3CDA00A3F395 /* Page.m */; };
 		F5F4E4CC16CA3CDB00A3F395 /* Block.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F4E4CB16CA3CDB00A3F395 /* Block.m */; };
@@ -275,6 +277,8 @@
 		F5C3B20C16C9F84000769E77 /* Bookmark+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Bookmark+RestKit.m"; sourceTree = "<group>"; };
 		F5E56591164EEA630044B956 /* NSString+FitInLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FitInLabel.h"; sourceTree = "<group>"; };
 		F5E56592164EEA630044B956 /* NSString+FitInLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FitInLabel.m"; sourceTree = "<group>"; };
+		F5E942DB16D9CC220097E10A /* fb_login_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fb_login_button@2x.png"; sourceTree = "<group>"; };
+		F5E942E916D9D5140097E10A /* view_count@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "view_count@2x.png"; sourceTree = "<group>"; };
 		F5F1433A16BF3E0100C8B268 /* UIFont+BAFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+BAFont.h"; sourceTree = "<group>"; };
 		F5F1433B16BF3E0100C8B268 /* UIFont+BAFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+BAFont.m"; sourceTree = "<group>"; };
 		F5F4E4C116CA3CDA00A3F395 /* Page.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Page.h; sourceTree = "<group>"; };
@@ -515,6 +519,8 @@
 		F586F04B1659D9CE00488742 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F5E942DB16D9CC220097E10A /* fb_login_button@2x.png */,
+				F5E942E916D9D5140097E10A /* view_count@2x.png */,
 				F5F4E4D016CB52A700A3F395 /* bookmark-button-dark@2x.png */,
 				F5F4E4D116CB52A700A3F395 /* bookmark-button-light@2x.png */,
 				F507444E16C73595008C8CAE /* bookmark-button@2x.png */,
@@ -745,6 +751,8 @@
 				F507445516C7362D008C8CAE /* bookmark-button2@2x.png in Resources */,
 				F5F4E4D216CB52A700A3F395 /* bookmark-button-dark@2x.png in Resources */,
 				F5F4E4D316CB52A700A3F395 /* bookmark-button-light@2x.png in Resources */,
+				F5E942DC16D9CC220097E10A /* fb_login_button@2x.png in Resources */,
+				F5E942EA16D9D5140097E10A /* view_count@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
