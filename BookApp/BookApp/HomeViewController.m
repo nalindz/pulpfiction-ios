@@ -19,9 +19,10 @@
 #import "UIView+BounceAnimate.h"
 
 @interface HomeViewController ()
-
+#define pageSize 9
 @property (nonatomic, strong) UICollectionView *storyResultGrid;
-@property (nonatomic, strong) NSArray *stories;
+@property (nonatomic, strong) UIView *bookmarksBlankSlateView;
+@property (nonatomic, strong) NSMutableArray *stories;
 @property (nonatomic, strong) UITextField *searchBox;
 @property (nonatomic, strong) UIButton *bookmarksButton;
 @property (nonatomic, strong) UIButton *homeButton;
@@ -33,18 +34,39 @@
 @property (nonatomic, weak) UILabel *visibleButtonLabel;
 
 
+@property (nonatomic) int currentPageNumber;
+@property (atomic) BOOL isLoadingPage;
+@property (atomic) BOOL canStartPaginateRequest;
+
+@property (atomic) BOOL isFeedView;
+
+
+// animation stuff
 @property int pageNumberToScrollTo;
 @property NSString *originalDirection;
-
 @property int lastPage;
 @property int storiesOnLastPage;
-
 @property int startScrollOffset;
+
 
 @end
 
 
 @implementation HomeViewController
+
+- (UIView*) bookmarksBlankSlateView {
+    if (_bookmarksBlankSlateView == nil) {
+        _bookmarksBlankSlateView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bookmarks_blank_slate"]];
+    }
+    return _bookmarksBlankSlateView;
+}
+
+- (NSMutableArray*) stories {
+    if (_stories == nil) {
+        _stories = [NSMutableArray array];
+    }
+    return _stories;
+}
 
 - (id)initWithFrame: (CGRect) frame {
     self = [super init];
@@ -53,7 +75,6 @@
     }
     return self;
 }
-
 
 - (UICollectionView*) storyResultGrid {
     if (_storyResultGrid == nil) {
@@ -65,6 +86,7 @@
         _storyResultGrid.height = self.view.height;
         _storyResultGrid.dataSource = self;
         _storyResultGrid.delegate = self;
+        _storyResultGrid.bounces = YES;
         
         [_storyResultGrid registerClass:[StoryCell class] forCellWithReuseIdentifier:@"storyCell"];
         _storyResultGrid.showsHorizontalScrollIndicator = NO;
@@ -76,29 +98,39 @@
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
-    self.stories = [NSArray array];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.view addSubview:self.storyResultGrid];
-    [self fetchStoriesWithQuery:nil];
+    [self fetchFeedPage:0 withQuery:nil refresh:YES];
 }
 
-- (void) search:(NSString *)searchText {
-    [self fetchStoriesWithQuery:searchText];
+- (void)search:(NSString *)searchText {
+    [self fetchFeedPage:0 withQuery:searchText refresh:YES];
 }
 
-- (void) bookmarksPressed {
-    [RKObjectManager.sharedManager loadObjectsAtResourcePath:@"stories?type=bookmarks" delegate:self];
+- (void)bookmarksPressed {
+    self.isFeedView = NO;
+    [RKObjectManager.sharedManager loadObjectsAtResourcePath:@"stories?type=bookmarks" usingBlock:^(RKObjectLoader *loader) {
+        loader.onDidLoadObjects = ^(NSArray *objects) {
+            [self receivePageofStories:objects ofType:@"bookmarks" refresh:YES];
+            [self scrollToFirstPageAnimated:NO];
+        };
+        loader.onDidFailWithError = ^(NSError * error) {
+            NSLog(@"Error loading bookmarks: %@", error);
+        };
+    }];
     [self showLabelForButton:self.bookmarksButton];
 }
 
-- (void) homePressed {
-    [self fetchStoriesWithQuery:nil];
+- (void)homePressed {
+    self.isFeedView = YES;
+    self.canStartPaginateRequest = YES;
+    [self fetchFeedPage:0 withQuery:nil refresh:YES]; // TODO: should use search text?
     [self showLabelForButton:self.homeButton];
 }
 
-- (void) showLabelForButton: (UIButton *)button {
+- (void)showLabelForButton: (UIButton *)button {
     UILabel *animatingLabel;
     
     if (button == self.bookmarksButton) {
@@ -124,20 +156,73 @@
 }
 
 
-- (void) fetchStoriesWithQuery: (NSString *) query {
-    NSString *resourcePath = @"stories?type=feed";
-    if (query)
-        resourcePath = [NSString stringWithFormat:@"%@&query=%@", resourcePath, query];
-    [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath delegate:self];
+- (int)currentPageNumber {
+    return self.storyResultGrid.contentOffset.x / self.storyResultGrid.width;
 }
 
 
-- (void) objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    if ([objectLoader.resourcePath hasPrefix:@"stories"]) {
-        NSLog(@"The stories : %@", objects);
-        self.stories = [NSArray arrayWithArray:objects];
-        [self.storyResultGrid reloadData];
+- (void)fetchFeedPage: (int) pageNumber withQuery: (NSString *) query refresh: (BOOL) refresh{
+    if (!self.canStartPaginateRequest) return;
+    if (self.isLoadingPage) return;
+    self.isLoadingPage = YES;
+    self.canStartPaginateRequest = NO;
+    NSString *resourcePath = [NSString stringWithFormat:@"stories?type=feed&offset=%d&limit=%d", pageSize * pageNumber, pageSize * 2];
+    if (query)
+        resourcePath = [NSString stringWithFormat:@"%@&query=%@", resourcePath, query];
+    [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath usingBlock:^(RKObjectLoader *loader) {
+        loader.onDidLoadObjects = ^(NSArray *objects) {
+            [self receivePageofStories:objects ofType:@"feed" refresh:refresh];
+            self.isLoadingPage = NO;
+        };
+        loader.onDidFailWithError = ^(NSError * error) {
+            NSLog(@"Error loading feed: %@", error);
+            self.isLoadingPage = NO;
+        };
+    }];
+}
+
+- (void)showFeedBlankSlate {
+}
+
+- (void)hideFeedBlankSlate {
+}
+
+- (void)hideAllBlankSlates {
+    [self hideBookmarksBlankSlate];
+    [self hideFeedBlankSlate];
+    self.storyResultGrid.hidden = NO;
+}
+
+
+- (void)showBookmarksBlankSlate {
+    self.storyResultGrid.hidden = YES;
+    [self.view addSubview:self.bookmarksBlankSlateView];
+    self.bookmarksBlankSlateView.center = self.storyResultGrid.center;
+}
+
+- (void)hideBookmarksBlankSlate {
+    [self.bookmarksBlankSlateView removeFromSuperview];
+}
+
+
+- (void)receivePageofStories: (NSArray *)stories ofType: (NSString *) type refresh: (BOOL) refresh {
+    if (refresh) [self.stories removeAllObjects];
+    [self.stories addObjectsFromArray:stories];
+    [self.storyResultGrid reloadData];
+    if (self.stories.count == 0) {
+        if ([type isEqualToString:@"feed"]) {
+            [self showFeedBlankSlate];
+            [self hideBookmarksBlankSlate];
+        } else if ([type isEqualToString:@"bookmarks"]) {
+            [self showBookmarksBlankSlate];
+            [self hideFeedBlankSlate];
+        }
+    } else {
+        [self hideAllBlankSlates];
     }
+    
+    
+    NSLog(@"content size width :%f", self.storyResultGrid.contentSize.width);
     
     self.lastPage = self.stories.count / 9;
     self.storiesOnLastPage = self.stories.count % 9;
@@ -146,6 +231,7 @@
         self.storiesOnLastPage = 9;
     }
 }
+
 
 - (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     NSLog(@"Error with request: %@", error);
@@ -175,9 +261,6 @@
     
     ReadViewController *readViewController = [[ReadViewController alloc] init];
     readViewController.story = storyToSwitchTo;
-    
-    //StoryCell *selectedCell = (StoryCell *)[self.storyResultGrid viewWithTag:[self cellTagForIndexPath:indexPath]];
-    
     [self.navigationController pushViewController: readViewController animated:YES];
     
     NSLog(@"index path: %d", indexPath.row);
@@ -195,17 +278,12 @@
     return cell;
 }
 
-- (NSInteger)cellTagForIndexPath: (NSIndexPath *) indexPath {
-    return 1000 + indexPath.row;
-}
-
-
 
 # pragma mark scroll view delegate methods
 
-
 - (void) scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     self.startScrollOffset = scrollView.contentOffset.x;
+    self.canStartPaginateRequest = YES;
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
@@ -231,7 +309,6 @@
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    
     if (decelerate) return;
     //NSLog(@"page to scroll to :%d", self.pageNumberToScrollTo);
     int currentPageNumberInt = self.startScrollOffset / scrollView.width;
@@ -297,7 +374,7 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (self.pageNumberToScrollTo == -1) return;
+    //if (self.pageNumberToScrollTo == -1) return;
     
     NSMutableArray *visibleViews = [[NSMutableArray alloc] init];
     for (UIView *view in scrollView.subviews) {
@@ -311,6 +388,21 @@
         [self performAnimationsForScrollView:scrollView scrollingFinished:YES];
         self.pageNumberToScrollTo = -1;
     }
+    
+    //NSLog(@"content size: %f", scrollView.contentSize.width);
+    //NSLog(@"content offset: %f", scrollView.contentOffset.x);
+    
+    if (((scrollView.contentOffset.x + scrollView.width) > scrollView.contentSize.width) && self.isFeedView) {
+        [self fetchNextPage];
+    }
+}
+
+- (void)scrollToFirstPageAnimated: (BOOL) animated {
+    [self.storyResultGrid scrollRectToVisible:CGRectMake(0, 0, self.storyResultGrid.width, self.storyResultGrid.height) animated:animated];
+}
+
+- (void)fetchNextPage {
+    [self fetchFeedPage:(self.currentPageNumber + 1) withQuery:nil refresh:NO];
 }
 
 - (void)animateForward: (NSArray *) visibleViews {
