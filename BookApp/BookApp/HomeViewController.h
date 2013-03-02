@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MainViewController.h"
 #import "Searchable.h"
 
 @interface HomeViewController : UIViewController
 <UICollectionViewDataSource,
 RKObjectLoaderDelegate,
 UICollectionViewDelegate,
-Searchable>
+Searchable,
+MainViewControllerDelegate>
 - (id)initWithFrame: (CGRect) frame;
 @end

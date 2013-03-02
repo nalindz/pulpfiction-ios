@@ -11,11 +11,13 @@
 #import "User.h"
 #import "ProfileHeaderView.h"
 #import "ProfileStoryCell.h"
+#import "UploadStoryTutorialView.h"
 
 @interface ProfileViewController ()
 @property (nonatomic, strong) ProfileHeaderView *profileHeaderView;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *tableData;
+@property (nonatomic, strong) UploadStoryTutorialView *uploadStoryTutorialView;
 @end
 
 #define profileHeaderHeight 50
@@ -23,6 +25,13 @@
 
 - (void) setFirstResponder: (id) firstResponder {
     _firstResponder = firstResponder;
+}
+
+- (UploadStoryTutorialView*) uploadStoryTutorialView {
+    if (_uploadStoryTutorialView == nil) {
+        _uploadStoryTutorialView = [[UploadStoryTutorialView alloc] initWithFrame:self.view.bounds];
+    }
+    return _uploadStoryTutorialView;
 }
 
 - (ProfileHeaderView *) profileHeaderView {
@@ -48,7 +57,6 @@
 {
     self = [super init];
     if (self) {
-        //[self.view addSubview:self.profileView];
         self.tableData = [NSMutableArray array];
         [self.view addSubview:self.profileHeaderView];
         [self.tableView putBelow:self.profileHeaderView withMargin:0];
@@ -59,7 +67,6 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //Story *story = [self.tableData objectAtIndex:indexPath.row];
     return [ProfileStoryCell cellHeight];
 }
 
@@ -92,6 +99,10 @@
     self.tableView.height = self.parentViewController.view.height - self.tableView.y - self.view.y;
 }
 
+- (void)tabButtonPressed {
+    [self fetchStoriesWithQuery:nil];
+}
+
 - (void)search:(NSString *)searchText {
     [self fetchStoriesWithQuery:searchText];
 }
@@ -103,23 +114,36 @@
     [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath delegate:self];
 }
 
-- (void)logoutPressed
-{
+- (void)logoutPressed {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Not done yet" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     [alertView show];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)showBlankSlate {
+    self.tableView.hidden = YES;
+    [self.view addSubview:self.uploadStoryTutorialView];
 }
 
-- (void) objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+- (void)hideBlankSlate {
+    self.tableView.hidden = NO;
+    [self.uploadStoryTutorialView removeFromSuperview];
+}
+
+- (void)receivePage: (NSArray *)objects {
     NSLog(@"Received stories: %@", objects);
     [self.tableData removeAllObjects];
     [self.tableData addObjectsFromArray:objects];
+    if (self.tableData.count == 0) {
+        return [self showBlankSlate];
+    } else {
+        [self hideBlankSlate];
+    }
     [self.tableView reloadData];
+}
+
+
+- (void) objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+    [self receivePage:objects];
 }
 
 - (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {

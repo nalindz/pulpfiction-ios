@@ -17,6 +17,7 @@
 #import "UIView+LayoutUtil.h"
 #import "UIView+FrameUtil.h"
 #import "UILabel+AutoSize.h"
+#import "UILabel+BALabelStyle.h"
 #import "UIButton+AutoSize.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "NSString+RemoveExtraWhiteSpace.h"

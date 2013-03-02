@@ -17,7 +17,7 @@
 
 @property (nonatomic, strong) HomeViewController* homeViewController;
 @property (nonatomic, strong) ProfileViewController* profileViewController;
-@property (nonatomic, weak)  UIViewController <Searchable> *activeViewController;
+@property (nonatomic, weak)  UIViewController <Searchable, MainViewControllerDelegate> *activeViewController;
 
 @property (nonatomic, strong) UITextField *searchBox;
 @property (nonatomic, strong) UIButton *bookmarksButton;
@@ -121,7 +121,7 @@
 }
 
 
-- (void)setActiveViewController:(UIViewController <Searchable>*)activeViewController {
+- (void)setActiveViewController:(UIViewController <Searchable, MainViewControllerDelegate>*)activeViewController {
     if (activeViewController == _activeViewController) return;
     [_activeViewController.view removeFromSuperview];
     [self.view addSubview:activeViewController.view];
@@ -183,8 +183,8 @@
 - (void)profilePressed {
     [self showLabelForButton:self.profileButton];
     self.activeViewController = self.profileViewController;
-    //[self.activeViewController performSelector:@selector(bookmarksPressed)];
-    
+    [self.activeViewController viewWillAppear:NO];
+    [self.activeViewController tabButtonPressed];
 }
 
 - (void)viewDidLoad {

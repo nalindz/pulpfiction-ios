@@ -12,6 +12,7 @@
 #import "User.h"
 #import "AppDelegate.h"
 #import "MainViewController.h"
+#import "SelectUsernameViewController.h"
 
 @interface LoginViewController ()
 @property (strong, nonatomic) UIButton *facebookLoginButton;
@@ -36,7 +37,13 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.facebookLoginButton];
     
-            //[API sharedInstance].loggedInUser = user;
+    //[API sharedInstance].loggedInUser = user;
+    
+    /*
+    SelectUsernameViewController *selectUsernameViewController = [[SelectUsernameViewController alloc] init];
+    [self.navigationController pushViewController:selectUsernameViewController animated:YES];
+     */
+    
     MainViewController *mainViewController = [[MainViewController alloc] init];
     [self.navigationController pushViewController:mainViewController animated:YES];
 }
@@ -50,8 +57,14 @@
         
         loader.onDidLoadObject = ^(User * user) {
             [API sharedInstance].loggedInUser = user;
+            
+            SelectUsernameViewController *selectUsernameViewController = [[SelectUsernameViewController alloc] init];
+            [self.navigationController pushViewController:selectUsernameViewController animated:YES];
+            
+            /*
             MainViewController *mainViewController = [[MainViewController alloc] init];
             [self.navigationController pushViewController:mainViewController animated:YES];
+             */
         };
     }];
 }
@@ -219,13 +232,6 @@
         default:
             return @"[Unknown]";
     }
-}
-
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

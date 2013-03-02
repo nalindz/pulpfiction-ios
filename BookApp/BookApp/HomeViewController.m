@@ -23,16 +23,8 @@
 @property (nonatomic, strong) UICollectionView *storyResultGrid;
 @property (nonatomic, strong) UIView *bookmarksBlankSlateView;
 @property (nonatomic, strong) NSMutableArray *stories;
-@property (nonatomic, strong) UITextField *searchBox;
-@property (nonatomic, strong) UIButton *bookmarksButton;
-@property (nonatomic, strong) UIButton *homeButton;
-@property (nonatomic, strong) UILabel *homeLabel;
-@property (nonatomic, strong) UILabel *bookmarksLabel;
-@property (nonatomic, strong) UILabel *profileLabel;
-@property (nonatomic, strong) UIButton *profileButton;
 
 @property (nonatomic, weak) UILabel *visibleButtonLabel;
-
 
 @property (nonatomic) int currentPageNumber;
 @property (atomic) BOOL isLoadingPage;
@@ -120,46 +112,22 @@
             NSLog(@"Error loading bookmarks: %@", error);
         };
     }];
-    [self showLabelForButton:self.bookmarksButton];
 }
 
 - (void)homePressed {
     self.isFeedView = YES;
     self.canStartPaginateRequest = YES;
     [self fetchFeedPage:0 withQuery:nil refresh:YES]; // TODO: should use search text?
-    [self showLabelForButton:self.homeButton];
 }
-
-- (void)showLabelForButton: (UIButton *)button {
-    UILabel *animatingLabel;
-    
-    if (button == self.bookmarksButton) {
-        animatingLabel = self.bookmarksLabel;
-    } else if (button == self.homeButton) {
-        animatingLabel = self.homeLabel;
-    } else if (button == self.profileButton) {
-        animatingLabel = self.profileLabel;
-    }
-    
-    if (animatingLabel == self.visibleButtonLabel) return;
-    
-    [self.visibleButtonLabel hideAnimateWithDuration:0.1 offset:20];
-    [animatingLabel bounceAnimateWithDuration:0.1 offset:10 bounces:1];
-    self.visibleButtonLabel = animatingLabel;
-    
-}
-
 
 - (void) profilePressed {
     ProfileViewController *profileVC = [[ProfileViewController alloc] init];
     [self.navigationController pushViewController:profileVC animated: YES];
 }
 
-
 - (int)currentPageNumber {
     return self.storyResultGrid.contentOffset.x / self.storyResultGrid.width;
 }
-
 
 - (void)fetchFeedPage: (int) pageNumber withQuery: (NSString *) query refresh: (BOOL) refresh{
     if (!self.canStartPaginateRequest) return;

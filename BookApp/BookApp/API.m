@@ -38,7 +38,6 @@ static API* _sharedInstance = nil;
     return _sharedInstance;
 }
 
-
 - (User *)loggedInUser {
     return [User findFirstByAttribute:@"id" withValue:self.loggedInUserId];
 }
@@ -86,7 +85,6 @@ static API* _sharedInstance = nil;
     [User configureMapping:userMapping];
     [objectManager.mappingProvider registerMapping:userMapping
                                    withRootKeyPath:@"user"];
-    
     [objectManager.router routeClass:User.class toResourcePath:@"/login" forMethod:RKRequestMethodPOST];
     
     

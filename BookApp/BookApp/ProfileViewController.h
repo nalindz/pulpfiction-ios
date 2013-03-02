@@ -8,13 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "Searchable.h"
+#import "MainViewController.h"
 
 
 @interface ProfileViewController : UIViewController
 <UITableViewDataSource,
 UITableViewDelegate,
 RKObjectLoaderDelegate,
-Searchable>
+Searchable,
+MainViewControllerDelegate>
 
 @property (nonatomic, weak) id firstResponder;
 
