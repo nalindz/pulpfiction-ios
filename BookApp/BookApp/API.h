@@ -10,7 +10,9 @@
 #import <RestKit/RestKit.h>
 #import "User.h"
 
-@interface API : NSObject <RKManagedObjectStoreDelegate>
+@interface API : NSObject
 + (API*) sharedInstance;
 @property (nonatomic, strong) User *loggedInUser;
+@property (nonatomic, strong) NSMutableDictionary *mappings;
+- (void)initRestKit;
 @end

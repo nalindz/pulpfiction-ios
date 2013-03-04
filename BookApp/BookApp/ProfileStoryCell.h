@@ -12,8 +12,7 @@
 
 
 @interface ProfileStoryCell : UITableViewCell
-<UITextViewDelegate,
-RKObjectLoaderDelegate>
+<UITextViewDelegate>
 @property (nonatomic, weak) ProfileViewController *delegate;
 @property (nonatomic, strong) Story *story;
 + (CGFloat)cellHeight;

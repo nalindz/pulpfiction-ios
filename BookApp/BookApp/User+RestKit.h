@@ -9,6 +9,5 @@
 #import "BAProtocols.h"
 #import "User.h"
 
-@interface User(RestKit) <HasRKManagedObjectMapping>
-
+@interface User(RestKit) <HasRestKitMapping>
 @end

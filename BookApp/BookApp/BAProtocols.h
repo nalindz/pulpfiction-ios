@@ -13,8 +13,10 @@
 
 @end
 
-@protocol HasRKManagedObjectMapping <HasRKObjectMapping>
+@protocol HasRKEntityMapping
++ (RKEntityMapping*) configureMapping:(RKEntityMapping*)mapping;
+@end
 
-+ (RKManagedObjectMapping*) configureMapping:(RKManagedObjectMapping*)mapping;
-
+@protocol HasRestKitMapping
++ (void) configureRestKitMapping;
 @end

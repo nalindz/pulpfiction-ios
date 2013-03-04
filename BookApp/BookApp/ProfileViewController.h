@@ -14,7 +14,6 @@
 @interface ProfileViewController : UIViewController
 <UITableViewDataSource,
 UITableViewDelegate,
-RKObjectLoaderDelegate,
 Searchable,
 MainViewControllerDelegate>
 

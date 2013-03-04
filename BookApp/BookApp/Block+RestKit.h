@@ -9,6 +9,6 @@
 #import "BAProtocols.h"
 #import "Block.h"
 
-@interface Block(RestKit) <HasRKManagedObjectMapping>
+@interface Block(RestKit) <HasRestKitMapping>
 + (Block *) blockWithStoryId:(NSNumber *) storyId blockNumber:(NSNumber *)blockNumber;
 @end

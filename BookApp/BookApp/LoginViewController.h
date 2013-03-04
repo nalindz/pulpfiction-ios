@@ -10,7 +10,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 
 
-@interface LoginViewController : UIViewController <RKObjectLoaderDelegate>
+@interface LoginViewController : UIViewController
 
 
 @end

@@ -9,6 +9,6 @@
 #import "Bookmark.h"
 #import "BAProtocols.h"
 
-@interface Bookmark (RestKit) <HasRKManagedObjectMapping>
+@interface Bookmark (RestKit) <HasRestKitMapping>
 
 @end

@@ -21,12 +21,7 @@ static API* _sharedInstance = nil;
 
 @interface API ()
 @property (nonatomic, strong) NSNumber *loggedInUserId;
-@property (strong, atomic) RKManagedObjectStore * objectStore;
-- (void)createErrorMapping;
-- (void)setupObjectMapping;
-- (void)initRestKit;
 @end
-
 @implementation API
 
 + (API*)sharedInstance {
@@ -36,6 +31,13 @@ static API* _sharedInstance = nil;
         }
     } 
     return _sharedInstance;
+}
+
+- (NSMutableDictionary*) mappings {
+    if (_mappings == nil) {
+        _mappings = [NSMutableDictionary dictionary];
+    }
+    return _mappings;
 }
 
 - (User *)loggedInUser {
@@ -48,90 +50,61 @@ static API* _sharedInstance = nil;
 
 - (API*)init {
     self = [super init];
-    [self initRestKit];
     return self;
 }
 
 - (void)initRestKit {
     Environment* tierConfig = [Environment sharedInstance];
     NSString* baseUrl = [tierConfig getConfigOption:@"apiURL"];
-    NSString* objectStoreFilename = [tierConfig getConfigOption:@"ObjectStoreFilename"];
-    
-    NSLog(@"fetch object store file name : %@", objectStoreFilename);
 #if DEBUG
     RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
     RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
 #endif
     
     NSLog(@"base url: %@", [NSURL URLWithString:baseUrl]);
+    RKObjectManager* objectManager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:baseUrl]];
+    objectManager.requestSerializationMIMEType = RKMIMETypeJSON;
     
-    RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:baseUrl]];
-    objectManager.serializationMIMEType = RKMIMETypeJSON;
     
-    [objectManager setClient:[RKClient sharedClient]];
+    NSURL *modelURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"BookApp-Entities" ofType:@"momd"]];
+    NSManagedObjectModel *managedObjectModel = [[[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL] mutableCopy];
+    RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
     
-    objectManager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:objectStoreFilename usingSeedDatabaseName:nil managedObjectModel:[self managedObjectModel] delegate:self];
+    NSError *error;
+    BOOL success = RKEnsureDirectoryExistsAtPath(RKApplicationDataDirectory(), &error);
+    if (! success) {
+        RKLogError(@"Failed to create Application Data Directory at path '%@': %@", RKApplicationDataDirectory(), error);
+    }
+    NSString *path = [RKApplicationDataDirectory() stringByAppendingPathComponent:@"Store.sqlite"];
+    NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:path fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
+    if (! persistentStore) {
+        RKLogError(@"Failed adding persistent store: %@", error);
+    }
+    [MagicalRecord setupCoreDataStackWithStoreNamed:@"Store.sqlite"];
+    [managedObjectStore createManagedObjectContexts];
+    objectManager.managedObjectStore = managedObjectStore;
     
-    self.objectStore = objectManager.objectStore;
+    
     
     // Enable automatic network activity indicator management
-    objectManager.client.requestQueue.showsNetworkActivityIndicatorWhenBusy = YES;
+    [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
     [self createErrorMapping];
     
-    
-    RKManagedObjectMapping* userMapping =
-    [RKManagedObjectMapping mappingForEntityWithName:@"User"
-                                inManagedObjectStore:objectManager.objectStore];
-    [User configureMapping:userMapping];
-    [objectManager.mappingProvider registerMapping:userMapping
-                                   withRootKeyPath:@"user"];
-    [objectManager.router routeClass:User.class toResourcePath:@"/login" forMethod:RKRequestMethodPOST];
-    
-    
-    RKManagedObjectMapping* bookmarkMapping =
-    [RKManagedObjectMapping mappingForEntityWithName:@"Bookmark"
-                                inManagedObjectStore:objectManager.objectStore];
-    [Bookmark configureMapping:bookmarkMapping];
-    [objectManager.mappingProvider registerMapping:bookmarkMapping
-                                   withRootKeyPath:@"bookmark"];
-    
-    [objectManager.router routeClass:Bookmark.class toResourcePath:@"/stories/:story_id/bookmarks" forMethod:RKRequestMethodPOST];
-    [objectManager.router routeClass:Bookmark.class toResourcePath:@"/stories/:story_id/bookmarks" forMethod:RKRequestMethodDELETE];
-    
-    
-    RKManagedObjectMapping* storyMapping =
-    [RKManagedObjectMapping mappingForEntityWithName:@"Story"
-                                inManagedObjectStore:objectManager.objectStore];
-    [Story configureMapping:storyMapping];
-    [objectManager.mappingProvider registerMapping:storyMapping
-                                   withRootKeyPath:@"story"];
-    [objectManager.router routeClass:Story.class toResourcePath:@"/stories/:id" forMethod:RKRequestMethodPUT];
-    
-    
-    RKManagedObjectMapping* blockMapping =
-    [RKManagedObjectMapping mappingForEntityWithName:@"Block"
-                                inManagedObjectStore:objectManager.objectStore];
-    [Block configureMapping:blockMapping];
-    [objectManager.mappingProvider registerMapping:blockMapping
-                                   withRootKeyPath:@"block"];
-    
-    
-    RKObjectMapping* storyViewMapping = [RKObjectMapping mappingForClass:StoryView.class];
-    [StoryView configureMapping:storyViewMapping];
-    [objectManager.mappingProvider addObjectMapping:storyViewMapping];
-    [objectManager.mappingProvider setSerializationMapping:storyViewMapping.inverseMapping forClass:StoryView.class];
-    [objectManager.router routeClass:StoryView.class toResourcePath:@"/stories/:story_id/view" forMethod:RKRequestMethodPOST];
-}
-
-- (void)setupObjectMapping {
+    [User configureRestKitMapping];
+    [Bookmark configureRestKitMapping];
+    [Story configureRestKitMapping];
+    [Block configureRestKitMapping];
+    [StoryView configureRestKitMapping];
 }
 
 
 - (void)createErrorMapping {
+    /*
     RKObjectMapping *errorMapping = [RKObjectMapping mappingForClass:[RKErrorMessage class]];
     [errorMapping mapKeyPath:@"description" toAttribute:@"errorMessage"];
     
     [RKObjectManager.sharedManager.mappingProvider setErrorMapping:errorMapping];
+     */
 }
 
 - (NSManagedObjectModel *)managedObjectModel {

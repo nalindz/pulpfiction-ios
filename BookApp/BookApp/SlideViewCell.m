@@ -34,6 +34,7 @@
 }
 
 - (void)bookmarkClicked {
+    /*
     if (self.story.bookmark) {
         // remove bookmark
         NSLog(@"deleting bookmark :%@", self.story.bookmark);
@@ -67,6 +68,7 @@
         }];
         [self setPageBookmarked];
     }
+     */
 }
 
 - (void)setPageBookmarked {

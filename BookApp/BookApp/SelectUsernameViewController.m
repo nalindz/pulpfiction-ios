@@ -7,6 +7,7 @@
 //
 
 #import "SelectUsernameViewController.h"
+#import "MainViewController.h"
 
 @interface SelectUsernameViewController()
 @property (nonatomic, strong) SelectUsernameView *selectUsernameView;
@@ -23,6 +24,17 @@
 }
 
 - (void)userNameSelected:(NSString *)username {
+    [API sharedInstance].loggedInUser.username = username;
+    [RKObjectManager.sharedManager
+     putObject:[API sharedInstance].loggedInUser
+     path:nil parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+         NSLog(@"Username updated");
+         MainViewController *mainViewController = [[MainViewController alloc] init];
+        [self.navigationController pushViewController:mainViewController animated:YES];
+     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"Error while updating username: %@", error);
+    }];
     
 }
+
 @end

@@ -1,6 +1,6 @@
 [submodule "Frameworks/RestKit"]
 	path = Frameworks/RestKit
-	url = git@bitbucket.org:nalindz/bookapp-restkit.git
+	url = https://github.com/RestKit/RestKit.git
 [submodule "Frameworks/SDWebImage"]
 	path = Frameworks/SDWebImage
 	url = https://github.com/rs/SDWebImage.git

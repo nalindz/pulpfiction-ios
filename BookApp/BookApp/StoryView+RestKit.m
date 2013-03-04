@@ -9,7 +9,14 @@
 #import "StoryView+RestKit.h"
 
 @implementation StoryView (RestKit)
-+ (RKObjectMapping *)configureMapping:(RKObjectMapping *)mapping {
-    return mapping;
++ (void)configureRestKitMapping {
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    RKObjectMapping *storyViewMapping = [RKObjectMapping mappingForClass:[StoryView class]];
+    
+    [objectManager.router.routeSet addRoute:[RKRoute
+                                             routeWithClass:[StoryView class]
+                                             pathPattern:@"/stories/:story_id/view"
+                                             method:RKRequestMethodPOST]];
+    
 }
 @end

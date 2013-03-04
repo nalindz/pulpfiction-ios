@@ -8,7 +8,6 @@
 
 #import "Page.h"
 @interface Page(RestKit)
-- (Page *) unfault;
 - (BOOL)isLastPage;
 + (Page *)pageWithNumber: (NSNumber *)pageNumber storyId: (NSNumber *) storyId;
 @end

@@ -11,19 +11,31 @@
 
 @implementation Block(RestKit)
 
-+ (RKManagedObjectMapping *)configureMapping:(RKManagedObjectMapping *)mapping {
-    [mapping mapAttributes:
++ (void)configureRestKitMapping {
+    RKObjectManager* objectManager = [RKObjectManager sharedManager];
+    RKEntityMapping* blockMapping =
+    [RKEntityMapping mappingForEntityForName:@"Block"
+                            inManagedObjectStore:objectManager.managedObjectStore];
+    
+    [API sharedInstance].mappings[@"block"] = blockMapping;
+    
+    [blockMapping addAttributeMappingsFromArray:@[
      @"id",
      @"text",
      @"block_number",
      @"total_start_index",
      @"story_id",
      @"first_block",
-     @"last_block",
-     nil];
+     @"last_block"]];
 
-    mapping.primaryKeyAttribute = @"id";
-    return mapping;
+    blockMapping.identificationAttributes = @[@"id"];
+    
+    NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
+    [objectManager addResponseDescriptor:
+     [RKResponseDescriptor responseDescriptorWithMapping:blockMapping
+                                             pathPattern:@"/blocks"
+                                                 keyPath:@"block"
+                                             statusCodes:statusCodes]];
 }
 
 + (Block *) blockWithStoryId:(NSNumber *) storyId blockNumber:(NSNumber *)blockNumber {

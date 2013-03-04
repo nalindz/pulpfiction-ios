@@ -11,7 +11,6 @@
 #import "StoryCell.h"
 #import "CaptureView.h"
 #import "Bookmark.h"
-#import "History.h"
 #import "SpringboardLayout.h"
 #import "SBLayout.h"
 #import "ProfileViewController.h"
@@ -103,15 +102,15 @@
 
 - (void)bookmarksPressed {
     self.isFeedView = NO;
-    [RKObjectManager.sharedManager loadObjectsAtResourcePath:@"stories?type=bookmarks" usingBlock:^(RKObjectLoader *loader) {
-        loader.onDidLoadObjects = ^(NSArray *objects) {
-            [self receivePageofStories:objects ofType:@"bookmarks" refresh:YES];
+    [RKObjectManager.sharedManager
+     getObjectsAtPath:@"/stories"
+     parameters:@{@"type": @"bookmarks"}
+     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            [self receivePageofStories:[mappingResult array] ofType:@"bookmarks" refresh:YES];
             [self scrollToFirstPageAnimated:NO];
-        };
-        loader.onDidFailWithError = ^(NSError * error) {
+     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             NSLog(@"Error loading bookmarks: %@", error);
-        };
-    }];
+     }];
 }
 
 - (void)homePressed {
@@ -134,19 +133,20 @@
     if (self.isLoadingPage) return;
     self.isLoadingPage = YES;
     self.canStartPaginateRequest = NO;
-    NSString *resourcePath = [NSString stringWithFormat:@"stories?type=feed&offset=%d&limit=%d", pageSize * pageNumber, pageSize * 2];
-    if (query)
-        resourcePath = [NSString stringWithFormat:@"%@&query=%@", resourcePath, query];
-    [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath usingBlock:^(RKObjectLoader *loader) {
-        loader.onDidLoadObjects = ^(NSArray *objects) {
-            [self receivePageofStories:objects ofType:@"feed" refresh:refresh];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"type": @"feed", @"offset": @(pageSize * pageNumber), @"limit": @(pageSize * 2)}];
+    if (query) params[@"query"] = query;
+    
+    [RKObjectManager.sharedManager
+     getObjectsAtPath:@"/stories"
+     parameters:params
+     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            [self receivePageofStories:[mappingResult array] ofType:@"feed" refresh:NO];
             self.isLoadingPage = NO;
-        };
-        loader.onDidFailWithError = ^(NSError * error) {
+     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             NSLog(@"Error loading feed: %@", error);
             self.isLoadingPage = NO;
-        };
-    }];
+     }];
 }
 
 - (void)showFeedBlankSlate {
@@ -198,11 +198,6 @@
         self.lastPage--;
         self.storiesOnLastPage = 9;
     }
-}
-
-
-- (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error with request: %@", error);
 }
 
 

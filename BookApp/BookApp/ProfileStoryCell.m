@@ -104,15 +104,14 @@
 }
 
 - (void) postTags:(NSString *)tagsString {
+    
     self.story.tags = tagsString;
-    [[RKObjectManager sharedManager]  putObject:self.story usingBlock:^(RKObjectLoader *loader) {
-        loader.onDidLoadObject = ^(id object){
-            NSLog(@"Tags Posted : %@", object);
-        };
-        
-        loader.onDidFailLoadWithError = ^(NSError *error) {
-            NSLog(@"Error updating tags: %@", error);
-        };
+    [RKObjectManager.sharedManager
+     putObject:self.story
+     path:nil
+     parameters:nil
+     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
     }];
 }
 

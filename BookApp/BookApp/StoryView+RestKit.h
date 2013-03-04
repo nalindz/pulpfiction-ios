@@ -9,6 +9,6 @@
 #import "StoryView.h"
 #import "BAProtocols.h"
 
-@interface StoryView (RestKit) <HasRKObjectMapping>
+@interface StoryView (RestKit) <HasRestKitMapping>
 
 @end

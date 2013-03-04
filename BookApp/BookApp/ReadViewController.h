@@ -15,8 +15,7 @@
 SlideScrollDataSource,
 SlideViewCellDelegate,
 UICollectionViewDataSource,
-UICollectionViewDelegate,
-RKObjectLoaderDelegate
+UICollectionViewDelegate
 >
 
 @property (retain, nonatomic) NSMutableArray       *viewControllers;

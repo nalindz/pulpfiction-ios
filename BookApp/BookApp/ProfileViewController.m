@@ -108,10 +108,17 @@
 }
 
 - (void)fetchStoriesWithQuery: (NSString *) query {
-    NSString *resourcePath = @"stories?type=profile";
-    if (query)
-        resourcePath = [NSString stringWithFormat:@"%@&query=%@", resourcePath, query];
-    [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath delegate:self];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"type": @"profile"}];
+    if (query) params[@"query"] = query;
+    
+    [RKObjectManager.sharedManager
+     getObjectsAtPath:@"/stories"
+     parameters:params
+     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+         [self receivePage:[mappingResult array]];
+     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+         NSLog(@"Error while trying to fetch profile stories: %@", error);
+     }];
 }
 
 - (void)logoutPressed {
@@ -139,15 +146,6 @@
         [self hideBlankSlate];
     }
     [self.tableView reloadData];
-}
-
-
-- (void) objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    [self receivePage:objects];
-}
-
-- (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error while trying to fetch profile stories: %@", error);
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {

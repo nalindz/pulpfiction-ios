@@ -11,13 +11,6 @@
 
 @implementation Page(RestKit)
 
-
-- (Page *) unfault {
-    Page *retrievedPage = (Page *)[[Page currentContext] objectWithID:self.objectID];
-    Page *unfaultedPage = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %@ AND story_id == %@", retrievedPage.page_number, retrievedPage.story_id]];
-    return unfaultedPage;
-}
-
 - (BOOL)isLastPage {
     Block *lastBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", self.last_block_number , self.story_id]];
     

@@ -30,42 +30,20 @@
     return _facebookLoginButton;
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.facebookLoginButton];
-    
-    //[API sharedInstance].loggedInUser = user;
-    
-    /*
-    SelectUsernameViewController *selectUsernameViewController = [[SelectUsernameViewController alloc] init];
-    [self.navigationController pushViewController:selectUsernameViewController animated:YES];
-     */
-    
-    MainViewController *mainViewController = [[MainViewController alloc] init];
-    [self.navigationController pushViewController:mainViewController animated:YES];
 }
 
-- (void)loginWithUser:(User *)user {
-    [RKObjectManager.sharedManager postObject:user usingBlock:^(RKObjectLoader *loader) {
-        loader.onDidFailWithError = ^(NSError * error) {
-            NSLog(@"Error logging in: %@", error);
-            
-        };
-        
-        loader.onDidLoadObject = ^(User * user) {
-            [API sharedInstance].loggedInUser = user;
-            
-            SelectUsernameViewController *selectUsernameViewController = [[SelectUsernameViewController alloc] init];
-            [self.navigationController pushViewController:selectUsernameViewController animated:YES];
-            
-            /*
-            MainViewController *mainViewController = [[MainViewController alloc] init];
-            [self.navigationController pushViewController:mainViewController animated:YES];
-             */
-        };
+- (void)loginWithFBUser: (NSDictionary<FBGraphUser> *) fbUser {
+    [RKObjectManager.sharedManager postObject:nil path:@"/login" parameters:@{@"facebook_id": fbUser[@"id"]} success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        [API sharedInstance].loggedInUser = (User *)[mappingResult firstObject];
+        SelectUsernameViewController *selectUsernameViewController = [[SelectUsernameViewController alloc] init];
+        [self.navigationController pushViewController:selectUsernameViewController animated:YES];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"Error logging in: %@", error);
     }];
 }
 
@@ -79,14 +57,9 @@
     NSLog(@"login success");
     if (FBSession.activeSession.isOpen) {
         [[FBRequest requestForMe] startWithCompletionHandler:
-         ^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *fb_user, NSError *error) {
+         ^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *fbUser, NSError *error) {
              if (!error) {
-                 User *user = [User object];
-                 user.first_name = [fb_user objectForKey:@"first_name"];
-                 user.last_name= [fb_user objectForKey:@"last_name"];
-                 user.facebook_id = [fb_user objectForKey:@"id"];
-                 user.email = [fb_user objectForKey:@"email"];
-                 [self loginWithUser:user];
+                 [self loginWithFBUser:fbUser];
              }
          }];
     }
@@ -108,34 +81,6 @@
     appDelegate.currentUser = nil;
 }
 
-/* RESTKIT SECTION */
-
-- (void) fetchUserWithUserId: (NSString *) userId {
-    NSString *resourcePath = @"users";
-    if (userId != nil) {
-        resourcePath = [NSString stringWithFormat:@"%@?id=%@", resourcePath, userId];
-    }
-    [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath delegate:self];
-}
-
-- (void) fetchUserWithFacebookId: (NSString *) facebookId andFirstName: (NSString *) firstName andLastName: (NSString*) lastName andEmail:(NSString*) email{
-    NSString *resourcePath = @"users";
-    if (facebookId != nil) {
-        resourcePath = [NSString stringWithFormat:@"%@?facebook_id=%@&first_name=%@&last_name=%@&email=%@", resourcePath, facebookId, firstName, lastName, email];
-    }
-    [RKObjectManager.sharedManager loadObjectsAtResourcePath:resourcePath delegate:self];
-}
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObject:(id)object{
-    if ([objectLoader.resourcePath hasPrefix:@"users"]) {
-        NSLog(@"The user : %@", object);
-        [self loginSuccess:object];
-    }
-}
-
-- (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    
-}
 
 /* FACEBOOK SECTION */
 

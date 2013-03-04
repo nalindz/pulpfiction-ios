@@ -12,7 +12,6 @@
 
 @interface HomeViewController : UIViewController
 <UICollectionViewDataSource,
-RKObjectLoaderDelegate,
 UICollectionViewDelegate,
 Searchable,
 MainViewControllerDelegate>

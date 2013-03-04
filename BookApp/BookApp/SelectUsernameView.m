@@ -32,7 +32,6 @@
     if (_nextButton == nil) {
         _nextButton = [UIButton initWithImageNamed:@"username-next-button"];
         [_nextButton addTarget:self action:@selector(clickedNext) forControlEvents:UIControlEventTouchUpInside];
-        _nextButton.centerX = self.center.x;
     }
     return _nextButton;
 }
@@ -45,7 +44,6 @@
         _usernameTextField.width = self.selectAUsernameLabel.width + 50;
         _usernameTextField.font = [UIFont h2];
         _usernameTextField.height = 50;
-        _usernameTextField.centerX = self.center.x;
         _usernameTextField.returnKeyType = UIReturnKeySearch;
         _usernameTextField.layer.borderColor = [UIColor lightGrayColor].CGColor;
         _usernameTextField.layer.borderWidth = 1.0;
@@ -62,7 +60,9 @@
         self.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.selectAUsernameLabel];
         [self.usernameTextField putBelow:self.selectAUsernameLabel withMargin:10];
+        _usernameTextField.centerX = self.center.x;
         [self.nextButton putBelow:self.usernameTextField withMargin:40];
+        _nextButton.centerX = self.center.x;
     }
     return self;
 }

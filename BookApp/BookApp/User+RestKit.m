@@ -1,27 +1,63 @@
 //
-//  User.m
+//  User+RestKit.m
 //  BookApp
-//
-//  Created by Haochen Li on 2012-11-25.
-//
 //
 
 #import "User+RestKit.h"
 
 @implementation User(RestKit)
 
-+ (RKManagedObjectMapping *)configureMapping:(RKManagedObjectMapping *)mapping {
-    [mapping mapAttributes:
-     @"id",
++ (void)configureRestKitMapping {
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    RKEntityMapping* userMapping =
+    [RKEntityMapping mappingForEntityForName:@"User"
+                            inManagedObjectStore:objectManager.managedObjectStore];
+    
+    NSArray *userMappingArray =
+   @[@"id",
      @"username",
      @"first_name",
      @"last_name",
      @"email",
-     @"facebook_id",
-     nil];
+     @"facebook_id"];
     
-    mapping.primaryKeyAttribute = @"id";
-    return mapping;
+    [userMapping addAttributeMappingsFromArray:userMappingArray];
+    
+   // userMapping.identificationAttributes = @[@"id"];
+    [API sharedInstance].mappings[@"user"] = userMapping;
+    
+    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
+    [requestMapping addAttributeMappingsFromArray:userMappingArray];
+    
+    [objectManager addRequestDescriptor:
+     [RKRequestDescriptor requestDescriptorWithMapping:requestMapping
+                                           objectClass:[User class]
+                                           rootKeyPath:@"user"]];
+    
+    
+    
+    NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
+    
+    [objectManager addResponseDescriptor:
+     [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                             pathPattern:@"/login"
+                                                 keyPath:@"user"
+                                             statusCodes:statusCodes]];
+    
+    [objectManager addResponseDescriptor:
+     [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                             pathPattern:@"/users/:id"
+                                                 keyPath:@"user"
+                                             statusCodes:statusCodes]];
+    
+    [objectManager.router.routeSet addRoute:[RKRoute
+                                             routeWithClass:[User class]
+                                             pathPattern:@"/login"
+                                             method:RKRequestMethodPOST]];
+    [objectManager.router.routeSet addRoute:[RKRoute
+                                             routeWithClass:[User class]
+                                             pathPattern:@"/users/:id"
+                                             method:RKRequestMethodPUT]];
 }
 
 @end

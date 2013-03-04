@@ -1,6 +1,5 @@
 #import "ReadViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "ViewController.h"
 #import "SlideViewCell.h"
 #import "Block.h"
 #import "Page+RestKit.h"
@@ -101,19 +100,23 @@
             currentBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", @(currentBlockNumber), self.story.id]];
             if (currentBlock == nil) {
                 int endBlockNumber = currentBlockNumber + 10;
-                [RKObjectManager.sharedManager loadObjectsAtResourcePath:[NSString stringWithFormat:@"stories/%@/blocks?first_block=%d&last_block=%d", self.story.id, currentBlockNumber, endBlockNumber] usingBlock:^(RKObjectLoader *loader) {
-                    loader.onDidLoadObjects = ^(NSArray *objects) {
-                        
-                        if (self.stopAddingJobs) return;
-                        dispatch_async( self.backgroundQueue,  ^(void) {
-                            [self createNumberOfPages: numberOfPages
-                                   startingPageNumber:@(currentPageNumber)
-                                            fromBlock:@(currentBlockNumber)
-                                                index:currentBlockIndex
-                                           pageBuffer:[NSString stringWithFormat:@"%@", myPageBuffer]];
-                        });
-                    };
-                }];
+                
+                [RKObjectManager.sharedManager getObjectsAtPath:@"/blocks"
+                                                     parameters:@{@"story_id": self.story.id,
+                                                                  @"first_block": @(currentBlockNumber),
+                                                                  @"last_block": @(endBlockNumber)}
+                                                        success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                            if (self.stopAddingJobs) return;
+                                                            dispatch_async( self.backgroundQueue,  ^(void) {
+                                                                [self createNumberOfPages: numberOfPages
+                                                                       startingPageNumber:@(currentPageNumber)
+                                                                                fromBlock:@(currentBlockNumber)
+                                                                                    index:currentBlockIndex
+                                                                               pageBuffer:[NSString stringWithFormat:@"%@", myPageBuffer]];
+                                                            });
+                                                        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                            NSLog(@"Error fetching blocks: %@", error);
+                                                        }];
                 return;
             }
             
@@ -150,7 +153,7 @@
         
         
         Page *newPage = [Page pageWithNumber:@(currentPageNumber) storyId:self.story.id];
-        if (newPage == nil) newPage = [Page object];
+        if (newPage == nil) newPage = [Page createEntity];
         newPage.page_number = @(currentPageNumber);
         newPage.story_id = self.story.id;
         newPage.text = [myPageBuffer substringToIndex:splitIndex];
@@ -162,14 +165,29 @@
         self.totalPages++;
         
         
+        /*
         NSError *error;
         if (![[newPage managedObjectContext] save:&error]) {
             NSLog(@"Save failed: %@", error);
+        }
+         */
+        
+        [[newPage managedObjectContext] saveToPersistentStoreAndWait];
+        
+        if ([newPage.font_size floatValue] == self.pageFont.pointSize && [newPage.page_number intValue] - self.lastPageNumber == 1) {
+            //NSLog(@"The number of views: %d", [self.scrollView numberOfItemsInSection:0]);
+            self.lastPageNumber = [newPage.page_number intValue];
+            [self.scrollView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:[newPage.page_number intValue] inSection:0]]];
+            //[indexPathsToInsert addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
         }
         
         if ([newPage isLastPage]) {
             numberOfPages = 0;
             [self scrollToCorrectPage];
+            
+            if (self.startingPageNumber == 0) {
+                [self reloadFirstCell];
+            }
             //[self reloadFirstCell];
         } else {
             numberOfPages--;
@@ -192,10 +210,6 @@
 
 - (CGSize) pageSize {
     return CGSizeMake(self.scrollView.frame.size.width - ([self pageMargin] * 2), self.scrollView.frame.size.height - ([self pageMargin] * 2));
-}
-
-- (void) objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error occured when fetching a block: %@", error);
 }
 
 - (void) setupScrollView {
@@ -224,10 +238,12 @@
     self.firstPageNumber = 0;
     self.lastPageNumber = -1;
     
+    /*
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveManagedObjectUpdate:)
                                                  name:@"changesMerged"
                                                object:nil];
+     */
 }
 
 - (void)receiveManagedObjectUpdate: (NSNotification *) notification {
@@ -254,7 +270,6 @@
                 NSLog(@"The number of views: %d", [self.scrollView numberOfItemsInSection:0]);
                 [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
                 self.lastPageNumber = [page.page_number intValue];
-                
             }
         }
         
@@ -310,13 +325,10 @@
 - (void)postStoryView {
     StoryView *storyView = [[StoryView alloc] init];
     storyView.story_id = self.story.id;
-    [[RKObjectManager sharedManager] postObject:storyView usingBlock:^(RKObjectLoader *loader) {
-        loader.onDidFailWithError = ^(NSError *error) {
-            NSLog(@"Error posting story view: %@", error);
-        };
-        loader.onDidLoadObject = ^(StoryView *object) {
-            NSLog(@"Posted story view object: %@", object);
-        };
+    [RKObjectManager.sharedManager postObject:storyView path:nil parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        NSLog(@"Posted story view object: %@", [mappingResult firstObject]);
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"Error posting story view: %@", error);
     }];
 }
 
@@ -494,13 +506,10 @@
         self.story.bookmark.story_id = self.story.id;
         
         // post bookmark to backend
-        [[RKObjectManager sharedManager] postObject:self.story.bookmark usingBlock:^(RKObjectLoader *loader) {
-            loader.onDidFailWithError = ^(NSError *error) {
-                NSLog(@"Error posting bookmark: %@", error);
-            };
-            loader.onDidLoadObject = ^(Bookmark *bookmark) {
-                NSLog(@"Loaded object: %@", bookmark);
-            };
+        [RKObjectManager.sharedManager postObject:self.story.bookmark path:nil parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            NSLog(@"Posted bookmark: %@", [mappingResult firstObject]);
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            NSLog(@"Error posting bookmark: %@", error);
         }];
     }
 }
