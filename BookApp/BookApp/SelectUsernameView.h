@@ -12,6 +12,11 @@
 @end
 
 @interface SelectUsernameView : UIView
+<UITextFieldDelegate>
 @property (nonatomic, weak) id<SelectUsernameViewDelegate> delegate;
-- (void) setSuggestedUsername: (NSString *) text;
+- (void)setSuggestedUsername: (NSString *) text;
+- (void)showTooShortError;
+- (void)showTooLongError;
+- (void)showAlreadyTakenError;
+- (void)showInvalidCharactersError;
 @end

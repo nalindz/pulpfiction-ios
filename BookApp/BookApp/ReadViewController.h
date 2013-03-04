@@ -1,5 +1,4 @@
 #import <UIKit/UIKit.h>
-#import "SlideScrollView.h"
 #import "SlideViewCell.h"
 #import "Story.h"
 #import "PageView.h"
@@ -12,7 +11,6 @@
 
 @interface ReadViewController : UIViewController
 <UIScrollViewDelegate,
-SlideScrollDataSource,
 SlideViewCellDelegate,
 UICollectionViewDataSource,
 UICollectionViewDelegate

@@ -33,8 +33,12 @@
         [self.navigationController pushViewController:mainViewController animated:YES];
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"Error while updating username: %@", error);
+         NSLog(@"the description :%@", [error localizedDescription]);
+         if ([error.description isEqualToString:@"TOO_SHORT"]) {
+             [self.selectUsernameView showTooShortError];
+         }
     }];
-    
 }
+
 
 @end

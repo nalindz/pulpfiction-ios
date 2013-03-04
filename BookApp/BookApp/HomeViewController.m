@@ -141,7 +141,7 @@
      getObjectsAtPath:@"/stories"
      parameters:params
      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            [self receivePageofStories:[mappingResult array] ofType:@"feed" refresh:NO];
+            [self receivePageofStories:[mappingResult array] ofType:@"feed" refresh:refresh];
             self.isLoadingPage = NO;
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
             NSLog(@"Error loading feed: %@", error);
@@ -160,7 +160,6 @@
     [self hideFeedBlankSlate];
     self.storyResultGrid.hidden = NO;
 }
-
 
 - (void)showBookmarksBlankSlate {
     self.storyResultGrid.hidden = YES;
@@ -201,22 +200,13 @@
 }
 
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return 0;
-}
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 0;
-}
-
-
--(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.stories.count;
 }
 
--(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { 
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
-
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     Story *storyToSwitchTo = [self.stories objectAtIndex:indexPath.row];
@@ -274,7 +264,7 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (decelerate) return;
     //NSLog(@"page to scroll to :%d", self.pageNumberToScrollTo);
-    int currentPageNumberInt = self.startScrollOffset / scrollView.width;
+    //int currentPageNumberInt = self.startScrollOffset / scrollView.width;
     //NSLog(@"current Page number :%d", currentPageNumberInt);
     CGFloat xToScrollTo = self.pageNumberToScrollTo * scrollView.width;
     if (xToScrollTo > (scrollView.contentSize.width - scrollView.width)) {
@@ -352,8 +342,7 @@
         self.pageNumberToScrollTo = -1;
     }
     
-    //NSLog(@"content size: %f", scrollView.contentSize.width);
-    //NSLog(@"content offset: %f", scrollView.contentOffset.x);
+    
     
     if (((scrollView.contentOffset.x + scrollView.width) > scrollView.contentSize.width) && self.isFeedView) {
         [self fetchNextPage];
@@ -381,7 +370,7 @@
         } else if (view.tag % 3 == 1) {
             xShakeAmount = 20;
             duration = 0.2;
-        } else if (view.tag % 3 == 2) {
+        } else {
             xShakeAmount = 30;
             duration = 0.1;
         }

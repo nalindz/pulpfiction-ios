@@ -137,8 +137,8 @@
 
 
 - (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    // allow backspace always
     NSError *error = NULL;
+    // allow backspace always
     if ([text isEqualToString:@""]) {
         return YES;
     }

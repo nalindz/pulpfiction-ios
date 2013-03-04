@@ -133,7 +133,6 @@
 		F5FC6DEC1645F7110087137F /* Block+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6DEB1645F7110087137F /* Block+RestKit.m */; };
 		F5FC6DF8164640C00087137F /* ReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6DF7164640C00087137F /* ReadViewController.m */; };
 		F5FC6EE31648E6DD0087137F /* SlideViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6EE21648E6DD0087137F /* SlideViewCell.m */; };
-		F5FC6EE61648FC550087137F /* SlideScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6EE51648FC550087137F /* SlideScrollView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -400,8 +399,6 @@
 		F5FC6DF7164640C00087137F /* ReadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadViewController.m; sourceTree = "<group>"; };
 		F5FC6EE11648E6DD0087137F /* SlideViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideViewCell.h; sourceTree = "<group>"; };
 		F5FC6EE21648E6DD0087137F /* SlideViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideViewCell.m; sourceTree = "<group>"; };
-		F5FC6EE41648FC550087137F /* SlideScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideScrollView.h; sourceTree = "<group>"; };
-		F5FC6EE51648FC550087137F /* SlideScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideScrollView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -632,8 +629,6 @@
 				F5C3B1F716C85B9000769E77 /* MainViewController.m */,
 				F52AAFB01653508B007B36C1 /* HomeViewController.h */,
 				F52AAFB11653508B007B36C1 /* HomeViewController.m */,
-				F5FC6EE41648FC550087137F /* SlideScrollView.h */,
-				F5FC6EE51648FC550087137F /* SlideScrollView.m */,
 				F5FC6EE11648E6DD0087137F /* SlideViewCell.h */,
 				F5FC6EE21648E6DD0087137F /* SlideViewCell.m */,
 				55125FB81662C8330006D538 /* LoginViewController.h */,
@@ -996,7 +991,6 @@
 				F5FC6DEC1645F7110087137F /* Block+RestKit.m in Sources */,
 				F5FC6DF8164640C00087137F /* ReadViewController.m in Sources */,
 				F5FC6EE31648E6DD0087137F /* SlideViewCell.m in Sources */,
-				F5FC6EE61648FC550087137F /* SlideScrollView.m in Sources */,
 				F5E56593164EEA630044B956 /* NSString+FitInLabel.m in Sources */,
 				F57526A4165083CC005E2235 /* Page+RestKit.m in Sources */,
 				F52AAFB21653508B007B36C1 /* HomeViewController.m in Sources */,

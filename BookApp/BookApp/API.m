@@ -85,7 +85,6 @@ static API* _sharedInstance = nil;
     objectManager.managedObjectStore = managedObjectStore;
     
     
-    
     // Enable automatic network activity indicator management
     [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
     [self createErrorMapping];
@@ -99,10 +98,17 @@ static API* _sharedInstance = nil;
 
 
 - (void)createErrorMapping {
+    
+    RKObjectMapping *errorMapping = [RKObjectMapping mappingForClass:[RKErrorMessage class]];
+    [errorMapping addPropertyMapping:[RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@"message"]];
+    NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassClientError);
+    RKResponseDescriptor *errorDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:errorMapping pathPattern:nil keyPath:@"errors" statusCodes:statusCodes];
+    [RKObjectManager.sharedManager addResponseDescriptor:errorDescriptor];
+
+
     /*
     RKObjectMapping *errorMapping = [RKObjectMapping mappingForClass:[RKErrorMessage class]];
     [errorMapping mapKeyPath:@"description" toAttribute:@"errorMessage"];
-    
     [RKObjectManager.sharedManager.mappingProvider setErrorMapping:errorMapping];
      */
 }

@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UILabel* selectAUsernameLabel;
 @property (nonatomic, strong) PaddedUITextField *usernameTextField;
 @property (nonatomic, strong) UIButton *nextButton;
+@property (nonatomic, strong) UILabel *errorLabel;
 @end
 @implementation SelectUsernameView
 
@@ -28,6 +29,15 @@
     }
     return _selectAUsernameLabel;
 }
+
+- (UILabel*) errorLabel {
+    if (_errorLabel == nil) {
+        _errorLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _errorLabel.font = [UIFont h4];
+        _errorLabel.textColor = [UIColor redColor];
+    }
+    return _errorLabel;
+}
 - (UIButton*) nextButton {
     if (_nextButton == nil) {
         _nextButton = [UIButton initWithImageNamed:@"username-next-button"];
@@ -40,6 +50,7 @@
     if (_usernameTextField == nil) {
         _usernameTextField = [[PaddedUITextField alloc] initWithFrame:CGRectZero];
         _usernameTextField.topPadding = 5;
+        _usernameTextField.delegate = self;
         _usernameTextField.textAlignment = NSTextAlignmentCenter;
         _usernameTextField.width = self.selectAUsernameLabel.width + 50;
         _usernameTextField.font = [UIFont h2];
@@ -53,6 +64,7 @@
     return _usernameTextField;
 }
 
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -61,7 +73,7 @@
         [self addSubview:self.selectAUsernameLabel];
         [self.usernameTextField putBelow:self.selectAUsernameLabel withMargin:10];
         _usernameTextField.centerX = self.center.x;
-        [self.nextButton putBelow:self.usernameTextField withMargin:40];
+        [self.nextButton putBelow:self.usernameTextField withMargin:150];
         _nextButton.centerX = self.center.x;
     }
     return self;
@@ -74,6 +86,11 @@
 
 - (void)clickedNext {
     [self.delegate userNameSelected:self.usernameTextField.text];
+}
+
+- (void)showTooShortError {
+    [self.errorLabel autoSizeWithText:@"Your username is too short. Try something between 3-15 characters"];
+    [self.errorLabel putBelow:self.usernameTextField withMargin:10];
 }
 
 @end
