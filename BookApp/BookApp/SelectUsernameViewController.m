@@ -33,12 +33,16 @@
         [self.navigationController pushViewController:mainViewController animated:YES];
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"Error while updating username: %@", error);
-         NSLog(@"the description :%@", [error localizedDescription]);
-         if ([error.description isEqualToString:@"TOO_SHORT"]) {
+         if ([error.localizedDescription isEqualToString:@"TOO_SHORT"]) {
              [self.selectUsernameView showTooShortError];
+         } else if ([error.localizedDescription isEqualToString:@"TOO_SHORT"]) {
+             [self.selectUsernameView showTooLongError];
+         } else if ([error.localizedDescription isEqualToString:@"ALREADY_TAKEN"]) {
+             [self.selectUsernameView showAlreadyTakenError];
+         } else if ([error.localizedDescription isEqualToString:@"INVALID_CHARS"]) {
+             [self.selectUsernameView showInvalidCharactersError];
          }
-    }];
+     }];
 }
-
 
 @end

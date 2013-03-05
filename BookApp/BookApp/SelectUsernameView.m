@@ -56,6 +56,8 @@
         _usernameTextField.font = [UIFont h2];
         _usernameTextField.height = 50;
         _usernameTextField.returnKeyType = UIReturnKeySearch;
+        _usernameTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+        _usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
         _usernameTextField.layer.borderColor = [UIColor lightGrayColor].CGColor;
         _usernameTextField.layer.borderWidth = 1.0;
         _usernameTextField.layer.masksToBounds = YES;
@@ -91,6 +93,19 @@
 - (void)showTooShortError {
     [self.errorLabel autoSizeWithText:@"Your username is too short. Try something between 3-15 characters"];
     [self.errorLabel putBelow:self.usernameTextField withMargin:10];
+    self.errorLabel.centerX = self.centerX;
+}
+
+- (void)showTooLongError {
+    [self.errorLabel autoSizeWithText:@"Your username is too long. Try something between 3-15 characters"];
+    [self.errorLabel putBelow:self.usernameTextField withMargin:10];
+    self.errorLabel.centerX = self.centerX;
+}
+
+- (void)showInvalidCharactersError {
+    [self.errorLabel autoSizeWithText:@"Invalid characters :("];
+    [self.errorLabel putBelow:self.usernameTextField withMargin:10];
+    self.errorLabel.centerX = self.centerX;
 }
 
 @end
