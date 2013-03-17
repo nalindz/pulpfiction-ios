@@ -211,6 +211,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     Story *storyToSwitchTo = [self.stories objectAtIndex:indexPath.row];
     
+    [Log eventName:@"clicked_story" data:@{@"story_id": storyToSwitchTo.id}];
     
     ReadViewController *readViewController = [[ReadViewController alloc] init];
     readViewController.story = storyToSwitchTo;
@@ -221,7 +222,6 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
     Story *story = [self.stories objectAtIndex:indexPath.row];
     
     StoryCell *cell = [self.storyResultGrid dequeueReusableCellWithReuseIdentifier:@"storyCell" forIndexPath:indexPath];

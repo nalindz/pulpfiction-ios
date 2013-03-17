@@ -11,6 +11,8 @@
 	</dict>
 	<key>Debug</key>
 	<dict>
+		<key>logBatchTimerValue</key>
+		<integer>5</integer>
 		<key>apiURL</key>
 		<string>http://192.168.1.128:3000</string>
 		<key>apiVersion</key>

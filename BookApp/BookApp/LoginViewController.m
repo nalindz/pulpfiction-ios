@@ -9,7 +9,7 @@
 #import "LoginViewController.h"
 #import "HomeViewController.h"
 #import "AppDelegate.h"
-#import "User.h"
+#import "User+Util.h"
 #import "AppDelegate.h"
 #import "MainViewController.h"
 #import "SelectUsernameViewController.h"
@@ -38,14 +38,21 @@
 }
 
 - (void)loginWithFBUser: (NSDictionary<FBGraphUser> *) fbUser {
-    [RKObjectManager.sharedManager postObject:nil path:@"/login" parameters:@{@"facebook_id": fbUser[@"id"]} success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        [API sharedInstance].loggedInUser = (User *)[mappingResult firstObject];
-        SelectUsernameViewController *selectUsernameViewController = [[SelectUsernameViewController alloc] init];
-        [self.navigationController pushViewController:selectUsernameViewController animated:YES];
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+    [RKObjectManager.sharedManager postObject:nil path:@"/login" parameters:@{@"facebook_id": fbUser[@"id"], @"first_name": fbUser[@"first_name"], @"last_name": fbUser[@"last_name"]} success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        API.sharedInstance.loggedInUser = (User *)[mappingResult firstObject];
+        User *user = (User *)[mappingResult firstObject];
+        
+        if (API.sharedInstance.loggedInUser.isUsernameConfirmed) {
+            [self.navigationController pushViewController:[[MainViewController alloc] init] animated:YES];
+        } else {
+            [self.navigationController pushViewController:[[SelectUsernameViewController alloc] init] animated:YES];
+        }
+        
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         NSLog(@"Error logging in: %@", error);
     }];
 }
+
 
 - (void)clickedFacebookLogin {
     NSLog(@"try facebook login");

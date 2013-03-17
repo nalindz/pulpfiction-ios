@@ -48,6 +48,7 @@ static API* _sharedInstance = nil;
     self.loggedInUserId = loggedInUser.id;
 }
 
+
 - (API*)init {
     self = [super init];
     return self;

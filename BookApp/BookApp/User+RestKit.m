@@ -19,6 +19,7 @@
      @"first_name",
      @"last_name",
      @"email",
+     @"state",
      @"facebook_id"];
     
     [userMapping addAttributeMappingsFromArray:userMappingArray];

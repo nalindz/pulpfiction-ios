@@ -103,7 +103,7 @@
 }
 
 - (void)showInvalidCharactersError {
-    [self.errorLabel autoSizeWithText:@"Invalid characters :("];
+    [self.errorLabel autoSizeWithText:@"You can only use letters, numbers, dots and underscores"];
     [self.errorLabel putBelow:self.usernameTextField withMargin:10];
     self.errorLabel.centerX = self.centerX;
 }

@@ -103,9 +103,12 @@
 		F59EEDAA1643B039001C42F2 /* Story+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F59EEDA91643B039001C42F2 /* Story+RestKit.m */; };
 		F5C3B1F816C85C4700769E77 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C3B1F716C85B9000769E77 /* MainViewController.m */; };
 		F5C3B20D16C9F84000769E77 /* Bookmark+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C3B20C16C9F84000769E77 /* Bookmark+RestKit.m */; };
+		F5D197BD16E87A1F004CB0DF /* User+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D197BC16E87A1F004CB0DF /* User+Util.m */; };
+		F5D197C016E87A6F004CB0DF /* NSNumber+BitUti.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D197BF16E87A6F004CB0DF /* NSNumber+BitUti.m */; };
+		F5D197C316E87BA4004CB0DF /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D197C216E87BA4004CB0DF /* User.m */; };
+		F5D197C616E9C7A4004CB0DF /* Log.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D197C516E9C7A4004CB0DF /* Log.m */; };
 		F5DE15FA16DF24D3001FE4A8 /* PaddedUITextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DE15F916DF24D3001FE4A8 /* PaddedUITextField.m */; };
 		F5DE15FC16DF27B0001FE4A8 /* username-next-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5DE15FB16DF27B0001FE4A8 /* username-next-button@2x.png */; };
-		F5DE161216DF33DC001FE4A8 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DE161116DF33DC001FE4A8 /* User.m */; };
 		F5DE162D16E1C7A5001FE4A8 /* upload-step-2-bullet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5DE162716E1C7A5001FE4A8 /* upload-step-2-bullet@2x.png */; };
 		F5DE162E16E1C7A5001FE4A8 /* upload-step-2-image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5DE162816E1C7A5001FE4A8 /* upload-step-2-image@2x.png */; };
 		F5DE162F16E1C7A5001FE4A8 /* upload-step-3-bullet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5DE162916E1C7A5001FE4A8 /* upload-step-3-bullet@2x.png */; };
@@ -351,11 +354,17 @@
 		F5C3B20716C8AC4000769E77 /* Searchable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Searchable.h; sourceTree = "<group>"; };
 		F5C3B20B16C9F84000769E77 /* Bookmark+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bookmark+RestKit.h"; sourceTree = "<group>"; };
 		F5C3B20C16C9F84000769E77 /* Bookmark+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Bookmark+RestKit.m"; sourceTree = "<group>"; };
+		F5D197BB16E87A1F004CB0DF /* User+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "User+Util.h"; sourceTree = "<group>"; };
+		F5D197BC16E87A1F004CB0DF /* User+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "User+Util.m"; sourceTree = "<group>"; };
+		F5D197BE16E87A6F004CB0DF /* NSNumber+BitUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+BitUtil.h"; sourceTree = "<group>"; };
+		F5D197BF16E87A6F004CB0DF /* NSNumber+BitUti.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+BitUti.m"; sourceTree = "<group>"; };
+		F5D197C116E87BA4004CB0DF /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		F5D197C216E87BA4004CB0DF /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		F5D197C416E9C7A4004CB0DF /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
+		F5D197C516E9C7A4004CB0DF /* Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Log.m; sourceTree = "<group>"; };
 		F5DE15F816DF24D3001FE4A8 /* PaddedUITextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaddedUITextField.h; sourceTree = "<group>"; };
 		F5DE15F916DF24D3001FE4A8 /* PaddedUITextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaddedUITextField.m; sourceTree = "<group>"; };
 		F5DE15FB16DF27B0001FE4A8 /* username-next-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "username-next-button@2x.png"; sourceTree = "<group>"; };
-		F5DE161016DF33DC001FE4A8 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		F5DE161116DF33DC001FE4A8 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		F5DE162716E1C7A5001FE4A8 /* upload-step-2-bullet@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upload-step-2-bullet@2x.png"; sourceTree = "<group>"; };
 		F5DE162816E1C7A5001FE4A8 /* upload-step-2-image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upload-step-2-image@2x.png"; sourceTree = "<group>"; };
 		F5DE162916E1C7A5001FE4A8 /* upload-step-3-bullet@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upload-step-3-bullet@2x.png"; sourceTree = "<group>"; };
@@ -667,6 +676,10 @@
 		F530E20316435C96003A9EDF /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F5D197C116E87BA4004CB0DF /* User.h */,
+				F5D197C216E87BA4004CB0DF /* User.m */,
+				F5D197BB16E87A1F004CB0DF /* User+Util.h */,
+				F5D197BC16E87A1F004CB0DF /* User+Util.m */,
 				F5F4E4E416CCC84600A3F395 /* Story.h */,
 				F5F4E4E516CCC84700A3F395 /* Story.m */,
 				F5C3B20E16C9F84600769E77 /* RestKit */,
@@ -679,8 +692,6 @@
 				F5F4E4C116CA3CDA00A3F395 /* Page.h */,
 				F5F4E4C216CA3CDA00A3F395 /* Page.m */,
 				F59EED9B16438E1E001C42F2 /* BookApp-Entities.xcdatamodeld */,
-				F5DE161016DF33DC001FE4A8 /* User.h */,
-				F5DE161116DF33DC001FE4A8 /* User.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -744,6 +755,10 @@
 		F59EED90164386AE001C42F2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				F5D197C416E9C7A4004CB0DF /* Log.h */,
+				F5D197C516E9C7A4004CB0DF /* Log.m */,
+				F5D197BE16E87A6F004CB0DF /* NSNumber+BitUtil.h */,
+				F5D197BF16E87A6F004CB0DF /* NSNumber+BitUti.m */,
 				F5DE163616E1CBA1001FE4A8 /* UILabel+BALabelStyle.h */,
 				F5DE163716E1CBA1001FE4A8 /* UILabel+BALabelStyle.m */,
 				F5DE15F816DF24D3001FE4A8 /* PaddedUITextField.h */,
@@ -1025,7 +1040,6 @@
 				F5E942F416DF1AE40097E10A /* SelectUsernameViewController.m in Sources */,
 				F5E942F716DF1B0A0097E10A /* SelectUsernameView.m in Sources */,
 				F5DE15FA16DF24D3001FE4A8 /* PaddedUITextField.m in Sources */,
-				F5DE161216DF33DC001FE4A8 /* User.m in Sources */,
 				F5DE163516E1C834001FE4A8 /* UploadStoryTutorialView.m in Sources */,
 				F5DE163816E1CBA1001FE4A8 /* UILabel+BALabelStyle.m in Sources */,
 				F52C076316E3D84900170DAA /* MagicalImportFunctions.m in Sources */,
@@ -1054,6 +1068,10 @@
 				F52C077A16E3D84900170DAA /* MagicalRecord+Setup.m in Sources */,
 				F52C077B16E3D84900170DAA /* MagicalRecord+ShorthandSupport.m in Sources */,
 				F52C077C16E3D84900170DAA /* MagicalRecord.m in Sources */,
+				F5D197BD16E87A1F004CB0DF /* User+Util.m in Sources */,
+				F5D197C016E87A6F004CB0DF /* NSNumber+BitUti.m in Sources */,
+				F5D197C316E87BA4004CB0DF /* User.m in Sources */,
+				F5D197C616E9C7A4004CB0DF /* Log.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

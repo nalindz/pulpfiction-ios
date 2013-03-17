@@ -2,7 +2,7 @@
 //  User.h
 //  BookApp
 //
-//  Created by Nalin on 2/27/13.
+//  Created by Nalin on 3/6/13.
 //
 //
 
@@ -19,6 +19,7 @@
 @property (nonatomic, retain) NSNumber * id;
 @property (nonatomic, retain) NSString * last_name;
 @property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSNumber * state;
 @property (nonatomic, retain) NSSet *bookmarks;
 @property (nonatomic, retain) NSSet *stories;
 @end
