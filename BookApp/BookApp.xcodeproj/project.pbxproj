@@ -18,7 +18,6 @@
 		F507443C16C6EFEA008C8CAE /* home_03.png in Resources */ = {isa = PBXBuildFile; fileRef = F507443B16C6EFEA008C8CAE /* home_03.png */; };
 		F507444616C6F1C1008C8CAE /* profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507444316C6F1C1008C8CAE /* profile@2x.png */; };
 		F507444716C6F1C1008C8CAE /* read@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507444416C6F1C1008C8CAE /* read@2x.png */; };
-		F507444816C6F1C1008C8CAE /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507444516C6F1C1008C8CAE /* search@2x.png */; };
 		F507444A16C6F249008C8CAE /* bookmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507444916C6F249008C8CAE /* bookmark@2x.png */; };
 		F507444D16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.m in Sources */ = {isa = PBXBuildFile; fileRef = F507444C16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.m */; };
 		F507445116C73595008C8CAE /* bookmark-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F507444E16C73595008C8CAE /* bookmark-button@2x.png */; };
@@ -74,6 +73,7 @@
 		F530E1FD16435AEE003A9EDF /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1FC16435AEE003A9EDF /* libxml2.dylib */; };
 		F530E1FF16435AF6003A9EDF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1FE16435AF6003A9EDF /* QuartzCore.framework */; };
 		F530E20016435B07003A9EDF /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1E716435A3C003A9EDF /* libRestKit.a */; };
+		F532414F16F6824A00B9E089 /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F532414E16F6824A00B9E089 /* search@2x.png */; };
 		F54E0BE7167DC5A6002C1F3B /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F54E0BE4167DC592002C1F3B /* libSDWebImage.a */; };
 		F54E0BEB167DC5F5002C1F3B /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54E0BEA167DC5F5002C1F3B /* ImageIO.framework */; };
 		F552792B16C6366F00323095 /* Home@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F552792A16C6366F00323095 /* Home@2x.png */; };
@@ -212,7 +212,6 @@
 		F507443B16C6EFEA008C8CAE /* home_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_03.png; sourceTree = "<group>"; };
 		F507444316C6F1C1008C8CAE /* profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile@2x.png"; sourceTree = "<group>"; };
 		F507444416C6F1C1008C8CAE /* read@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "read@2x.png"; sourceTree = "<group>"; };
-		F507444516C6F1C1008C8CAE /* search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search@2x.png"; sourceTree = "<group>"; };
 		F507444916C6F249008C8CAE /* bookmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bookmark@2x.png"; sourceTree = "<group>"; };
 		F507444B16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+ResizeWithAspectRatio.h"; sourceTree = "<group>"; };
 		F507444C16C6F9A7008C8CAE /* UIButton+ResizeWithAspectRatio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+ResizeWithAspectRatio.m"; sourceTree = "<group>"; };
@@ -306,6 +305,7 @@
 		F530E1FA16435AE6003A9EDF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		F530E1FC16435AEE003A9EDF /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		F530E1FE16435AF6003A9EDF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F532414E16F6824A00B9E089 /* search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search@2x.png"; sourceTree = "<group>"; };
 		F54E0BDA167DC592002C1F3B /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = ../Frameworks/SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
 		F54E0BEA167DC5F5002C1F3B /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		F552792A16C6366F00323095 /* Home@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Home@2x.png"; sourceTree = "<group>"; };
@@ -737,11 +737,11 @@
 				F5F4E4D116CB52A700A3F395 /* bookmark-button-light@2x.png */,
 				F507444E16C73595008C8CAE /* bookmark-button@2x.png */,
 				F507444F16C73595008C8CAE /* home-button@2x.png */,
+				F532414E16F6824A00B9E089 /* search@2x.png */,
 				F507445016C73595008C8CAE /* profile-button@2x.png */,
 				F507445416C7362C008C8CAE /* bookmark-button2@2x.png */,
 				F507444316C6F1C1008C8CAE /* profile@2x.png */,
 				F507444416C6F1C1008C8CAE /* read@2x.png */,
-				F507444516C6F1C1008C8CAE /* search@2x.png */,
 				F552792C16C637A700323095 /* Clock@2x.png */,
 				F507444916C6F249008C8CAE /* bookmark@2x.png */,
 				F507443B16C6EFEA008C8CAE /* home_03.png */,
@@ -968,7 +968,6 @@
 				F507443C16C6EFEA008C8CAE /* home_03.png in Resources */,
 				F507444616C6F1C1008C8CAE /* profile@2x.png in Resources */,
 				F507444716C6F1C1008C8CAE /* read@2x.png in Resources */,
-				F507444816C6F1C1008C8CAE /* search@2x.png in Resources */,
 				F507444A16C6F249008C8CAE /* bookmark@2x.png in Resources */,
 				F507445116C73595008C8CAE /* bookmark-button@2x.png in Resources */,
 				F507445216C73595008C8CAE /* home-button@2x.png in Resources */,
@@ -986,6 +985,7 @@
 				F5DE163016E1C7A5001FE4A8 /* upload-step-3-image@2x.png in Resources */,
 				F5DE163116E1C7A5001FE4A8 /* upload-step-1-bullet@2x.png in Resources */,
 				F5DE163216E1C7A5001FE4A8 /* upload-step-1-image@2x.png in Resources */,
+				F532414F16F6824A00B9E089 /* search@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,7 +15,8 @@
 #import "SelectUsernameViewController.h"
 
 @interface LoginViewController ()
-@property (strong, nonatomic) UIButton *facebookLoginButton;
+@property (nonatomic, strong) UIButton *facebookLoginButton;
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 @end
 
 @implementation LoginViewController
@@ -30,18 +31,43 @@
     return _facebookLoginButton;
 }
 
+- (UIActivityIndicatorView *) spinner {
+    if (_spinner == nil) {
+        _spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    }
+    return _spinner;
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.facebookLoginButton];
+    
+    
+    [self openSessionWithAllowLoginUI:NO];
+    if (![FBSession.activeSession isOpen]) {
+        [self showLoginButton];
+    }
+}
+
+- (void)showLoggingIn {
+    self.facebookLoginButton.hidden = YES;
+    self.spinner.center = self.facebookLoginButton.center;
+    [self.spinner startAnimating];
+    [self.view addSubview:self.spinner];
+    
+}
+
+- (void)showLoginButton {
+    [self.spinner removeFromSuperview];
+    self.facebookLoginButton.hidden = NO;
 }
 
 - (void)loginWithFBUser: (NSDictionary<FBGraphUser> *) fbUser {
     [RKObjectManager.sharedManager postObject:nil path:@"/login" parameters:@{@"facebook_id": fbUser[@"id"], @"first_name": fbUser[@"first_name"], @"last_name": fbUser[@"last_name"]} success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         API.sharedInstance.loggedInUser = (User *)[mappingResult firstObject];
-        User *user = (User *)[mappingResult firstObject];
-        
         if (API.sharedInstance.loggedInUser.isUsernameConfirmed) {
             [self.navigationController pushViewController:[[MainViewController alloc] init] animated:YES];
         } else {
@@ -52,7 +78,6 @@
         NSLog(@"Error logging in: %@", error);
     }];
 }
-
 
 - (void)clickedFacebookLogin {
     NSLog(@"try facebook login");
@@ -92,6 +117,7 @@
 /* FACEBOOK SECTION */
 
 - (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI {
+    [self showLoggingIn];
     NSArray *permissions = [[NSArray alloc] initWithObjects:@"email", nil];
     return [FBSession openActiveSessionWithReadPermissions:permissions
                                               allowLoginUI:allowLoginUI

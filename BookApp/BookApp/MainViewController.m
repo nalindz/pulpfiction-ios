@@ -12,14 +12,15 @@
 #import "ProfileViewController.h"
 #import "UIView+BounceAnimate.h"
 #import "Searchable.h"
+#import "PaddedUITextField.h"
 
 @interface MainViewController ()
 
 @property (nonatomic, strong) HomeViewController* homeViewController;
 @property (nonatomic, strong) ProfileViewController* profileViewController;
 @property (nonatomic, weak)  UIViewController <Searchable, MainViewControllerDelegate> *activeViewController;
-
-@property (nonatomic, strong) UITextField *searchBox;
+@property (nonatomic, strong) PaddedUITextField *searchBox;
+@property (nonatomic, strong) UIImageView *searchIcon;
 @property (nonatomic, strong) UIButton *bookmarksButton;
 @property (nonatomic, strong) UIButton *homeButton;
 @property (nonatomic, strong) UILabel *homeLabel;
@@ -53,7 +54,7 @@
 
 
 @implementation MainViewController
-- (UILabel*) homeLabel {
+- (UILabel*)homeLabel {
     if (_homeLabel == nil) {
         _homeLabel = [[tabLabel alloc] init];
         [_homeLabel autoSizeWithText:@"home"];
@@ -61,7 +62,7 @@
     return _homeLabel;
 }
 
-- (UILabel*) profileLabel {
+- (UILabel*)profileLabel {
     if (_profileLabel == nil) {
         _profileLabel = [[tabLabel alloc] init];
         [_profileLabel autoSizeWithText:@"profile"];
@@ -69,7 +70,7 @@
     return _profileLabel;
 }
 
-- (UILabel*) bookmarksLabel {
+- (UILabel*)bookmarksLabel {
     if (_bookmarksLabel == nil) {
         _bookmarksLabel = [[tabLabel alloc] init];
         [_bookmarksLabel autoSizeWithText:@"bookmarks"];
@@ -77,15 +78,30 @@
     return _bookmarksLabel;
 }
 
-- (UITextField*) searchBox {
+- (UIImageView *)searchIcon {
+    if (_searchIcon == nil) {
+        _searchIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search"]];
+    }
+    return _searchIcon;
+}
+
+- (PaddedUITextField *)searchBox {
     if (_searchBox == nil) {
-        _searchBox = [[UITextField alloc] initWithFrame:CGRectMake(40, 40, 100, 100)];
+        _searchBox = [[PaddedUITextField alloc] initWithFrame:CGRectZero];
+        _searchBox.topPadding = 5;
+        _searchBox.rightPadding = self.searchIcon.width + 20;
+        _searchBox.leftPadding = 10;
         _searchBox.width = self.view.width * 0.6;
+        _searchBox.y = 40;
         _searchBox.height = 50;
         _searchBox.font = [UIFont h2];
+        _searchBox.layer.cornerRadius = 5.0;
+        _searchBox.layer.masksToBounds = YES;
         _searchBox.returnKeyType = UIReturnKeySearch;
         _searchBox.layer.borderColor = [UIColor lightGrayColor].CGColor;
         _searchBox.layer.borderWidth = 1.0;
+        [self.searchIcon putInRightEdgeOf:_searchBox withMargin:10];
+        self.searchIcon.centerY = _searchBox.height / 2;
     }
     return _searchBox;
 }
