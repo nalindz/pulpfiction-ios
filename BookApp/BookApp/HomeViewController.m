@@ -22,9 +22,9 @@
 @property (nonatomic, strong) UICollectionView *storyResultGrid;
 @property (nonatomic, strong) UIView *bookmarksBlankSlateView;
 @property (nonatomic, strong) NSMutableArray *stories;
-
 @property (nonatomic, weak) UILabel *visibleButtonLabel;
 
+@property (nonatomic, strong) NSString *searchText;
 @property (nonatomic) int currentPageNumber;
 @property (atomic) BOOL isLoadingPage;
 @property (atomic) BOOL canStartPaginateRequest;
@@ -89,6 +89,7 @@
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
+    self.canStartPaginateRequest = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -97,6 +98,7 @@
 }
 
 - (void)search:(NSString *)searchText {
+    self.searchText = searchText;
     [self fetchFeedPage:0 withQuery:searchText refresh:YES];
 }
 
@@ -116,7 +118,7 @@
 - (void)homePressed {
     self.isFeedView = YES;
     self.canStartPaginateRequest = YES;
-    [self fetchFeedPage:0 withQuery:nil refresh:YES]; // TODO: should use search text?
+    [self fetchFeedPage:0 withQuery:self.searchText refresh:YES]; // TODO: should use search text?
 }
 
 - (void) profilePressed {
@@ -129,7 +131,7 @@
 }
 
 - (void)fetchFeedPage: (int) pageNumber withQuery: (NSString *) query refresh: (BOOL) refresh{
-    if (!self.canStartPaginateRequest) return;
+    if (!self.canStartPaginateRequest && pageNumber != 0) return;
     if (self.isLoadingPage) return;
     self.isLoadingPage = YES;
     self.canStartPaginateRequest = NO;
@@ -343,7 +345,6 @@
     }
     
     
-    
     if (((scrollView.contentOffset.x + scrollView.width) > scrollView.contentSize.width) && self.isFeedView) {
         [self fetchNextPage];
     }
@@ -354,7 +355,7 @@
 }
 
 - (void)fetchNextPage {
-    [self fetchFeedPage:(self.currentPageNumber + 1) withQuery:nil refresh:NO];
+    [self fetchFeedPage:(self.currentPageNumber + 1) withQuery:self.searchText refresh:NO];
 }
 
 - (void)animateForward: (NSArray *) visibleViews {
