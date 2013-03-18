@@ -81,6 +81,9 @@
 - (UIImageView *)searchIcon {
     if (_searchIcon == nil) {
         _searchIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search"]];
+        UIGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(search)];
+        [_searchIcon addGestureRecognizer:recognizer];
+        _searchIcon.userInteractionEnabled = YES;
     }
     return _searchIcon;
 }
@@ -165,6 +168,10 @@
     [self.activeViewController search:textField.text];
 }
 
+- (void)search {
+    [self.activeViewController search:self.searchBox.text];
+}
+
 - (void) showLabelForButton: (UIButton *)button {
     UILabel *animatingLabel;
     
@@ -181,7 +188,6 @@
     [self.visibleButtonLabel hideAnimateWithDuration:0.1 offset:20];
     [animatingLabel bounceAnimateWithDuration:0.1 offset:10 bounces:1];
     self.visibleButtonLabel = animatingLabel;
-    
 }
 
 - (void)homePressed {
