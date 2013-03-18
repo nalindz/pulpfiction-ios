@@ -17,18 +17,10 @@
 #define FONT_MIN_SIZE 10.0
 
 @interface ReadViewController ()
-
-- (void) setupScrollView;
-
-- (NSInteger)numberOfPages;
-- (void) reloadData;
-
 @property (atomic, strong) dispatch_queue_t backgroundQueue;
-
 @property (atomic) int firstPageNumber;
 @property (atomic) int lastPageNumber;
 @property (atomic) int totalPages;
-
 @property (atomic) int currentPageNumber;
 
 @property (atomic, strong) UIView *loadingShot;
@@ -40,15 +32,10 @@
 // bleh globals - should be in a closure
 @property (nonatomic, strong) NSNumber *viewingBlockNumber;
 @property (nonatomic, strong) NSNumber *viewingBlockIndex;
-
 @property (atomic) BOOL fontClickDisabled;
-
-- (void)removeAndAddCellsIfNecessary;
-    
 @end
 
 @implementation ReadViewController
-
 
 #pragma mark - life cycle
 
@@ -60,22 +47,12 @@
     return _pageFont;
 }
 
-
 - (id)init {
     self = [super init];
     if (self) {
-        [self view];
-        [self loadTitleView];
         self.backgroundQueue = dispatch_queue_create("background.queue", nil);
     }
     return self;
-}
-
-- (void)loadTitleView
-{
-    UIView *titleView = [[UIView alloc] init];
-    titleView.frame = CGRectMake(0, 0, 150, 44);
-    titleView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
 }
 
 - (void) createNumberOfPages:(int) numberOfPages
@@ -193,7 +170,6 @@
             numberOfPages--;
         }
         
-        
         currentPageNumber++;
         currentBlockIndex = [newPage.last_block_index intValue];
         currentBlockNumber = [newPage.last_block_number intValue];
@@ -206,6 +182,10 @@
 
 - (int)pageMargin {
     return 80;
+}
+
+- (Story *)story {
+    return [Story findFirstByAttribute:@"id" withValue:self.storyId];
 }
 
 - (CGSize) pageSize {
@@ -437,7 +417,6 @@
     });
 }
 
-
 - (void)fontIncrease {
     CGFloat fontSize = self.pageFont.pointSize;
     fontSize += 5.0;
@@ -463,8 +442,6 @@
     self.viewingBlockIndex = [currentPage.first_block_index copy];
     self.viewingBlockNumber = [currentPage.first_block_number copy];
     
-   
-    
     //UICollectionViewCell *cell = [self.scrollView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
     UIGraphicsBeginImageContextWithOptions(self.scrollView.frame.size,NO, 1);
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -482,9 +459,7 @@
    
     [self.view addSubview:self.loadingShot];
     
-    
     dispatch_async(self.backgroundQueue, ^{[self finishFontChange];});
-    
 }
 
 - (void) finishFontChange {
@@ -523,7 +498,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (Page *) currentPage {
+- (Page *)currentPage {
     Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", self.currentPageNumber, self.story.id]];
     return page;
 }
@@ -568,6 +543,48 @@
     return self.pageFont;
 }
 
+- (void)bookmarkClicked {
+    if (self.story.bookmark) {
+        [self deleteBookmark];
+    } else {
+        [self createBookmark];
+    }
+}
+
+- (void)createBookmark {
+    Bookmark *newBookmark = [Bookmark createEntity];
+    newBookmark.page_number = @(self.currentPageNumber);
+    newBookmark.story_id = self.story.id;
+    newBookmark.font_size = @(self.pageFont.pointSize);
+    self.story.bookmark = newBookmark;
+    
+    // post bookmark
+    [[RKObjectManager sharedManager] postObject:newBookmark path:nil parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        NSLog(@"Saved bookmark :%@", [mappingResult firstObject]);
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"Error saving bookmark: %@", error);
+    }];
+    [[self currentPageCell] setPageBookmarked];
+}
+
+- (void)deleteBookmark {
+    NSLog(@"deleting bookmark :%@", self.story.bookmark);
+    [RKObjectManager.sharedManager deleteObject:self.story.bookmark path:nil parameters:@{@"story_id": self.story.bookmark.story_id} success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        NSLog(@"Deleted bookmark");
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        NSLog(@"Error deleting bookmark: %@", error);
+    }];
+    
+    Story *story = self.story;
+    story.bookmark = nil;
+    [self.delegate deleteBookmarkedStory:story];
+    [[self currentPageCell] setPageUnbookmarked];
+}
+
+- (SlideViewCell *)currentPageCell {
+    return (SlideViewCell*)[self.scrollView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:self.currentPageNumber inSection:0]];
+}
+
 #pragma mark collectionView delegate methods
 
 
@@ -587,8 +604,6 @@
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"dis caled");
-    
     SlideViewCell *cell = [self.scrollView dequeueReusableCellWithReuseIdentifier:@"slideViewCell" forIndexPath:indexPath];
     
     [cell renderWithPageNumber:@(indexPath.row)

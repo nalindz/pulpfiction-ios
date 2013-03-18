@@ -28,47 +28,9 @@
 - (UIButton*) bookmarkButton {
     if (_bookmarkButton == nil) {
         _bookmarkButton = [UIButton initWithImageNamed:@"bookmark-button-light"];
-        [_bookmarkButton addTarget:self action:@selector(bookmarkClicked) forControlEvents:UIControlEventTouchUpInside];
+        [_bookmarkButton addTarget:self.delegate action:@selector(bookmarkClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _bookmarkButton;
-}
-
-- (void)bookmarkClicked {
-    /*
-    if (self.story.bookmark) {
-        // remove bookmark
-        NSLog(@"deleting bookmark :%@", self.story.bookmark);
-        [[RKObjectManager sharedManager] deleteObject:self.story.bookmark usingBlock:^(RKObjectLoader *loader) {
-            loader.onDidLoadObject = ^(Bookmark *bookmark) {
-                NSLog(@"Deleted bookmark :%@", bookmark);
-            };
-            
-            loader.onDidFailWithError = ^(NSError *error) {
-                NSLog(@"Error deleting bookmark: %@", error);
-            };
-        }];
-        self.story.bookmark = nil;
-        [self setPageUnbookmarked];
-    } else {
-        Bookmark *newBookmark = [Bookmark object];
-        newBookmark.page_number = self.pageNumber;
-        newBookmark.story_id = self.story.id;
-        newBookmark.font_size = @(self.textLabel.font.pointSize);
-        self.story.bookmark = newBookmark;
-        
-        // post bookmark
-        [[RKObjectManager sharedManager] postObject:newBookmark usingBlock:^(RKObjectLoader *loader) {
-            loader.onDidLoadObject = ^(Bookmark *bookmark) {
-                NSLog(@"Saved bookmark :%@", bookmark);
-            };
-            
-            loader.onDidFailWithError = ^(NSError *error) {
-                NSLog(@"Error saving bookmark: %@", error);
-            };
-        }];
-        [self setPageBookmarked];
-    }
-     */
 }
 
 - (void)setPageBookmarked {
@@ -128,12 +90,10 @@
 }
 
 - (void)clickedFontIncrease {
-    //self.fontIncrease.enabled = NO;
     [self.delegate fontIncrease];
 }
 
 - (void) clickedFontDecrease {
-//    self.fontDecrease.enabled = NO;
     [self.delegate fontDecrease];
 }
 

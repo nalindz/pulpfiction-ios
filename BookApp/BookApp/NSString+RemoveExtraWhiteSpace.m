@@ -19,4 +19,9 @@
     return [filteredArray componentsJoinedByString:@" "];
 }
 
+
+- (BOOL)isBlank {
+    return [[self trim] isEqualToString:@""];
+}
+
 @end

@@ -24,7 +24,7 @@
     
     [userMapping addAttributeMappingsFromArray:userMappingArray];
     
-   // userMapping.identificationAttributes = @[@"id"];
+    userMapping.identificationAttributes = @[@"id"];
     [API sharedInstance].mappings[@"user"] = userMapping;
     
     RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];

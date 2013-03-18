@@ -17,7 +17,6 @@
 @end
 @implementation SelectUsernameView
 
-
 - (UILabel*) selectAUsernameLabel {
     if (_selectAUsernameLabel == nil) {
         _selectAUsernameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -38,6 +37,7 @@
     }
     return _errorLabel;
 }
+
 - (UIButton*) nextButton {
     if (_nextButton == nil) {
         _nextButton = [UIButton initWithImageNamed:@"username-next-button"];
@@ -66,9 +66,7 @@
     return _usernameTextField;
 }
 
-
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
@@ -81,7 +79,6 @@
     return self;
 }
 
-
 - (void) setSuggestedUsername: (NSString *) text {
     self.usernameTextField.text = text;
 }
@@ -91,19 +88,25 @@
 }
 
 - (void)showTooShortError {
-    [self.errorLabel autoSizeWithText:@"Your username is too short. Try something between 3-15 characters"];
+    [self.errorLabel autoSizeWithText:@"Your username is too short. Try something between 3-15 characters."];
     [self.errorLabel putBelow:self.usernameTextField withMargin:10];
     self.errorLabel.centerX = self.centerX;
 }
 
 - (void)showTooLongError {
-    [self.errorLabel autoSizeWithText:@"Your username is too long. Try something between 3-15 characters"];
+    [self.errorLabel autoSizeWithText:@"Your username is too long. Try something between 3-15 characters."];
     [self.errorLabel putBelow:self.usernameTextField withMargin:10];
     self.errorLabel.centerX = self.centerX;
 }
 
 - (void)showInvalidCharactersError {
-    [self.errorLabel autoSizeWithText:@"You can only use letters, numbers, dots and underscores"];
+    [self.errorLabel autoSizeWithText:@"You can only use letters, numbers, dots and underscores."];
+    [self.errorLabel putBelow:self.usernameTextField withMargin:10];
+    self.errorLabel.centerX = self.centerX;
+}
+
+- (void)showAlreadyTakenError {
+    [self.errorLabel autoSizeWithText:@"Sorry, that username is already taken."];
     [self.errorLabel putBelow:self.usernameTextField withMargin:10];
     self.errorLabel.centerX = self.centerX;
 }

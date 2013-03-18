@@ -11,12 +11,9 @@
 @implementation StoryView (RestKit)
 + (void)configureRestKitMapping {
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    RKObjectMapping *storyViewMapping = [RKObjectMapping mappingForClass:[StoryView class]];
-    
     [objectManager.router.routeSet addRoute:[RKRoute
                                              routeWithClass:[StoryView class]
                                              pathPattern:@"/stories/:story_id/view"
                                              method:RKRequestMethodPOST]];
-    
 }
 @end

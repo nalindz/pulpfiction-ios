@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @protocol MainViewControllerDelegate
+@optional
 - (void)tabButtonPressed;
 @end
+
 @interface MainViewController : UIViewController
 @end

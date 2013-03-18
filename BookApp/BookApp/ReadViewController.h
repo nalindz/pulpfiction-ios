@@ -3,10 +3,8 @@
 #import "Story.h"
 #import "PageView.h"
 
-@protocol ISColumnsControllerChild <NSObject>
-@optional
-- (void)didBecomeActive;
-- (void)didResignActive;
+@protocol ReadViewControllerDelegate
+- (void)deleteBookmarkedStory: (Story *)bookmarkedStory;
 @end
 
 @interface ReadViewController : UIViewController
@@ -16,13 +14,13 @@ UICollectionViewDataSource,
 UICollectionViewDelegate
 >
 
-@property (retain, nonatomic) NSMutableArray       *viewControllers;
-@property (retain, nonatomic) PageView  *scrollView;
-@property (retain, nonatomic) UILabel       *titleLabel;
+@property (retain, nonatomic) NSMutableArray *viewControllers;
+@property (retain, nonatomic) PageView *scrollView;
+@property (retain, nonatomic) UILabel *titleLabel;
 @property (retain, nonatomic) UIPageControl *pageControl;
-@property (retain, nonatomic)Story * story;
+@property (retain, nonatomic) Story * story;
+@property (retain, nonatomic) NSNumber * storyId;
 @property (nonatomic, retain) NSNumber *startingPageNumber;
-- (void)reloadChildViewControllers;
-
+@property (nonatomic, weak) id<ReadViewControllerDelegate> delegate;
 
 @end

@@ -1,5 +1,5 @@
 //
-//  DiscoverVC.m
+//  HomeViewController.m
 //  BookApp
 //
 //  Created by Nalin on 11/13/12.
@@ -7,7 +7,6 @@
 //
 
 #import "HomeViewController.h"
-#import "ReadViewController.h"
 #import "StoryCell.h"
 #import "CaptureView.h"
 #import "Bookmark.h"
@@ -18,10 +17,12 @@
 #import "UIView+BounceAnimate.h"
 
 @interface HomeViewController ()
-#define pageSize 9
+#define pageSize 18
 @property (nonatomic, strong) UICollectionView *storyResultGrid;
 @property (nonatomic, strong) UIView *bookmarksBlankSlateView;
-@property (nonatomic, strong) NSMutableArray *stories;
+@property (nonatomic, weak) NSMutableArray *stories;
+@property (nonatomic, strong) NSMutableArray *feedStories;
+@property (nonatomic, strong) NSMutableArray *bookmarkStories;
 @property (nonatomic, weak) UILabel *visibleButtonLabel;
 
 @property (nonatomic, strong) NSString *searchText;
@@ -30,7 +31,7 @@
 @property (atomic) BOOL canStartPaginateRequest;
 
 @property (atomic) BOOL isFeedView;
-
+@property (atomic) BOOL endOfFeed;
 
 // animation stuff
 @property int pageNumberToScrollTo;
@@ -38,7 +39,6 @@
 @property int lastPage;
 @property int storiesOnLastPage;
 @property int startScrollOffset;
-
 
 @end
 
@@ -52,11 +52,18 @@
     return _bookmarksBlankSlateView;
 }
 
-- (NSMutableArray*) stories {
-    if (_stories == nil) {
-        _stories = [NSMutableArray array];
+- (NSMutableArray*)feedStories {
+    if (_feedStories == nil) {
+        _feedStories = [NSMutableArray array];
     }
-    return _stories;
+    return _feedStories;
+}
+
+- (NSMutableArray *)bookmarkStories {
+    if (_bookmarkStories == nil) {
+        _bookmarkStories = [NSMutableArray array];
+    }
+    return _bookmarkStories;
 }
 
 - (id)initWithFrame: (CGRect) frame {
@@ -90,64 +97,78 @@
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     self.canStartPaginateRequest = YES;
+    self.currentPageNumber = 1;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.view addSubview:self.storyResultGrid];
-    [self fetchFeedPage:0 withQuery:nil refresh:YES];
 }
 
 - (void)search:(NSString *)searchText {
     self.searchText = searchText;
-    [self fetchFeedPage:0 withQuery:searchText refresh:YES];
+    [self fetchFeedPage:1 withQuery:searchText];
 }
 
 - (void)bookmarksPressed {
     self.isFeedView = NO;
-    [RKObjectManager.sharedManager
-     getObjectsAtPath:@"/stories"
-     parameters:@{@"type": @"bookmarks"}
-     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            [self receivePageofStories:[mappingResult array] ofType:@"bookmarks" refresh:YES];
-            [self scrollToFirstPageAnimated:NO];
-     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            NSLog(@"Error loading bookmarks: %@", error);
-     }];
+    self.stories = self.bookmarkStories;
+    [self.storyResultGrid reloadData];
+    [self fetchBookmarkStories];
 }
 
 - (void)homePressed {
     self.isFeedView = YES;
+    self.stories = self.feedStories;
+    [self.storyResultGrid reloadData];
+}
+
+- (void)resetFeedState {
+    self.endOfFeed = NO;
     self.canStartPaginateRequest = YES;
-    [self fetchFeedPage:0 withQuery:self.searchText refresh:YES]; // TODO: should use search text?
 }
 
-- (void) profilePressed {
-    ProfileViewController *profileVC = [[ProfileViewController alloc] init];
-    [self.navigationController pushViewController:profileVC animated: YES];
+- (void)fetchBookmarkStories {
+    [RKObjectManager.sharedManager
+     getObjectsAtPath:@"/stories"
+     parameters:@{@"type": @"bookmarks"}
+     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+         [self receivePageofStories:[mappingResult array] ofType:@"bookmarks" pageNumber:1];
+         [self scrollToFirstPageAnimated:NO];
+     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+         NSLog(@"Error loading bookmarks: %@", error);
+     }];
 }
 
-- (int)currentPageNumber {
-    return self.storyResultGrid.contentOffset.x / self.storyResultGrid.width;
-}
-
-- (void)fetchFeedPage: (int) pageNumber withQuery: (NSString *) query refresh: (BOOL) refresh{
-    if (!self.canStartPaginateRequest && pageNumber != 0) return;
+- (void)fetchFeedPage: (int) pageNumber withQuery: (NSString *) query {
+    if (pageNumber == 1) {
+        [self resetFeedState];
+    }
+    if (!self.canStartPaginateRequest && pageNumber != 1) return;
     if (self.isLoadingPage) return;
+    if (self.endOfFeed) return;
     self.isLoadingPage = YES;
     self.canStartPaginateRequest = NO;
     
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"type": @"feed", @"offset": @(pageSize * pageNumber), @"limit": @(pageSize * 2)}];
-    if (query) params[@"query"] = query;
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"type": @"feed", @"page": @(pageNumber)}];
+    query = [query trim];
+    if (query && ![query isBlank]) params[@"query"] = query;
     
     [RKObjectManager.sharedManager
      getObjectsAtPath:@"/stories"
      parameters:params
      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            [self receivePageofStories:[mappingResult array] ofType:@"feed" refresh:refresh];
-            self.isLoadingPage = NO;
+         NSArray *storiesPage = [mappingResult array];
+         [self receivePageofStories:storiesPage ofType:@"feed" pageNumber:pageNumber];
+         
+         if (storiesPage.count == pageSize) {
+             self.currentPageNumber = pageNumber;
+         } else {
+             self.endOfFeed = YES;
+         }
+         self.isLoadingPage = NO;
      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            NSLog(@"Error loading feed: %@", error);
-            self.isLoadingPage = NO;
+         NSLog(@"Error loading feed: %@", error);
+         self.isLoadingPage = NO;
      }];
 }
 
@@ -173,11 +194,11 @@
     [self.bookmarksBlankSlateView removeFromSuperview];
 }
 
-
-- (void)receivePageofStories: (NSArray *)stories ofType: (NSString *) type refresh: (BOOL) refresh {
-    if (refresh) [self.stories removeAllObjects];
+- (void)receivePageofStories: (NSArray *)stories ofType: (NSString *) type pageNumber: (int) pageNumber {
+    if (pageNumber == 1) [self.stories removeAllObjects];
     [self.stories addObjectsFromArray:stories];
     [self.storyResultGrid reloadData];
+    
     if (self.stories.count == 0) {
         if ([type isEqualToString:@"feed"]) {
             [self showFeedBlankSlate];
@@ -190,9 +211,6 @@
         [self hideAllBlankSlates];
     }
     
-    
-    NSLog(@"content size width :%f", self.storyResultGrid.contentSize.width);
-    
     self.lastPage = self.stories.count / 9;
     self.storiesOnLastPage = self.stories.count % 9;
     if (self.storiesOnLastPage == 0) {
@@ -201,6 +219,17 @@
     }
 }
 
+- (void)deleteBookmarkedStory:(Story *)bookmarkedStory {
+    int i = 0;
+    for (Story *story in self.bookmarkStories) {
+        if ([story.id isEqualToNumber:bookmarkedStory.id]) {
+            [self.bookmarkStories removeObjectAtIndex:i];
+            [self.storyResultGrid reloadData];
+            break;
+        }
+    i++;
+    }
+}
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.stories.count;
@@ -210,29 +239,23 @@
     return 1;
 }
 
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     Story *storyToSwitchTo = [self.stories objectAtIndex:indexPath.row];
-    
     [Log eventName:@"clicked_story" data:@{@"story_id": storyToSwitchTo.id}];
-    
     ReadViewController *readViewController = [[ReadViewController alloc] init];
-    readViewController.story = storyToSwitchTo;
+    readViewController.delegate = self;
+    readViewController.storyId = storyToSwitchTo.id;
     [self.navigationController pushViewController: readViewController animated:YES];
-    
-    NSLog(@"index path: %d", indexPath.row);
-    
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     Story *story = [self.stories objectAtIndex:indexPath.row];
-    
     StoryCell *cell = [self.storyResultGrid dequeueReusableCellWithReuseIdentifier:@"storyCell" forIndexPath:indexPath];
-    
     [cell renderWithStory:story indexPath:indexPath];
     cell.tag = indexPath.row;
     return cell;
 }
-
 
 # pragma mark scroll view delegate methods
 
@@ -345,7 +368,7 @@
     }
     
     
-    if (((scrollView.contentOffset.x + scrollView.width) > scrollView.contentSize.width) && self.isFeedView) {
+    if ((scrollView.contentSize.width - (scrollView.contentOffset.x + scrollView.width) < scrollView.width / 2) && self.isFeedView) {
         [self fetchNextPage];
     }
 }
@@ -355,7 +378,7 @@
 }
 
 - (void)fetchNextPage {
-    [self fetchFeedPage:(self.currentPageNumber + 1) withQuery:self.searchText refresh:NO];
+    [self fetchFeedPage:(self.currentPageNumber + 1) withQuery:self.searchText];
 }
 
 - (void)animateForward: (NSArray *) visibleViews {
@@ -400,7 +423,7 @@
         } else if (view.tag % 3 == 1) {
             xShakeAmount = 20;
             duration = 0.2;
-        } else if (view.tag % 3 == 2) {
+        } else {
             xShakeAmount = 10;
             duration = 0.1;
         }

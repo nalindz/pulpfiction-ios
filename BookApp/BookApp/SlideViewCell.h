@@ -11,14 +11,15 @@
 #import "BAProgressBarView.h"
 
 @protocol SlideViewCellDelegate
+@optional
 - (UIFont *) fontForSlideViewCell;
-- (int) pageMargin;
-- (void) fontIncrease;
-- (void) fontDecrease;
-- (void) hideAllControls;
-- (void) showAllControls;
-- (void) bookmarkCurrentPage;
-- (void) scrollToPercentage: (CGFloat) percentage;
+- (int)pageMargin;
+- (void)fontIncrease;
+- (void)fontDecrease;
+- (void)hideAllControls;
+- (void)showAllControls;
+- (void)bookmarkClicked;
+- (void)scrollToPercentage: (CGFloat) percentage;
 @end
 
 @interface SlideViewCell : UICollectionViewCell <BAProgressBarViewDelegate>
@@ -28,12 +29,14 @@
 - (void) setPercentage: (CGFloat) percentage;
 - (void) hideControls;
 - (void) showControls;
-    - (void)prepareForReuse;
+- (void)prepareForReuse;
+- (void)setPageBookmarked;
+- (void)setPageUnbookmarked;
 - (void)renderWithPageNumber: (NSNumber *) pageNumber
                      storyId: (NSNumber *) storyId
                         font: (UIFont *) font
                       margin: (CGFloat) margin
-                      progress: (CGFloat) progress
+                    progress: (CGFloat) progress
                 showControls: (BOOL) showControls;
     
 @end

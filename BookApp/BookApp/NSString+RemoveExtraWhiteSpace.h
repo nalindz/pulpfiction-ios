@@ -9,5 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface NSString (RemoveExtraWhiteSpace)
-- (NSString *) trim;
+- (NSString *)trim;
+- (BOOL)isBlank;
 @end

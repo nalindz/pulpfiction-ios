@@ -18,16 +18,29 @@
                             inManagedObjectStore:objectManager.managedObjectStore];
     
     [API sharedInstance].mappings[@"bookmark"] = bookmarkMapping;
-    [bookmarkMapping addAttributeMappingsFromArray:@[
+    
+    NSArray *bookmarkMappingArray =@[
      @"id",
      @"page_number",
      @"font_size",
      @"user_id",
      @"created_at",
      @"updated_at",
-     @"story_id"]];
+     @"story_id"];
+    
+    
+    
+    [bookmarkMapping addAttributeMappingsFromArray:bookmarkMappingArray];
 
     bookmarkMapping.identificationAttributes = @[@"id"];
+    
+    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
+    [requestMapping addAttributeMappingsFromArray:bookmarkMappingArray];
+    
+    [objectManager addRequestDescriptor:
+     [RKRequestDescriptor requestDescriptorWithMapping:requestMapping
+                                           objectClass:[Bookmark class]
+                                           rootKeyPath:@"bookmark"]];
     
     
     [objectManager.router.routeSet addRoute:[RKRoute

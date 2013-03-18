@@ -28,10 +28,8 @@
 @property (nonatomic, strong) UILabel *profileLabel;
 @property (nonatomic, strong) UIButton *profileButton;
 
-
 // state
 @property (nonatomic, weak) UILabel *visibleButtonLabel;
-//
 
 @end
 
@@ -193,12 +191,15 @@
 - (void)homePressed {
     [self showLabelForButton:self.homeButton];
     self.activeViewController = self.homeViewController;
+    self.searchBox.text = @"";
     [self.activeViewController performSelector:@selector(homePressed)];
+    [self.activeViewController search:self.searchBox.text];
 }
 
 - (void)bookmarksPressed {
     [self showLabelForButton:self.bookmarksButton];
     self.activeViewController = self.homeViewController;
+    self.searchBox.text = @"";
     [self.activeViewController performSelector:@selector(bookmarksPressed)];
 }
 
@@ -206,6 +207,7 @@
     [self showLabelForButton:self.profileButton];
     self.activeViewController = self.profileViewController;
     [self.activeViewController viewWillAppear:NO];
+    self.searchBox.text = @"";
     [self.activeViewController tabButtonPressed];
 }
 
@@ -221,10 +223,11 @@
     [self.searchBox addTarget:self
                   action:@selector(textFieldFinished:)
                   forControlEvents:UIControlEventEditingDidEndOnExit];
+    [self homePressed];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self homePressed];
+    //[self homePressed];
 }
 
 - (void) setupTabLabels {
