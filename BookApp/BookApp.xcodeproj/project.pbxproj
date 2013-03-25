@@ -74,6 +74,8 @@
 		F530E1FF16435AF6003A9EDF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1FE16435AF6003A9EDF /* QuartzCore.framework */; };
 		F530E20016435B07003A9EDF /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F530E1E716435A3C003A9EDF /* libRestKit.a */; };
 		F532414F16F6824A00B9E089 /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F532414E16F6824A00B9E089 /* search@2x.png */; };
+		F54D492216FD82E50026B08E /* FeedBlankSlateView.m in Sources */ = {isa = PBXBuildFile; fileRef = F54D492116FD82E50026B08E /* FeedBlankSlateView.m */; };
+		F54D496D16FFE4A60026B08E /* no-search-results@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F54D496C16FFE4A60026B08E /* no-search-results@2x.png */; };
 		F54E0BE7167DC5A6002C1F3B /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F54E0BE4167DC592002C1F3B /* libSDWebImage.a */; };
 		F54E0BEB167DC5F5002C1F3B /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54E0BEA167DC5F5002C1F3B /* ImageIO.framework */; };
 		F552792B16C6366F00323095 /* Home@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F552792A16C6366F00323095 /* Home@2x.png */; };
@@ -306,6 +308,9 @@
 		F530E1FC16435AEE003A9EDF /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		F530E1FE16435AF6003A9EDF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F532414E16F6824A00B9E089 /* search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search@2x.png"; sourceTree = "<group>"; };
+		F54D492016FD82E50026B08E /* FeedBlankSlateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBlankSlateView.h; sourceTree = "<group>"; };
+		F54D492116FD82E50026B08E /* FeedBlankSlateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedBlankSlateView.m; sourceTree = "<group>"; };
+		F54D496C16FFE4A60026B08E /* no-search-results@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no-search-results@2x.png"; sourceTree = "<group>"; };
 		F54E0BDA167DC592002C1F3B /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = ../Frameworks/SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
 		F54E0BEA167DC5F5002C1F3B /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		F552792A16C6366F00323095 /* Home@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Home@2x.png"; sourceTree = "<group>"; };
@@ -651,6 +656,8 @@
 		F530E20216435C8D003A9EDF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F54D492016FD82E50026B08E /* FeedBlankSlateView.h */,
+				F54D492116FD82E50026B08E /* FeedBlankSlateView.m */,
 				F5DE163316E1C834001FE4A8 /* UploadStoryTutorialView.h */,
 				F5DE163416E1C834001FE4A8 /* UploadStoryTutorialView.m */,
 				F5E942F516DF1B0A0097E10A /* SelectUsernameView.h */,
@@ -817,6 +824,7 @@
 		F5DE162616E1C78F001FE4A8 /* Upload Story Tutorial */ = {
 			isa = PBXGroup;
 			children = (
+				F54D496C16FFE4A60026B08E /* no-search-results@2x.png */,
 				F5DE162716E1C7A5001FE4A8 /* upload-step-2-bullet@2x.png */,
 				F5DE162816E1C7A5001FE4A8 /* upload-step-2-image@2x.png */,
 				F5DE162916E1C7A5001FE4A8 /* upload-step-3-bullet@2x.png */,
@@ -986,6 +994,7 @@
 				F5DE163116E1C7A5001FE4A8 /* upload-step-1-bullet@2x.png in Resources */,
 				F5DE163216E1C7A5001FE4A8 /* upload-step-1-image@2x.png in Resources */,
 				F532414F16F6824A00B9E089 /* search@2x.png in Resources */,
+				F54D496D16FFE4A60026B08E /* no-search-results@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1072,6 +1081,7 @@
 				F5D197C016E87A6F004CB0DF /* NSNumber+BitUti.m in Sources */,
 				F5D197C316E87BA4004CB0DF /* User.m in Sources */,
 				F5D197C616E9C7A4004CB0DF /* Log.m in Sources */,
+				F54D492216FD82E50026B08E /* FeedBlankSlateView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

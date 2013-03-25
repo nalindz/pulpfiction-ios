@@ -15,11 +15,13 @@
 #import "ProfileViewController.h"
 #import "UIButton+ResizeWithAspectRatio.h"
 #import "UIView+BounceAnimate.h"
+#import "FeedBlankSlateView.h"
 
 @interface HomeViewController ()
 #define pageSize 18
 @property (nonatomic, strong) UICollectionView *storyResultGrid;
 @property (nonatomic, strong) UIView *bookmarksBlankSlateView;
+@property (nonatomic, strong) UIView *feedBlankSlateView;
 @property (nonatomic, weak) NSMutableArray *stories;
 @property (nonatomic, strong) NSMutableArray *feedStories;
 @property (nonatomic, strong) NSMutableArray *bookmarkStories;
@@ -39,9 +41,7 @@
 @property int lastPage;
 @property int storiesOnLastPage;
 @property int startScrollOffset;
-
 @end
-
 
 @implementation HomeViewController
 
@@ -50,6 +50,13 @@
         _bookmarksBlankSlateView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bookmarks_blank_slate"]];
     }
     return _bookmarksBlankSlateView;
+}
+
+- (UIView *)feedBlankSlateView {
+    if (_feedBlankSlateView == nil) {
+        _feedBlankSlateView = [[FeedBlankSlateView alloc] initWithFrame:self.storyResultGrid.frame];
+    }
+    return _feedBlankSlateView;
 }
 
 - (NSMutableArray*)feedStories {
@@ -119,6 +126,7 @@
 - (void)homePressed {
     self.isFeedView = YES;
     self.stories = self.feedStories;
+    [self hideAllBlankSlates];
     [self.storyResultGrid reloadData];
 }
 
@@ -173,9 +181,14 @@
 }
 
 - (void)showFeedBlankSlate {
+    self.storyResultGrid.hidden = YES;
+    [self.view addSubview:self.feedBlankSlateView];
+    self.feedBlankSlateView.center = self.storyResultGrid.center;
 }
 
 - (void)hideFeedBlankSlate {
+    self.storyResultGrid.hidden = NO;
+    [self.feedBlankSlateView removeFromSuperview];
 }
 
 - (void)hideAllBlankSlates {
@@ -192,13 +205,12 @@
 
 - (void)hideBookmarksBlankSlate {
     [self.bookmarksBlankSlateView removeFromSuperview];
+    self.storyResultGrid.hidden = NO;
 }
 
 - (void)receivePageofStories: (NSArray *)stories ofType: (NSString *) type pageNumber: (int) pageNumber {
     if (pageNumber == 1) [self.stories removeAllObjects];
     [self.stories addObjectsFromArray:stories];
-    [self.storyResultGrid reloadData];
-    
     if (self.stories.count == 0) {
         if ([type isEqualToString:@"feed"]) {
             [self showFeedBlankSlate];
@@ -210,7 +222,7 @@
     } else {
         [self hideAllBlankSlates];
     }
-    
+    [self.storyResultGrid reloadData];
     self.lastPage = self.stories.count / 9;
     self.storiesOnLastPage = self.stories.count % 9;
     if (self.storiesOnLastPage == 0) {
