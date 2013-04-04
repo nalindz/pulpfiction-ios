@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
-#import "SlideViewCell.h"
+#import "PageCell.h"
 #import "Story.h"
 #import "PageView.h"
 

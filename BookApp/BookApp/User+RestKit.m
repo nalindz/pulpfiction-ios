@@ -19,6 +19,7 @@
      @"first_name",
      @"last_name",
      @"email",
+     @"email_hash",
      @"state",
      @"facebook_id"];
     

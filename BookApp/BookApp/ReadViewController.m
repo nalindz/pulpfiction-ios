@@ -1,6 +1,6 @@
 #import "ReadViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "SlideViewCell.h"
+#import "PageCell.h"
 #import "Block.h"
 #import "Page+RestKit.h"
 #import "NSString+FitInLabel.h"
@@ -201,29 +201,35 @@
     
     self.scrollView.backgroundColor = [UIColor blackColor];
     self.scrollView.pagingEnabled = YES;
+    //self.scrollView.scrollEnabled = NO;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.showsVerticalScrollIndicator = NO;
     self.scrollView.scrollsToTop = NO;
     self.scrollView.delegate = self;
     self.scrollView.dataSource = self;
-    [self.scrollView registerClass:[SlideViewCell class] forCellWithReuseIdentifier:@"slideViewCell"];
+    [self.scrollView registerClass:[PageCell class] forCellWithReuseIdentifier:@"slideViewCell"];
     
     [self.view addSubview:self.scrollView];
+    
+    UIView *bar = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.height - 200, self.scrollView.width, 200)];
+    [self.scrollView addSubview:bar];
+    UIGestureRecognizer *progressScrollRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(progressScroll:)];
+    [bar addGestureRecognizer:progressScrollRecognizer];
+    [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:progressScrollRecognizer];
 }
 
-- (void)viewDidLoad
-{
+- (void)progressScroll: (UIPanGestureRecognizer *)recognizer {
+    NSLog(@"meow pan:%f", [recognizer translationInView:recognizer.view].x);
+    for (int i = 0; i <  [recognizer numberOfTouches]; i++) {
+        NSLog(@"meow touch:%f", [recognizer locationOfTouch:i inView:recognizer.view].x);
+    }
+}
+
+- (void)viewDidLoad {
     [super viewDidLoad];
     [self setupScrollView];
     self.firstPageNumber = 0;
     self.lastPageNumber = -1;
-    
-    /*
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receiveManagedObjectUpdate:)
-                                                 name:@"changesMerged"
-                                               object:nil];
-     */
 }
 
 - (void)receiveManagedObjectUpdate: (NSNotification *) notification {
@@ -314,15 +320,15 @@
 
 - (void)hideAllControls {
     self.showControls = NO;
-    for (SlideViewCell *cell in self.scrollView.subviews) {
-        [cell hideControls];
+    for (PageCell *cell in self.scrollView.subviews) {
+        if (cell.class == PageCell.class) [cell hideControls];
     }
 }
 
 - (void)showAllControls {
     self.showControls = YES;
-    for (SlideViewCell *cell in self.scrollView.subviews) {
-        [cell showControls];
+    for (PageCell *cell in self.scrollView.subviews) {
+        if (cell.class == PageCell.class) [cell showControls];
     }
 }
 
@@ -342,7 +348,7 @@
     int pageNumber = percentage * self.totalPages;
     [self scrollToPageNumber:pageNumber];
     
-    SlideViewCell *pageCell = (SlideViewCell *)[self.scrollView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:pageNumber inSection:0]];
+    PageCell *pageCell = (PageCell *)[self.scrollView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:pageNumber inSection:0]];
     [pageCell setPercentage:percentage];
 }
 
@@ -581,8 +587,8 @@
     [[self currentPageCell] setPageUnbookmarked];
 }
 
-- (SlideViewCell *)currentPageCell {
-    return (SlideViewCell*)[self.scrollView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:self.currentPageNumber inSection:0]];
+- (PageCell *)currentPageCell {
+    return (PageCell*)[self.scrollView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:self.currentPageNumber inSection:0]];
 }
 
 #pragma mark collectionView delegate methods
@@ -604,13 +610,14 @@
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    SlideViewCell *cell = [self.scrollView dequeueReusableCellWithReuseIdentifier:@"slideViewCell" forIndexPath:indexPath];
+    PageCell *cell = [self.scrollView dequeueReusableCellWithReuseIdentifier:@"slideViewCell" forIndexPath:indexPath];
     
     [cell renderWithPageNumber:@(indexPath.row)
                        storyId:self.story.id
                           font:self.pageFont margin:[self pageMargin]
                       progress:((indexPath.row + 1) / (CGFloat)self.totalPages)
                   showControls:self.showControls];
+    cell.scrollView = self.scrollView;
     cell.delegate = self;
     return cell;
 }

@@ -85,7 +85,10 @@
         _step1Label.font = [UIFont h3];
         _step1Label.numberOfLines = 0;
         _step1Label.height = _step1Label.font.pointSize * 2 + 8;
-        [_step1Label setText:[NSString stringWithFormat:@"Compose an email to:\n%@", @"username+HASH@pulpfiction.io"] fixedWidth:NO];
+        [_step1Label setText:[NSString stringWithFormat:@"Compose an email to:\n%@+%@@pulpfictionapp.com",
+                              [API.sharedInstance.loggedInUser.username lowercaseString],
+                              API.sharedInstance.loggedInUser.email_hash]
+                                             fixedWidth:NO];
     }
     return _step1Label;
 }

@@ -2,7 +2,7 @@
 //  User.m
 //  BookApp
 //
-//  Created by Nalin on 3/6/13.
+//  Created by Nalin on 4/3/13.
 //
 //
 
@@ -18,8 +18,9 @@
 @dynamic first_name;
 @dynamic id;
 @dynamic last_name;
-@dynamic username;
 @dynamic state;
+@dynamic username;
+@dynamic email_hash;
 @dynamic bookmarks;
 @dynamic stories;
 
