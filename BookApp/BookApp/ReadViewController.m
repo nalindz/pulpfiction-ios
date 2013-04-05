@@ -151,15 +151,13 @@
         
         [[newPage managedObjectContext] saveToPersistentStoreAndWait];
         
-        if ([newPage.font_size floatValue] == self.pageFont.pointSize && [newPage.page_number intValue] - self.lastPageNumber == 1) {
-            //NSLog(@"The number of views: %d", [self.scrollView numberOfItemsInSection:0]);
-            self.lastPageNumber = [newPage.page_number intValue];
-            [self.scrollView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:[newPage.page_number intValue] inSection:0]]];
-            //[indexPathsToInsert addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
-        }
+        self.lastPageNumber = [newPage.page_number intValue];
+        [self.scrollView reloadData];
         
         if ([newPage isLastPage]) {
             numberOfPages = 0;
+            [self.scrollView reloadData];
+            NSLog(@"The last page number :%d", self.lastPageNumber);
             [self scrollToCorrectPage];
             
             if (self.startingPageNumber == 0) {
@@ -210,19 +208,6 @@
     [self.scrollView registerClass:[PageCell class] forCellWithReuseIdentifier:@"slideViewCell"];
     
     [self.view addSubview:self.scrollView];
-    
-    UIView *bar = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.height - 200, self.scrollView.width, 200)];
-    [self.scrollView addSubview:bar];
-    UIGestureRecognizer *progressScrollRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(progressScroll:)];
-    [bar addGestureRecognizer:progressScrollRecognizer];
-    [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:progressScrollRecognizer];
-}
-
-- (void)progressScroll: (UIPanGestureRecognizer *)recognizer {
-    NSLog(@"meow pan:%f", [recognizer translationInView:recognizer.view].x);
-    for (int i = 0; i <  [recognizer numberOfTouches]; i++) {
-        NSLog(@"meow touch:%f", [recognizer locationOfTouch:i inView:recognizer.view].x);
-    }
 }
 
 - (void)viewDidLoad {
@@ -230,48 +215,6 @@
     [self setupScrollView];
     self.firstPageNumber = 0;
     self.lastPageNumber = -1;
-}
-
-- (void)receiveManagedObjectUpdate: (NSNotification *) notification {
-    if (self.stopAddingJobs) return;
-    NSLog(@"updated meow here: %@", notification);
-    NSLog(@"updated meow object: %@", [notification.object class]);
-    NSArray *insertedData = [notification.userInfo objectForKey:@"inserted"];
-    NSArray *updatedData = [notification.userInfo objectForKey:@"updated"];
-    NSMutableArray *insertedAndUpdatedData = [[NSMutableArray alloc] init];
-    
-    
-    if (insertedData != nil && insertedData.count > 0) {
-        [insertedAndUpdatedData addObjectsFromArray:insertedData];
-    }
-    if (updatedData != nil && updatedData.count > 0) {
-        [insertedAndUpdatedData addObjectsFromArray:updatedData];
-    }
-    
-    NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc] init];
-    for (NSManagedObject *object in insertedAndUpdatedData) {
-        if ([object class] == [Page class]) {
-            Page *page = (Page *)object;
-            if ([page.font_size floatValue] == self.pageFont.pointSize && [page.page_number intValue] - self.lastPageNumber == 1) {
-                NSLog(@"The number of views: %d", [self.scrollView numberOfItemsInSection:0]);
-                [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:[page.page_number intValue] inSection:0]];
-                self.lastPageNumber = [page.page_number intValue];
-            }
-        }
-        
-    }
-    
-    if (indexPathsToInsert.count > 0) {
-        NSLog(@"inserting: %d", indexPathsToInsert.count);
-        for (NSIndexPath *path in indexPathsToInsert) {
-            NSLog(@"the index path: %@", path);
-        }
-        [self.scrollView insertItemsAtIndexPaths:indexPathsToInsert];
-        
-        if (self.startingPageNumber == 0) {
-            [self reloadFirstCell];
-        }
-    }
 }
 
 - (void) reloadFirstCell {
@@ -283,8 +226,8 @@
 
 
 - (void) setStartingPageNumber: (NSNumber *) startingPageNumber {
-    self.firstPageNumber = [startingPageNumber intValue];
-    self.lastPageNumber = [startingPageNumber intValue];
+    //self.firstPageNumber = [startingPageNumber intValue];
+    //self.lastPageNumber = [startingPageNumber intValue];
     _startingPageNumber = startingPageNumber;
 }
 
@@ -356,9 +299,7 @@
     //if (pageNumber == self.currentPageNumber) return;
     self.currentPageNumber = pageNumber;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(pageNumber) inSection:0];
-    //dispatch_async(dispatch_get_main_queue(), ^{[self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];});
     [self.scrollView scrollToItemAtIndexPath:indexPath atScrollPosition: UICollectionViewScrollPositionLeft animated:NO];
-    //[self.scrollView reloadItemsAtIndexPaths:@[indexPath]];
 }
 
 - (BOOL) isBlockNumber:(int) blockNumber andIndex: (int) index inPage: (Page *) page {
@@ -414,13 +355,11 @@
     if (self.stopAddingJobs) return;
     
     [self showLoadingPage];
-    dispatch_async(self.backgroundQueue, ^(void) {
         [self createNumberOfPages:pagesToBuffer
                startingPageNumber:@(0)
                         fromBlock:@(0)
                             index:0
                        pageBuffer:@""];
-    });
 }
 
 - (void)fontIncrease {
@@ -480,12 +419,17 @@
 
 
 - (void)saveBookmark {
-    if (self.story.bookmark) {
-        self.story.bookmark.font_size = @(self.pageFont.pointSize);
-        //bookmark.page = [self currentPage];
-        self.story.bookmark.page_number = @(self.currentPageNumber);
-        self.story.bookmark.story_id = self.story.id;
-        
+    if (!self.story.bookmark) {
+        self.story.bookmark = [Bookmark createEntity];
+        self.story.bookmark.auto_bookmark = @(YES);
+    }
+    
+    self.story.bookmark.font_size = @(self.pageFont.pointSize);
+    //bookmark.page = [self currentPage];
+    self.story.bookmark.page_number = @(self.currentPageNumber);
+    self.story.bookmark.story_id = self.story.id;
+    [[self.story.bookmark managedObjectContext] save:nil];
+    if (![self.story.bookmark.auto_bookmark boolValue]) {
         // post bookmark to backend
         [RKObjectManager.sharedManager postObject:self.story.bookmark path:nil parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             NSLog(@"Posted bookmark: %@", [mappingResult firstObject]);
@@ -494,6 +438,7 @@
         }];
     }
 }
+
 
 - (void)backClicked {
     [self saveBookmark];
@@ -550,7 +495,7 @@
 }
 
 - (void)bookmarkClicked {
-    if (self.story.bookmark) {
+    if (self.story.bookmark && ![self.story.bookmark.auto_bookmark boolValue]) {
         [self deleteBookmark];
     } else {
         [self createBookmark];
@@ -564,6 +509,8 @@
     newBookmark.font_size = @(self.pageFont.pointSize);
     self.story.bookmark = newBookmark;
     
+    [[self.story managedObjectContext] save:nil];
+    [[newBookmark managedObjectContext] save:nil];
     // post bookmark
     [[RKObjectManager sharedManager] postObject:newBookmark path:nil parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         NSLog(@"Saved bookmark :%@", [mappingResult firstObject]);

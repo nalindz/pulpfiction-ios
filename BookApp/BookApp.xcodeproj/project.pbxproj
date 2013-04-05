@@ -128,12 +128,12 @@
 		F5F1433C16BF3E0100C8B268 /* UIFont+BAFont.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F1433B16BF3E0100C8B268 /* UIFont+BAFont.m */; };
 		F5F4E4C316CA3CDA00A3F395 /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F4E4C216CA3CDA00A3F395 /* Page.m */; };
 		F5F4E4CC16CA3CDB00A3F395 /* Block.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F4E4CB16CA3CDB00A3F395 /* Block.m */; };
-		F5F4E4CF16CA3CDB00A3F395 /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F4E4CE16CA3CDB00A3F395 /* Bookmark.m */; };
 		F5F4E4D216CB52A700A3F395 /* bookmark-button-dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F4E4D016CB52A700A3F395 /* bookmark-button-dark@2x.png */; };
 		F5F4E4D316CB52A700A3F395 /* bookmark-button-light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F4E4D116CB52A700A3F395 /* bookmark-button-light@2x.png */; };
 		F5F4E4DA16CCBF1200A3F395 /* StoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F4E4D916CCBF1200A3F395 /* StoryView.m */; };
 		F5F4E4E316CCBF9F00A3F395 /* StoryView+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F4E4E216CCBF9F00A3F395 /* StoryView+RestKit.m */; };
 		F5F4E4E616CCC84700A3F395 /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F4E4E516CCC84700A3F395 /* Story.m */; };
+		F5FA4A2A170EA56800ADB6CB /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FA4A29170EA56800ADB6CB /* Bookmark.m */; };
 		F5FC6DEC1645F7110087137F /* Block+RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6DEB1645F7110087137F /* Block+RestKit.m */; };
 		F5FC6DF8164640C00087137F /* ReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6DF7164640C00087137F /* ReadViewController.m */; };
 		F5FC6EE31648E6DD0087137F /* PageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FC6EE21648E6DD0087137F /* PageCell.m */; };
@@ -394,8 +394,6 @@
 		F5F4E4C216CA3CDA00A3F395 /* Page.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Page.m; sourceTree = "<group>"; };
 		F5F4E4CA16CA3CDB00A3F395 /* Block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Block.h; sourceTree = "<group>"; };
 		F5F4E4CB16CA3CDB00A3F395 /* Block.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Block.m; sourceTree = "<group>"; };
-		F5F4E4CD16CA3CDB00A3F395 /* Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bookmark.h; sourceTree = "<group>"; };
-		F5F4E4CE16CA3CDB00A3F395 /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmark.m; sourceTree = "<group>"; };
 		F5F4E4D016CB52A700A3F395 /* bookmark-button-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bookmark-button-dark@2x.png"; sourceTree = "<group>"; };
 		F5F4E4D116CB52A700A3F395 /* bookmark-button-light@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bookmark-button-light@2x.png"; sourceTree = "<group>"; };
 		F5F4E4D816CCBF1200A3F395 /* StoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryView.h; sourceTree = "<group>"; };
@@ -404,6 +402,8 @@
 		F5F4E4E216CCBF9F00A3F395 /* StoryView+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StoryView+RestKit.m"; sourceTree = "<group>"; };
 		F5F4E4E416CCC84600A3F395 /* Story.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Story.h; sourceTree = "<group>"; };
 		F5F4E4E516CCC84700A3F395 /* Story.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Story.m; sourceTree = "<group>"; };
+		F5FA4A28170EA56800ADB6CB /* Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bookmark.h; sourceTree = "<group>"; };
+		F5FA4A29170EA56800ADB6CB /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmark.m; sourceTree = "<group>"; };
 		F5FC6DEA1645F7110087137F /* Block+RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Block+RestKit.h"; sourceTree = "<group>"; };
 		F5FC6DEB1645F7110087137F /* Block+RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Block+RestKit.m"; sourceTree = "<group>"; };
 		F5FC6DF6164640C00087137F /* ReadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadViewController.h; sourceTree = "<group>"; };
@@ -678,6 +678,8 @@
 		F530E20316435C96003A9EDF /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F5FA4A28170EA56800ADB6CB /* Bookmark.h */,
+				F5FA4A29170EA56800ADB6CB /* Bookmark.m */,
 				F596CAD7170D436F00997062 /* User.h */,
 				F596CAD8170D436F00997062 /* User.m */,
 				F5D197BB16E87A1F004CB0DF /* User+Util.h */,
@@ -687,8 +689,6 @@
 				F5C3B20E16C9F84600769E77 /* RestKit */,
 				F5F4E4D816CCBF1200A3F395 /* StoryView.h */,
 				F5F4E4D916CCBF1200A3F395 /* StoryView.m */,
-				F5F4E4CD16CA3CDB00A3F395 /* Bookmark.h */,
-				F5F4E4CE16CA3CDB00A3F395 /* Bookmark.m */,
 				F5F4E4CA16CA3CDB00A3F395 /* Block.h */,
 				F5F4E4CB16CA3CDB00A3F395 /* Block.m */,
 				F5F4E4C116CA3CDA00A3F395 /* Page.h */,
@@ -1034,7 +1034,6 @@
 				F5C3B20D16C9F84000769E77 /* Bookmark+RestKit.m in Sources */,
 				F5F4E4C316CA3CDA00A3F395 /* Page.m in Sources */,
 				F5F4E4CC16CA3CDB00A3F395 /* Block.m in Sources */,
-				F5F4E4CF16CA3CDB00A3F395 /* Bookmark.m in Sources */,
 				F5F4E4DA16CCBF1200A3F395 /* StoryView.m in Sources */,
 				F5F4E4E316CCBF9F00A3F395 /* StoryView+RestKit.m in Sources */,
 				F5F4E4E616CCC84700A3F395 /* Story.m in Sources */,
@@ -1076,6 +1075,7 @@
 				F54D492216FD82E50026B08E /* FeedBlankSlateView.m in Sources */,
 				F5ACB6F616FFF493007BA6D5 /* PageView.m in Sources */,
 				F596CAD9170D436F00997062 /* User.m in Sources */,
+				F5FA4A2A170EA56800ADB6CB /* Bookmark.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

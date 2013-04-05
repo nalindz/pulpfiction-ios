@@ -2,7 +2,7 @@
 //  Bookmark.m
 //  BookApp
 //
-//  Created by Nalin on 2/12/13.
+//  Created by Nalin on 4/4/13.
 //
 //
 
@@ -21,8 +21,9 @@
 @dynamic story_id;
 @dynamic updated_at;
 @dynamic user_id;
-@dynamic user;
-@dynamic story;
+@dynamic auto_bookmark;
 @dynamic page;
+@dynamic story;
+@dynamic user;
 
 @end

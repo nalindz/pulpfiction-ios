@@ -98,7 +98,6 @@
     [self.delegate fontDecrease];
 }
 
-
 - (void)prepareForReuse {
     self.transform = CGAffineTransformIdentity;
     self.textLabel.text = @"";
@@ -118,12 +117,6 @@
     self.progressBar.delegate = self;
     [self.progressBar setPercentage:progress];
     [self addSubview:self.progressBar];
-    UIGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(progressSwiped:)];
-    [self.progressBar addGestureRecognizer:recognizer];
-}
-
-- (void)progressSwiped: (UISwipeGestureRecognizer *)recognizer {
-    NSLog(@"meow swiped");
 }
 
 - (void)renderWithPageNumber: (NSNumber *) pageNumber
@@ -153,7 +146,7 @@
     self.fontIncrease.centerY = self.progressBar.centerY + 15;
     
     
-    if (self.story.bookmark) {
+    if (self.story.bookmark && ![self.story.bookmark.auto_bookmark boolValue]) {
         [self setPageBookmarked];
     }
     
