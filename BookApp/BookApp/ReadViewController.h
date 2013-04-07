@@ -9,7 +9,7 @@
 
 @interface ReadViewController : UIViewController
 <UIScrollViewDelegate,
-SlideViewCellDelegate,
+PageCellDelegate,
 UICollectionViewDataSource,
 UICollectionViewDelegate
 >

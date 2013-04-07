@@ -200,9 +200,23 @@ static const CGFloat FONT_STEP = 5.0;
     self.scrollView.scrollsToTop = NO;
     self.scrollView.delegate = self;
     self.scrollView.dataSource = self;
-    [self.scrollView registerClass:[PageCell class] forCellWithReuseIdentifier:@"slideViewCell"];
-    
+    [self.scrollView registerClass:[PageCell class] forCellWithReuseIdentifier:@"PageCell"];
     [self.view addSubview:self.scrollView];
+    
+    UIView *scrollArea = [[UIView alloc] initWithFrame:self.progressBarFrameForPageCell];
+    [self.view addSubview:scrollArea];
+    UIGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(progressScrolled:)];
+    [scrollArea addGestureRecognizer:recognizer];
+    [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:recognizer];
+}
+
+- (void)progressScrolled: (UIPanGestureRecognizer *)recognizer {
+    //NSLog(@"%f", [recognizer translationInView:recognizer.view].x);
+    for (int i = 0; i < recognizer.numberOfTouches; i++) {
+        CGFloat locationOfTouch = [recognizer locationOfTouch:0 inView:recognizer.view].x;
+        [self scrollToPercentage:(locationOfTouch / self.progressBarFrameForPageCell.size.width)];
+        NSLog(@"%f", locationOfTouch);
+    }
 }
 
 - (void)viewDidLoad {
@@ -216,14 +230,6 @@ static const CGFloat FONT_STEP = 5.0;
     // sets the correct progress bar for the first load
     [self.scrollView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
 }
-
-
-- (void) setStartingPageNumber: (NSNumber *) startingPageNumber {
-    //self.firstPageNumber = [startingPageNumber intValue];
-    //self.lastPageNumber = [startingPageNumber intValue];
-    _startingPageNumber = startingPageNumber;
-}
-
 
 - (void)loadBookmark {
     if (self.story.bookmark) {
@@ -345,13 +351,12 @@ static const CGFloat FONT_STEP = 5.0;
 
 - (void) buildAllPages {
     self.lastPageNumber = -1;
-    
     [self showLoadingPage];
-        [self createNumberOfPages:pagesToBuffer
-               startingPageNumber:@(0)
-                        fromBlock:@(0)
-                            index:0
-                       pageBuffer:@""];
+    [self createNumberOfPages:pagesToBuffer
+           startingPageNumber:@(0)
+                    fromBlock:@(0)
+                        index:0
+                   pageBuffer:@""];
 }
 
 - (void)fontIncrease {
@@ -364,13 +369,7 @@ static const CGFloat FONT_STEP = 5.0;
 
 - (void) fontChangeWithSize: (CGFloat) fontSize {
     
-    /*
-    if (self.fontChangeInProgress) return;
-    self.fontChangeInProgress = YES;
-     */
-    
     if (fontSize <= FONT_MIN_SIZE || fontSize >= FONT_MAX_SIZE) return;
-    
     self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:fontSize];
     
     // save current page info
@@ -428,10 +427,6 @@ static const CGFloat FONT_STEP = 5.0;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void) viewPop {
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (Page *)currentPage {
     Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", self.currentPageNumber, self.story.id]];
     return page;
@@ -444,8 +439,12 @@ static const CGFloat FONT_STEP = 5.0;
     NSLog(@"current page %d", self.currentPageNumber);
 }
 
-- (UIFont *) fontForSlideViewCell {
+- (UIFont *)fontForPageCell {
     return self.pageFont;
+}
+
+- (CGRect)progressBarFrameForPageCell {
+    return CGRectMake(self.pageMargin * 2, self.scrollView.height - 80, self.scrollView.width - self.pageMargin * 4, 50);
 }
 
 - (void)bookmarkClicked {
@@ -511,15 +510,14 @@ static const CGFloat FONT_STEP = 5.0;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    PageCell *cell = [self.scrollView dequeueReusableCellWithReuseIdentifier:@"slideViewCell" forIndexPath:indexPath];
-    
+    PageCell *cell = [self.scrollView dequeueReusableCellWithReuseIdentifier:@"PageCell" forIndexPath:indexPath];
+    cell.delegate = self;
     [cell renderWithPageNumber:@(indexPath.row)
                        storyId:self.story.id
-                          font:self.pageFont margin:[self pageMargin]
+                          font:self.pageFont
+                        margin:self.pageMargin
                       progress:((indexPath.row + 1) / (CGFloat)self.lastPageNumber)
                   showControls:self.showControls];
-    cell.scrollView = self.scrollView;
-    cell.delegate = self;
     return cell;
 }
 

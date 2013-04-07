@@ -118,7 +118,7 @@
 }
 
 - (void)renderProgressBarWithProgress: (CGFloat) progress {
-    self.progressBar = [[BAProgressBarView alloc] initWithFrame:CGRectMake(self.margin * 2 ,self.height - 80, self.width - self.margin * 4, 50)];
+    self.progressBar = [[BAProgressBarView alloc] initWithFrame:[self.delegate progressBarFrameForPageCell]];
     self.progressBar.delegate = self;
     [self.progressBar setPercentage:progress];
     [self addSubview:self.progressBar];
@@ -159,8 +159,6 @@
     if (self.story.bookmark && ![self.story.bookmark.auto_bookmark boolValue]) {
         [self setPageBookmarked];
     }
-    
-    
     
     if (showControls) {
         [self showControls];
