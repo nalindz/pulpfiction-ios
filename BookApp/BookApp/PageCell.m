@@ -12,7 +12,6 @@
 #import "Bookmark+RestKit.h"
 
 @interface PageCell()
-@property (nonatomic, strong) UIView *titleBar;
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) UIButton *fontIncrease;
 @property (nonatomic, strong) UIButton *fontDecrease;
@@ -21,6 +20,7 @@
 @property (nonatomic, strong) NSNumber *storyId;
 @property (nonatomic) CGFloat margin;
 @property (nonatomic, strong) BAProgressBarView *progressBar;
+@property (nonatomic, strong) UILabel *titleLabel;
 
 @end
 
@@ -32,6 +32,15 @@
         [_bookmarkButton addTarget:self.delegate action:@selector(bookmarkClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _bookmarkButton;
+}
+
+- (UILabel *)titleLabel {
+    if (_titleLabel == nil) {
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _titleLabel.textColor = [UIColor grayColor];
+        _titleLabel.font = [UIFont fontWithName:@"Meta Serif OT" size:18];
+    }
+    return _titleLabel;
 }
 
 - (void)setPageBookmarked {
@@ -50,16 +59,12 @@
         self.textLabel.numberOfLines = 0;
         self.textLabel.userInteractionEnabled = YES;
         [self addSubview:self.textLabel];
-        
+        [self addSubview:self.titleLabel];
         
         [self.bookmarkButton putInLeftEdgeOf:self withMargin:20];
         
         UITapGestureRecognizer *textTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleControls)];
         [self.textLabel addGestureRecognizer:textTap];
-        
-        self.titleBar = [[UIView alloc] init];
-        self.titleBar.width = self.width;
-        self.titleBar.height = 40;
         
         self.backButton = [UIButton initWithImageNamed:@"close-button"];
         self.backButton.x = self.width - self.backButton.width - 20;
@@ -146,14 +151,21 @@
     self.fontIncrease.centerY = self.progressBar.centerY + 15;
     
     
+    [self.titleLabel autoSizeWithText:self.story.title];
+    [self.titleLabel putInTopOf:self withMargin:27];
+    self.titleLabel.centerX = self.width / 2;
+    
+    
     if (self.story.bookmark && ![self.story.bookmark.auto_bookmark boolValue]) {
         [self setPageBookmarked];
     }
     
-    if (!showControls) {
-        [self hideControls];
-    } else {
+    
+    
+    if (showControls) {
         [self showControls];
+    } else {
+        [self hideControls];
     }
 }
 
@@ -173,34 +185,31 @@
     }
 }
 
+- (NSArray *)controls {
+    return @[self.progressBar,
+             self.fontDecrease,
+             self.fontIncrease,
+             self.backButton,
+             self.bookmarkButton,
+             self.titleLabel];
+}
+
 - (void)showControls {
-    self.progressBar.hidden = NO;
-    self.fontDecrease.hidden = NO;
-    self.fontIncrease.hidden = NO;
-    self.backButton.hidden = NO;
-    self.bookmarkButton.hidden = NO;
+    for (UIView *control in self.controls)
+        control.hidden = NO;
     [UIView animateWithDuration:0.15 animations:^{
-        self.progressBar.alpha = 1.0;
-        self.fontDecrease.alpha = 1.0;
-        self.fontIncrease.alpha = 1.0;
-        self.backButton.alpha = 1.0;
-        self.bookmarkButton.alpha = 1.0;
+        for (UIView *control in self.controls)
+            control.alpha = 1.0;
     }];
 }
 
 - (void)hideControls {
     [UIView animateWithDuration:0.15 animations:^{
-        self.progressBar.alpha = 0.0;
-        self.fontDecrease.alpha = 0.0;
-        self.fontIncrease.alpha = 0.0;
-        self.backButton.alpha = 0.0;
-        self.bookmarkButton.alpha = 0.0;
+        for (UIView *control in self.controls)
+            control.alpha = 0.0;
     } completion:^(BOOL finished) {
-        self.progressBar.hidden = YES;
-        self.fontDecrease.hidden = YES;
-        self.fontIncrease.hidden = YES;
-        self.backButton.hidden = YES;
-        self.bookmarkButton.hidden = YES;
+        for (UIView *control in self.controls)
+            control.hidden = YES;
     }];
 }
 

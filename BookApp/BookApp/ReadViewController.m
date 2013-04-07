@@ -13,8 +13,9 @@
 
 #define pagesToBuffer 10000
 
-#define FONT_MAX_SIZE 50.0
-#define FONT_MIN_SIZE 10.0
+static const CGFloat FONT_MAX_SIZE = 50.0;
+static const CGFloat FONT_MIN_SIZE = 10.0;
+static const CGFloat FONT_STEP = 5.0;
 
 @interface ReadViewController ()
 @property (atomic, strong) dispatch_queue_t backgroundQueue;
@@ -24,7 +25,6 @@
 @property (atomic) int currentPageNumber;
 
 @property (atomic, strong) UIView *loadingShot;
-@property  (atomic) BOOL stopAddingJobs;
 
 @property (nonatomic, strong) UIFont *pageFont;
 @property  BOOL showControls;
@@ -32,7 +32,7 @@
 // bleh globals - should be in a closure
 @property (nonatomic, strong) NSNumber *viewingBlockNumber;
 @property (nonatomic, strong) NSNumber *viewingBlockIndex;
-@property (atomic) BOOL fontClickDisabled;
+@property (atomic) BOOL fontChangeInProgress;
 @end
 
 @implementation ReadViewController
@@ -51,6 +51,7 @@
     self = [super init];
     if (self) {
         self.backgroundQueue = dispatch_queue_create("background.queue", nil);
+        self.totalPages = 0;
     }
     return self;
 }
@@ -61,7 +62,6 @@
                        index:(NSInteger) startBlockIndex
                   pageBuffer: (NSString *) pageBuffer {
     
-    self.totalPages = 0;
     NSLog(@"requesting page number: %@", pageNumber);
     Block *currentBlock;
     int currentBlockNumber = [startBlockNumber intValue];
@@ -72,7 +72,6 @@
     while (numberOfPages > 0) {
         int splitIndex = myPageBuffer.length;
         int oldmyPageBufferLength = 0;
-        if (self.stopAddingJobs) return;
         while (splitIndex == myPageBuffer.length) {
             currentBlock = [Block findFirstWithPredicate:[NSPredicate predicateWithFormat:@"block_number == %@ AND story_id == %@", @(currentBlockNumber), self.story.id]];
             if (currentBlock == nil) {
@@ -83,14 +82,11 @@
                                                                   @"first_block": @(currentBlockNumber),
                                                                   @"last_block": @(endBlockNumber)}
                                                         success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                                            if (self.stopAddingJobs) return;
-                                                            dispatch_async( self.backgroundQueue,  ^(void) {
                                                                 [self createNumberOfPages: numberOfPages
                                                                        startingPageNumber:@(currentPageNumber)
                                                                                 fromBlock:@(currentBlockNumber)
                                                                                     index:currentBlockIndex
                                                                                pageBuffer:[NSString stringWithFormat:@"%@", myPageBuffer]];
-                                                            });
                                                         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
                                                             NSLog(@"Error fetching blocks: %@", error);
                                                         }];
@@ -152,7 +148,6 @@
         [[newPage managedObjectContext] saveToPersistentStoreAndWait];
         
         self.lastPageNumber = [newPage.page_number intValue];
-        [self.scrollView reloadData];
         
         if ([newPage isLastPage]) {
             numberOfPages = 0;
@@ -219,9 +214,7 @@
 
 - (void) reloadFirstCell {
     // sets the correct progress bar for the first load
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.scrollView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
-    });
+    [self.scrollView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
 }
 
 
@@ -288,7 +281,7 @@
 }
 
 - (void) scrollToPercentage:(CGFloat)percentage {
-    int pageNumber = percentage * self.totalPages;
+    int pageNumber = percentage * self.lastPageNumber;
     [self scrollToPageNumber:pageNumber];
     
     PageCell *pageCell = (PageCell *)[self.scrollView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:pageNumber inSection:0]];
@@ -352,7 +345,6 @@
 
 - (void) buildAllPages {
     self.lastPageNumber = -1;
-    if (self.stopAddingJobs) return;
     
     [self showLoadingPage];
         [self createNumberOfPages:pagesToBuffer
@@ -363,26 +355,25 @@
 }
 
 - (void)fontIncrease {
-    CGFloat fontSize = self.pageFont.pointSize;
-    fontSize += 5.0;
-    if (fontSize >= FONT_MAX_SIZE) return;
-    self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:fontSize];
-    [self fontChangeWithSize:fontSize];
+    [self fontChangeWithSize:(self.pageFont.pointSize + FONT_STEP)];
 }
 
 - (void)fontDecrease {
-    CGFloat fontSize = self.pageFont.pointSize;
-    fontSize -= 5.0;
-    if (fontSize <= FONT_MIN_SIZE) return;
-    [self fontChangeWithSize:fontSize];
+    [self fontChangeWithSize:(self.pageFont.pointSize - FONT_STEP)];
 }
 
 - (void) fontChangeWithSize: (CGFloat) fontSize {
-    self.stopAddingJobs = YES;
+    
+    /*
+    if (self.fontChangeInProgress) return;
+    self.fontChangeInProgress = YES;
+     */
+    
+    if (fontSize <= FONT_MIN_SIZE || fontSize >= FONT_MAX_SIZE) return;
+    
     self.pageFont = [UIFont fontWithName:@"Meta Serif OT" size:fontSize];
     
     // save current page info
-    
     Page *currentPage = [self currentPage];
     self.viewingBlockIndex = [currentPage.first_block_index copy];
     self.viewingBlockNumber = [currentPage.first_block_number copy];
@@ -403,20 +394,13 @@
     [spinner startAnimating];
    
     [self.view addSubview:self.loadingShot];
-    
-    dispatch_async(self.backgroundQueue, ^{[self finishFontChange];});
+    [self finishFontChange];
 }
 
 - (void) finishFontChange {
-    self.lastPageNumber = -1;
-    [self.scrollView reloadData];
-    
-    NSLog(@"The number of views: %d", [self.scrollView.dataSource collectionView:self.scrollView numberOfItemsInSection:0]);
-    self.stopAddingJobs = NO;
-    self.fontClickDisabled = NO;
     [self buildAllPages];
+    self.fontChangeInProgress = NO;
 }
-
 
 - (void)saveBookmark {
     if (!self.story.bookmark) {
@@ -439,7 +423,6 @@
     }
 }
 
-
 - (void)backClicked {
     [self saveBookmark];
     [self.navigationController popViewControllerAnimated:YES];
@@ -454,41 +437,12 @@
     return page;
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     CGFloat offset = self.scrollView.contentOffset.x;
     CGFloat width = self.scrollView.frame.size.width;
-    int newCurrentPage = ((offset+(width/2))/width);
-    if (newCurrentPage != self.currentPageNumber) {
-        if (newCurrentPage > (self.lastPageNumber - pagesToBuffer + 1)) {
-            //[self getMorePages];
-        } else {
-            //self.stopLoadingPages = YES;
-        }
-    }
     self.currentPageNumber = ((offset+(width/2))/width);
     NSLog(@"current page %d", self.currentPageNumber);
 }
-
-/*
-- (void) getMorePages {
-    if (self.pagesOutstanding > 0) return;
-    if (self.loadingPages) return;
-    self.loadingPages = YES;
-    NSLog(@"The last page: %d", self.lastPageNumber);
-    
-    Page *page = [Page findFirstWithPredicate:[NSPredicate predicateWithFormat:@"page_number == %d AND story_id == %@", self.lastPageNumber, self.story.id]];
-    
-    if (![page isLastPage]) {
-        self.pagesOutstanding = pagesToBuffer;
-        if (self.stopAddingJobs) return;
-        dispatch_async(self.backgroundQueue, ^(void) {
-            [self createNumberOfPages:pagesToBuffer startingPageNumber:[NSNumber numberWithInt:(self.lastPageNumber + 1)] fromBlock:@([page.last_block_number intValue]) index:[page.last_block_index intValue] pageBuffer:@""];
-        });
-    }
-}
- */
 
 - (UIFont *) fontForSlideViewCell {
     return self.pageFont;
@@ -562,7 +516,7 @@
     [cell renderWithPageNumber:@(indexPath.row)
                        storyId:self.story.id
                           font:self.pageFont margin:[self pageMargin]
-                      progress:((indexPath.row + 1) / (CGFloat)self.totalPages)
+                      progress:((indexPath.row + 1) / (CGFloat)self.lastPageNumber)
                   showControls:self.showControls];
     cell.scrollView = self.scrollView;
     cell.delegate = self;
