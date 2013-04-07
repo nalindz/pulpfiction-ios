@@ -167,7 +167,6 @@
      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
          NSArray *storiesPage = [mappingResult array];
          [self receivePageofStories:storiesPage ofType:@"feed" pageNumber:pageNumber];
-         
          if (storiesPage.count == pageSize) {
              self.currentPageNumber = pageNumber;
          } else {
@@ -229,6 +228,7 @@
         self.lastPage--;
         self.storiesOnLastPage = 9;
     }
+    if (pageNumber == 1) [self scrollToFirstPageAnimated:NO];
 }
 
 - (void)deleteBookmarkedStory:(Story *)bookmarkedStory {

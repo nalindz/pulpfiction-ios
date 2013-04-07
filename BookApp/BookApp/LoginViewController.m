@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 #import "SelectUsernameViewController.h"
+#import "OLGhostAlertView.h"
 
 @interface LoginViewController ()
 @property (nonatomic, strong) UIButton *facebookLoginButton;
@@ -73,8 +74,11 @@
         } else {
             [self.navigationController pushViewController:[[SelectUsernameViewController alloc] init] animated:YES];
         }
-        
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        [self showLoginButton];
+        OLGhostAlertView *alert = [[OLGhostAlertView alloc] initWithTitle:@"Could not log in. Please try again" message:nil timeout:2.0 dismissible:NO];
+        alert.position = OLGhostAlertViewPositionBottom;
+        [alert show];
         NSLog(@"Error logging in: %@", error);
     }];
 }
