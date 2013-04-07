@@ -18,13 +18,13 @@ static const CGFloat FONT_MIN_SIZE = 10.0;
 static const CGFloat FONT_STEP = 5.0;
 
 @interface ReadViewController ()
-@property (atomic, strong) dispatch_queue_t backgroundQueue;
 @property (atomic) int firstPageNumber;
 @property (atomic) int lastPageNumber;
-@property (atomic) int totalPages;
 @property (atomic) int currentPageNumber;
 
-@property (atomic, strong) UIView *loadingShot;
+@property (nonatomic, strong) UIView *loadingShot;
+@property (nonatomic, strong) UIView *pageScrubView;
+@property (nonatomic, strong) NSNumber *scrubProgress;
 
 @property (nonatomic, strong) UIFont *pageFont;
 @property  BOOL showControls;
@@ -47,14 +47,6 @@ static const CGFloat FONT_STEP = 5.0;
     return _pageFont;
 }
 
-- (id)init {
-    self = [super init];
-    if (self) {
-        self.backgroundQueue = dispatch_queue_create("background.queue", nil);
-        self.totalPages = 0;
-    }
-    return self;
-}
 
 - (void) createNumberOfPages:(int) numberOfPages
           startingPageNumber: (NSNumber *) pageNumber
@@ -135,18 +127,8 @@ static const CGFloat FONT_STEP = 5.0;
         newPage.last_block_number = currentBlock.block_number;
         newPage.last_block_index = [NSNumber numberWithInt:lastBlockIndex];
         newPage.font_size = @(self.pageFont.pointSize);
-        self.totalPages++;
-        
-        
-        /*
-        NSError *error;
-        if (![[newPage managedObjectContext] save:&error]) {
-            NSLog(@"Save failed: %@", error);
-        }
-         */
         
         [[newPage managedObjectContext] saveToPersistentStoreAndWait];
-        
         self.lastPageNumber = [newPage.page_number intValue];
         
         if ([newPage isLastPage]) {
@@ -158,7 +140,6 @@ static const CGFloat FONT_STEP = 5.0;
             if (self.startingPageNumber == 0) {
                 [self reloadFirstCell];
             }
-            //[self reloadFirstCell];
         } else {
             numberOfPages--;
         }
@@ -172,7 +153,6 @@ static const CGFloat FONT_STEP = 5.0;
     }
 }
 
-
 - (int)pageMargin {
     return 80;
 }
@@ -181,20 +161,17 @@ static const CGFloat FONT_STEP = 5.0;
     return [Story findFirstByAttribute:@"id" withValue:self.storyId];
 }
 
-- (CGSize) pageSize {
+- (CGSize)pageSize {
     return CGSizeMake(self.scrollView.frame.size.width - ([self pageMargin] * 2), self.scrollView.frame.size.height - ([self pageMargin] * 2));
 }
 
-- (void) setupScrollView {
+- (void)setupScrollView {
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-
     self.showControls = YES;
     self.scrollView = [[PageView alloc] initWithFrame:self.view.bounds collectionViewLayout:flowLayout];
-    
     self.scrollView.backgroundColor = [UIColor blackColor];
     self.scrollView.pagingEnabled = YES;
-    //self.scrollView.scrollEnabled = NO;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.showsVerticalScrollIndicator = NO;
     self.scrollView.scrollsToTop = NO;
@@ -202,11 +179,11 @@ static const CGFloat FONT_STEP = 5.0;
     self.scrollView.dataSource = self;
     [self.scrollView registerClass:[PageCell class] forCellWithReuseIdentifier:@"PageCell"];
     [self.view addSubview:self.scrollView];
-    
-    UIView *scrollArea = [[UIView alloc] initWithFrame:self.progressBarFrameForPageCell];
-    [self.view addSubview:scrollArea];
+   
+    self.pageScrubView = [[UIView alloc] initWithFrame:self.progressBarFrameForPageCell];
+    [self.view addSubview:self.pageScrubView];
     UIGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(progressScrolled:)];
-    [scrollArea addGestureRecognizer:recognizer];
+    [self.pageScrubView addGestureRecognizer:recognizer];
     [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:recognizer];
 }
 
@@ -274,7 +251,7 @@ static const CGFloat FONT_STEP = 5.0;
     }
 }
 
-- (void) showLoadingPage {
+- (void)showLoadingPage {
     if (self.startingPageNumber != nil) {
         self.loadingShot = [[UIView alloc] initWithFrame:self.view.bounds];
         self.loadingShot.backgroundColor = [UIColor blackColor];
@@ -287,9 +264,9 @@ static const CGFloat FONT_STEP = 5.0;
 }
 
 - (void) scrollToPercentage:(CGFloat)percentage {
+    self.scrubProgress = @(percentage);
     int pageNumber = percentage * self.lastPageNumber;
     [self scrollToPageNumber:pageNumber];
-    
     PageCell *pageCell = (PageCell *)[self.scrollView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:pageNumber inSection:0]];
     [pageCell setPercentage:percentage];
 }
@@ -336,17 +313,12 @@ static const CGFloat FONT_STEP = 5.0;
     
     [self scrollToPageNumber:pageToScrollTo];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        self.loadingShot.hidden = YES;
-        [self.view bringSubviewToFront:self.scrollView];
-        self.scrollView.alpha = 0.0;
-        [UIView animateWithDuration:0.2 animations:^{
-            self.scrollView.alpha = 1.0;
-        }];
-    });
-    //self.loadingShot.hidden = YES;
-    //[self.scrollView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.pageControl.currentPage inSection:0]]];
+    self.loadingShot.hidden = YES;
+    //[self.view bringSubviewToFront:self.scrollView];
+    self.scrollView.alpha = 0.0;
+    [UIView animateWithDuration:0.2 animations:^{
+        self.scrollView.alpha = 1.0;
+    }];
 }
 
 - (void) buildAllPages {
@@ -512,11 +484,19 @@ static const CGFloat FONT_STEP = 5.0;
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     PageCell *cell = [self.scrollView dequeueReusableCellWithReuseIdentifier:@"PageCell" forIndexPath:indexPath];
     cell.delegate = self;
+    CGFloat progress;
+    if (self.scrubProgress) {
+       progress = [self.scrubProgress floatValue];
+        self.scrubProgress = nil;
+    } else {
+        progress = ((indexPath.row + 1) / (CGFloat)self.lastPageNumber);
+    }
+    
     [cell renderWithPageNumber:@(indexPath.row)
                        storyId:self.story.id
                           font:self.pageFont
                         margin:self.pageMargin
-                      progress:((indexPath.row + 1) / (CGFloat)self.lastPageNumber)
+                      progress:progress
                   showControls:self.showControls];
     return cell;
 }
