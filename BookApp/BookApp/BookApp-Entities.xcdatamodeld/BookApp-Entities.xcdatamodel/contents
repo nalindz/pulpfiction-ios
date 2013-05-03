@@ -38,6 +38,7 @@
     </entity>
     <entity name="Story" representedClassName="Story" syncable="YES">
         <attribute name="blocks_count" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="bookmarks_count" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="cover_url" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -60,13 +61,24 @@
         <attribute name="state" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Bookmark" inverseName="user" inverseEntity="Bookmark" syncable="YES"/>
+        <relationship name="stat" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="UserStat" inverseName="user" inverseEntity="UserStat" syncable="YES"/>
         <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Story" inverseName="user" inverseEntity="Story" syncable="YES"/>
+    </entity>
+    <entity name="UserStat" representedClassName="UserStat" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="own_stories_bookmarks" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="own_stories_views" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="total_stories_bookmarks" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="total_stories_views" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="user_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="stat" inverseEntity="User" syncable="YES"/>
     </entity>
     <elements>
         <element name="Block" positionX="160" positionY="192" width="128" height="180"/>
         <element name="Bookmark" positionX="160" positionY="192" width="128" height="210"/>
         <element name="Page" positionX="160" positionY="192" width="128" height="195"/>
-        <element name="Story" positionX="160" positionY="192" width="128" height="225"/>
-        <element name="User" positionX="160" positionY="192" width="128" height="195"/>
+        <element name="Story" positionX="160" positionY="192" width="128" height="240"/>
+        <element name="User" positionX="160" positionY="192" width="128" height="210"/>
+        <element name="UserStat" positionX="160" positionY="192" width="128" height="150"/>
     </elements>
 </model>

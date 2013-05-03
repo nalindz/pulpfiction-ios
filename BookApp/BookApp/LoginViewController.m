@@ -46,7 +46,6 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.facebookLoginButton];
     
-    
     [self openSessionWithAllowLoginUI:NO];
     if (![FBSession.activeSession isOpen]) {
         [self showLoginButton];

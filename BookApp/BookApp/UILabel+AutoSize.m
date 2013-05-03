@@ -10,7 +10,8 @@
 
 @implementation UILabel (AutoSize)
 
--(void) setText: (NSString *) text fixedWidth: (BOOL) fixedWidth {
+- (void)setText:(NSString *)text fixedWidth:(BOOL) fixedWidth {
+    
     CGSize expectedSize;
     CGRect newFrame = self.frame;
     if (fixedWidth) {
@@ -29,7 +30,7 @@
     self.text = text;
 }
 
--(void) autoSizeWithText: (NSString *) text {
+- (void)autoSizeWithText:(NSString *) text {
     [self setText:text fixedWidth:NO];
     [self setText:text fixedWidth:YES];
 }

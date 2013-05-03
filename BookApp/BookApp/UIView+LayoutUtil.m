@@ -69,6 +69,11 @@
     [anchorView.superview addSubview:self];
 }
 
+- (void)putToLeftOf: (UIView *) anchorView withMargin: (CGFloat) margin {
+    self.x = anchorView.x - self.width - margin;
+    [anchorView.superview addSubview:self];
+}
+
 - (void) putBelow: (UIView *) anchorView withMargin: (CGFloat) margin {
     CGRect frame = self.frame;
     frame.origin.y = anchorView.y + anchorView.height + margin;

@@ -12,6 +12,7 @@
 #import "Story+RestKit.h"
 #import "Block+RestKit.h"
 #import "User+RestKit.h"
+#import "UserStat+RestKit.h"
 #import "Bookmark+RestKit.h"
 #import "StoryView+RestKit.h"
 #import <RestKit/RKErrorMessage.h>
@@ -58,8 +59,10 @@ static API* _sharedInstance = nil;
     Environment* tierConfig = [Environment sharedInstance];
     NSString* baseUrl = [tierConfig getConfigOption:@"apiURL"];
 #if DEBUG
-    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+    //RKLogConfigureByName("RestKit", RKLogLevelTrace);
+    //RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelTrace);
+    //RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+    //RKLogConfigureByName("RestKit/CoreData", RKLogLevelTrace)
 #endif
     
     NSLog(@"base url: %@", [NSURL URLWithString:baseUrl]);
@@ -90,6 +93,7 @@ static API* _sharedInstance = nil;
     [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
     [self createErrorMapping];
     
+    [UserStat configureRestKitMapping];
     [User configureRestKitMapping];
     [Bookmark configureRestKitMapping];
     [Story configureRestKitMapping];

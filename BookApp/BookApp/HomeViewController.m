@@ -18,7 +18,7 @@
 #import "FeedBlankSlateView.h"
 
 @interface HomeViewController ()
-#define pageSize 18
+#define pageSize 27 
 @property (nonatomic, strong) UICollectionView *storyResultGrid;
 @property (nonatomic, strong) UIView *bookmarksBlankSlateView;
 @property (nonatomic, strong) UIView *feedBlankSlateView;
@@ -105,12 +105,18 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.canStartPaginateRequest = YES;
     self.currentPageNumber = 1;
+    [self fetchFeedPage:1 withQuery:@""];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.view addSubview:self.storyResultGrid];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    NSLog(@"meow");
+}
+    
 - (void)search:(NSString *)searchText {
     self.searchText = searchText;
     [self fetchFeedPage:1 withQuery:searchText];
@@ -208,8 +214,11 @@
 }
 
 - (void)receivePageofStories: (NSArray *)stories ofType: (NSString *) type pageNumber: (int) pageNumber {
-    if (pageNumber == 1) [self.stories removeAllObjects];
-    [self.stories addObjectsFromArray:stories];
+    if (pageNumber == 1) {
+        [self.stories removeAllObjects];
+        [self.storyResultGrid reloadData];
+    }
+    [self addObjects:stories toEndOfCollectionView:self.storyResultGrid];
     if (self.stories.count == 0) {
         if ([type isEqualToString:@"feed"]) {
             [self showFeedBlankSlate];
@@ -221,7 +230,7 @@
     } else {
         [self hideAllBlankSlates];
     }
-    [self.storyResultGrid reloadData];
+    //[self.storyResultGrid reloadData];
     self.lastPage = self.stories.count / 9;
     self.storiesOnLastPage = self.stories.count % 9;
     if (self.storiesOnLastPage == 0) {
@@ -229,6 +238,17 @@
         self.storiesOnLastPage = 9;
     }
     if (pageNumber == 1) [self scrollToFirstPageAnimated:NO];
+}
+
+
+- (void)addObjects: (NSArray *)objects toEndOfCollectionView: (UICollectionView *)collectionView {
+    int numberOfCurrentItems = [collectionView numberOfItemsInSection:0];
+    [self.stories addObjectsFromArray:objects];
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    for (int i = 0; i < objects.count; i++) {
+        indexPaths[i] = [NSIndexPath indexPathForRow:(numberOfCurrentItems + i) inSection:0];
+    }
+    [collectionView insertItemsAtIndexPaths:indexPaths];
 }
 
 - (void)deleteBookmarkedStory:(Story *)bookmarkedStory {
@@ -380,7 +400,7 @@
     }
     
     
-    if ((scrollView.contentSize.width - (scrollView.contentOffset.x + scrollView.width) < scrollView.width / 2) && self.isFeedView) {
+    if ((scrollView.contentSize.width - (scrollView.contentOffset.x + scrollView.width) < scrollView.width * 2) && self.isFeedView) {
         [self fetchNextPage];
     }
 }

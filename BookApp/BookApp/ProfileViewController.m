@@ -20,11 +20,15 @@
 @property (nonatomic, strong) UploadStoryTutorialView *uploadStoryTutorialView;
 @end
 
-#define profileHeaderHeight 50
+#define profileHeaderHeight 60
 @implementation ProfileViewController
 
-- (void) setFirstResponder: (id) firstResponder {
+- (void)setFirstResponder: (id) firstResponder {
     _firstResponder = firstResponder;
+}
+
+- (void)removeFirstResponder {
+    _firstResponder = nil;
 }
 
 - (UploadStoryTutorialView*) uploadStoryTutorialView {
@@ -37,7 +41,7 @@
 - (ProfileHeaderView *) profileHeaderView {
     if (_profileHeaderView == nil) {
         _profileHeaderView = [[ProfileHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, profileHeaderHeight)];
-        _profileHeaderView.delegate = self;
+        [_profileHeaderView render];
     }
     return _profileHeaderView;
 }
@@ -53,15 +57,13 @@
     return _tableView;
 }
 
-- (id)init
-{
+- (id)init {
     self = [super init];
     if (self) {
         self.tableData = [NSMutableArray array];
         [self.view addSubview:self.profileHeaderView];
         [self.tableView putBelow:self.profileHeaderView withMargin:0];
         self.tableView.height = self.view.height - self.tableView.y;
-        [self.profileHeaderView setUsername:@"nalin"];
     }
     return self;
 }
@@ -89,8 +91,7 @@
     return cell;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     [self fetchStoriesWithQuery:nil];
 }
@@ -101,6 +102,18 @@
 
 - (void)tabButtonPressed {
     [self fetchStoriesWithQuery:nil];
+    [self updateUserHeader];
+}
+
+- (void)updateUserHeader {
+    [RKObjectManager.sharedManager
+     getObjectsAtPath:@"/users" parameters:nil
+     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+         API.sharedInstance.loggedInUser = [mappingResult firstObject];
+         [self.profileHeaderView render];
+     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+         NSLog(@"Error trying to pull new user object:%@", error);
+     }];
 }
 
 - (void)search:(NSString *)searchText {

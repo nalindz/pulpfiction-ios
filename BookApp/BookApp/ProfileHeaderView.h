@@ -9,6 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface ProfileHeaderView : UIView
-@property (nonatomic, weak) id delegate;
-- (void)setUsername: (NSString *) username;
+- (void)render;
 @end

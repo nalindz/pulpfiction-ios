@@ -18,7 +18,8 @@
     
     [API sharedInstance].mappings[@"story"] = storyMapping;
     
-    [storyMapping addAttributeMappingsFromArray:@[
+    
+    NSArray *storyMappingArray = @[
      @"id",
      @"blocks_count",
      @"total_length",
@@ -26,10 +27,20 @@
      @"updated_at",
      @"cover_url",
      @"views_count",
+     @"bookmarks_count",
      @"title",
-     @"tags"]];
+     @"tags"];
     
+    [storyMapping addAttributeMappingsFromArray:storyMappingArray];
     storyMapping.identificationAttributes = @[@"id"];
+    
+    RKObjectMapping *requestMapping = [RKObjectMapping requestMapping];
+    [requestMapping addAttributeMappingsFromArray:storyMappingArray];
+    
+    [objectManager addRequestDescriptor:
+     [RKRequestDescriptor requestDescriptorWithMapping:requestMapping
+                                           objectClass:[Story class]
+                                           rootKeyPath:@"story"]];
     
     
     // Map the relationships.
@@ -37,7 +48,6 @@
      [RKRelationshipMapping relationshipMappingFromKeyPath:@"user"
                                                  toKeyPath:@"user"
                                                withMapping:[API sharedInstance].mappings[@"user"]];
-    
     
      RKRelationshipMapping *bookmarkRelationship =
      [RKRelationshipMapping relationshipMappingFromKeyPath:@"bookmark"
@@ -47,11 +57,11 @@
     [storyMapping addPropertyMappingsFromArray:
      @[userRelationship, bookmarkRelationship]];
     
+    
     [objectManager.router.routeSet addRoute:[RKRoute
                                              routeWithClass:[Story class]
                                              pathPattern:@"/stories/:id"
                                              method:RKRequestMethodPUT]];
-    
     
     
     NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);

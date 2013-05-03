@@ -37,6 +37,15 @@
                                            rootKeyPath:@"user"]];
     
     
+    // Map the relationships.
+     RKRelationshipMapping *userStatRelationship =
+     [RKRelationshipMapping relationshipMappingFromKeyPath:@"stat"
+                                                 toKeyPath:@"stat"
+                                               withMapping:[API sharedInstance].mappings[@"userStat"]];
+    
+    [userMapping addPropertyMappingsFromArray:
+     @[userStatRelationship]];
+    
     
     NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     
@@ -51,6 +60,13 @@
                                              pathPattern:@"/users/:id"
                                                  keyPath:@"user"
                                              statusCodes:statusCodes]];
+    
+    [objectManager addResponseDescriptor:
+     [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+                                             pathPattern:@"/users"
+                                                 keyPath:@"user"
+                                             statusCodes:statusCodes]];
+    
     
     [objectManager.router.routeSet addRoute:[RKRoute
                                              routeWithClass:[User class]

@@ -33,7 +33,7 @@
 
 @end
 
-#define headerHeight 140
+#define headerHeight 100
 
 @interface tabLabel : UILabel
 @end
@@ -93,7 +93,7 @@
         _searchBox.rightPadding = self.searchIcon.width + 20;
         _searchBox.leftPadding = 10;
         _searchBox.width = self.view.width * 0.6;
-        _searchBox.y = 40;
+        _searchBox.y = 20;
         _searchBox.height = 50;
         _searchBox.font = [UIFont h2];
         _searchBox.layer.cornerRadius = 5.0;
@@ -172,7 +172,6 @@
 
 - (void) showLabelForButton: (UIButton *)button {
     UILabel *animatingLabel;
-    
     if (button == self.bookmarksButton) {
         animatingLabel = self.bookmarksLabel;
     } else if (button == self.homeButton) {
@@ -190,10 +189,12 @@
 
 - (void)homePressed {
     [self showLabelForButton:self.homeButton];
-    self.activeViewController = self.homeViewController;
     self.searchBox.text = @"";
+    if (self.activeViewController == self.homeViewController) {
+        //[self.homeViewController search:self.searchBox.text];
+    }
+    self.activeViewController = self.homeViewController;
     [self.activeViewController performSelector:@selector(homePressed)];
-    [self.activeViewController search:self.searchBox.text];
 }
 
 - (void)bookmarksPressed {
@@ -223,6 +224,7 @@
     [self.searchBox addTarget:self
                   action:@selector(textFieldFinished:)
                   forControlEvents:UIControlEventEditingDidEndOnExit];
+    self.activeViewController = self.homeViewController;
     [self homePressed];
 }
 
@@ -247,7 +249,6 @@
     [self.profileButton positionLeftOf:self.bookmarksButton withMargin:50];
     [self.profileLabel putBelow:self.profileButton withMargin:5];
     self.profileLabel.center = CGPointMake(self.profileButton.center.x, self.profileLabel.center.y);
-    
 }
 
 @end

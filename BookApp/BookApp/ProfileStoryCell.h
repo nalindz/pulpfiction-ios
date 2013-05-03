@@ -10,7 +10,6 @@
 #import "Story.h"
 #import "ProfileViewController.h"
 
-
 @interface ProfileStoryCell : UITableViewCell
 <UITextViewDelegate>
 @property (nonatomic, weak) ProfileViewController *delegate;

@@ -2,7 +2,7 @@
 //  Story.m
 //  BookApp
 //
-//  Created by Nalin on 2/13/13.
+//  Created by Nalin on 4/9/13.
 //
 //
 
@@ -23,7 +23,8 @@
 @dynamic updated_at;
 @dynamic user_id;
 @dynamic views_count;
-@dynamic bookmark;
+@dynamic bookmarks_count;
 @dynamic user;
+@dynamic bookmark;
 
 @end

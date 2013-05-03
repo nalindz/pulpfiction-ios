@@ -2,7 +2,7 @@
 //  Story.h
 //  BookApp
 //
-//  Created by Nalin on 2/13/13.
+//  Created by Nalin on 4/9/13.
 //
 //
 
@@ -23,7 +23,8 @@
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSNumber * user_id;
 @property (nonatomic, retain) NSNumber * views_count;
-@property (nonatomic, retain) Bookmark *bookmark;
+@property (nonatomic, retain) NSNumber * bookmarks_count;
 @property (nonatomic, retain) User *user;
+@property (nonatomic, retain) Bookmark *bookmark;
 
 @end
