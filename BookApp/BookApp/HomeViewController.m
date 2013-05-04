@@ -16,6 +16,7 @@
 #import "UIButton+ResizeWithAspectRatio.h"
 #import "UIView+BounceAnimate.h"
 #import "FeedBlankSlateView.h"
+#import <SDWebImage/SDWebImagePrefetcher.h>
 
 @interface HomeViewController ()
 #define pageSize 27 
@@ -213,11 +214,21 @@
     self.storyResultGrid.hidden = NO;
 }
 
+- (void)prefetchImagesOfStories: (NSArray *)stories {
+    NSMutableArray *imageURLs = [NSMutableArray array];
+    for (Story *story in stories) {
+        [imageURLs addObject:[NSURL URLWithString:story.cover_url]];
+    }
+    SDWebImagePrefetcher *prefetcher = [[SDWebImagePrefetcher alloc] init];
+    [prefetcher prefetchURLs:imageURLs];
+}
+
 - (void)receivePageofStories: (NSArray *)stories ofType: (NSString *) type pageNumber: (int) pageNumber {
     if (pageNumber == 1) {
         [self.stories removeAllObjects];
         [self.storyResultGrid reloadData];
     }
+    
     [self addObjects:stories toEndOfCollectionView:self.storyResultGrid];
     if (self.stories.count == 0) {
         if ([type isEqualToString:@"feed"]) {
