@@ -3,4 +3,4 @@
 	url = https://github.com/RestKit/RestKit.git
 [submodule "Frameworks/SDWebImage"]
 	path = Frameworks/SDWebImage
-	url = https://github.com/rs/SDWebImage.git
+	url = git@bitbucket.org:nalindz/bookapp-sdwebimage.git
